@@ -14,7 +14,7 @@
 Wio Play is a media device that can seamlessly integrate with many services to provide awesome entertainment.
 
 
-[**Wiki**](#)
+[**Wiki**](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/home)
 
 ## Features
 
