@@ -9,6 +9,6 @@ def test_resultLength():
 
 
 def test_isResult():
-    # result elements must be of type Search
+    # result elements must be of type SearchResult
     results = list(Server.getResults("dog").values())
     assert isinstance(results.pop(), SearchResult)
