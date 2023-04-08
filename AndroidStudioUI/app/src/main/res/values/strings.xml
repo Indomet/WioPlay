@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Wio Play</string>
+    <string name="bottomNavigationView">bottomNavigationViewID</string>
+    <string name="calories_burnt_textview">Calories Burnt</string>
+    <string name="burn_down_text">View Burn-Down Chart</string>
+    <string name="start_workout_text">Start A New Workout</string>
+    <string name="hourglass_text">Time Left To Reach\n Your Calorie Goal</string>
+    <string name="stopwatch_text">Time Elapsed</string>
+
+
+</resources>
