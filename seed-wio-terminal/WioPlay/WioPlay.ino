@@ -34,7 +34,7 @@ void loop() {
 
   float diff_x = abs(current_x - prev_x), diff_y = abs(current_y - prev_y), diff_z = abs(current_z - prev_z);
 
-  if (diff_x > 0.5 || diff_y > 0.5 || diff_z > 0.5) {  // If the difference is greater than 10 (indicating movement), play the music
+  if (diff_x > 0.5 || diff_y > 0.5 || diff_z > 0.5) {  // If the difference is greater than a certain number (indicating movement), print the movement
     Serial.println("Movement detected!");
    
     tft.fillScreen(TFT_BLUE); //fill background 
