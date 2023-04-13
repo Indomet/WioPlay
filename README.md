@@ -31,7 +31,7 @@ The idea is to have a compact device that can stream music from a source, or loa
 
 - [Mosquitto Broker](https://mosquitto.org/) - For managing the MQTT clients and messages
 - [Paho Java Client](https://www.eclipse.org/paho/index.php?page=clients/java/index.php) - A java library for interacting with the MQTT protocol
-- [youtube-dl](https://youtube-dl.org/) - A binary that allows for youtube data sampling
+- [Pytube](https://pytube.io/en/latest/) - A binary that retreives youtube data
 - [ArduinoMqttClient](https://github.com/arduino-libraries/ArduinoMqttClient) - An arduino library for interacting with the MQTT protocol
 
 ## Team
