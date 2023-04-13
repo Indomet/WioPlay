@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fff4a520-1ed3-4e34-8ccb-5914ab5634e3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/checksums/checksums.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/dependencies-accessors/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/executionHistory/executionHistory.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/executionHistory/executionHistory.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/fileChanges/last-build.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/fileHashes/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/fileHashes/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/fileHashes/resourceHashesCache.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/7.5/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/file-system.probe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.gradle/vcs-1/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.idea/assetWizardSettings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/proguard-rules.pro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/androidTest/java/com/example/wioplay/ExampleInstrumentedTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/java/com/example/wioplay/MainActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/java/com/example/wioplay/MusicFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/java/com/example/wioplay/SearchFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/java/com/example/wioplay/SettingsFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/java/com/example/wioplay/WorkoutFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/drawable/baseline_directions_run_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/drawable/baseline_music_note_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/drawable/baseline_search_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/drawable/baseline_settings_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/drawable/bottom_navigation_background.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/drawable/bottom_navigation_selector.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/layout/activity_main.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/layout/fragment_music.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/layout/fragment_search.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/layout/fragment_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/layout/fragment_workout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/menu/bottom_nav_menu.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-anydpi-v33/ic_launcher.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-hdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-mdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-xhdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/values-night/themes.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/values/colors.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/values/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/values/themes.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/xml/backup_rules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/main/res/xml/data_extraction_rules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/app/src/test/java/com/example/wioplay/ExampleUnitTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/gradle.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/local.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WioPlay/settings.gradle" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2O9A0x1bR8cedtvdIyhDpSb3prE" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "C:/Users/Jafar/Desktop/group-10-dit113-v23-mini-project-systems-development/AndroidStudioUI"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fff4a520-1ed3-4e34-8ccb-5914ab5634e3" name="Changes" comment="" />
+      <created>1680962204446</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1680962204446</updated>
+    </task>
+    <servers />
+  </component>
+</project>
