@@ -10,9 +10,8 @@ void setup() {
   lis.begin(Wire1);      //Start accelerometer
 
   //Check whether accelerometer is working
-  if (!lis) {
-    Serial.println("ERROR");
-    while (1);
+  while (!lis) {
+    Serial.println("ERROR accelerometer not working");
   }
   lis.setOutputDataRate(LIS3DHTR_DATARATE_25HZ);  //Data output rate (5Hz up to 5kHz)
   lis.setFullScaleRange(LIS3DHTR_RANGE_2G);       //Scale range (2g up to 16g)
