@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     public boolean changeFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).setReorderingAllowed(true)
-                .addToBackStack("name")
+                .addToBackStack(null)
                 .commit();
         return true;
     }

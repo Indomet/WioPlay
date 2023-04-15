@@ -5,8 +5,19 @@
     <string name="burn_down_text">View Burn-Down Chart</string>
     <string name="start_workout_text">Start A New Workout</string>
     <string name="hourglass_text">Time Left To Reach\n Your Calorie Goal</string>
-    <string name="stopwatch_text">Time Elapsed</string>
     <string name="weight_hint"> <u>Kilograms</u></string>
     <string name="height_hint"> <u>Centimeters</u></string>
     <string name="sex_hint"> <u>Sex</u></string>
+    <string name="stopwatch_text"> Time Elapsed</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select_exercise_type">Select Type</string>
+    <string name="target_calories_label">Target Calories</string>
+    <string name="start_btn_text">Start</string>
+    <string name="weight_label">Weight</string>
+    <string name="height_label">Height</string>
+    <string name="gender_label">gender</string>
+    <string name="age_label">age</string>
+    <string name="rate_us_label">Rate Us!</string>
+    <string name="underline_label">___________</string>
 </resources>

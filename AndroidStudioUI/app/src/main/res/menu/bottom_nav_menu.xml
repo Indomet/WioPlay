@@ -3,17 +3,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/music"
         android:title="Music"
-        android:icon="@drawable/baseline_music_note_24"/>
+        android:icon="@drawable/music_note_icon"/>
     <item android:id="@+id/search"
         android:title="Search"
-        android:icon="@drawable/baseline_search_24"/>
+        android:icon="@drawable/search_icon"/>
     <item android:id="@+id/workout"
         android:title="Workout"
-        android:icon="@drawable/baseline_directions_run_24"
+        android:icon="@drawable/run_icon"
         />
     <item android:id="@+id/settings"
         android:title="Settings"
-        android:icon="@drawable/baseline_settings_24"
+        android:icon="@drawable/settings_icon"
 
         />
 </menu>
