@@ -15,7 +15,7 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener{
     private View rootView;
     private ProgressBar calorieProgressBar;
 
-    private Button newWorkoutButton,burnDownChartButton;
+    private Button newWorkoutButton;
 
 
     @Override
@@ -25,7 +25,6 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener{
         rootView= inflater.inflate(R.layout.fragment_workout, container, false);
         calorieProgressBar = rootView.findViewById(R.id.calorie_progress_bar);
         newWorkoutButton = rootView.findViewById(R.id.start_new_workout_button);
-        burnDownChartButton = rootView.findViewById(R.id.burn_down_chart_button);
         return rootView;
     }
 
@@ -33,8 +32,6 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.start_new_workout_button://TODO
-            break;
-            case R.id.burn_down_chart_button://todo
             break;
         }
     }

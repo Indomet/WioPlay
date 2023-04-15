@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     public boolean changeFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).setReorderingAllowed(true)
+                .addToBackStack("name")
+                .commit();
         return true;
     }
 }

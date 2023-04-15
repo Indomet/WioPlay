@@ -6,3 +6,7 @@
     <string name="start_workout_text">Start A New Workout</string>
     <string name="hourglass_text">Time Left To Reach\n Your Calorie Goal</string>
     <string name="stopwatch_text">Time Elapsed</string>
+    <string name="weight_hint"> <u>Kilograms</u></string>
+    <string name="height_hint"> <u>Centimeters</u></string>
+    <string name="sex_hint"> <u>Sex</u></string>
+</resources>

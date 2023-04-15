@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 
 
 public class SettingsFragment extends Fragment {
-
-
+    private View rootView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+        return rootView;
     }
 }
