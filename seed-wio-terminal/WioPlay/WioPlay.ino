@@ -12,8 +12,9 @@ using std::string;
 #define MAX_SIZE 10 // maximum size of data displayed at once in graph
 doubles data[2];
 
-float totalNumberOfSegments; // Number of update segments in graph until goal is reached
-float currentSegments = 0;
+#include "BurndownChartBackEnd.h"
+
+float movementValue;
 
 float graphUIXStartValue = 20; // X-coordinate in terminal for the graph to start at
 // ---------------------------------------------------------------------------------------
@@ -21,31 +22,6 @@ float graphUIXStartValue = 20; // X-coordinate in terminal for the graph to star
 //                              **CALORIES BURNT**
 // ---------------------------------------------------------------------------------------
 
-// Note: Row[i] is equivalent to the (i)th activity
-// Note: Retrieve standard-value by getting the average of min and max value
-// The minimal and maximal met-values for each physical activity
-byte metRanges[3][2] =
-{
-  {3, 6},  // Walking
-  {9, 23}, // Running
-  {5, 8}   // Hiking
-};
-
-// Movement values required to acquire average/standard MET-value for specified exercise
-float standardMovementValues[] =
-{
-  0.3,  // Walking
-  3,    // Running
-  1.5   // Hiking
-};
-
-float standard;
-float minMovement; // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
-float maxMovement; // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
-float proportionalConstant;
-float movementValue;
-
-// Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
 float caloriesBurned = 0;
 bool isExercising = true;
 
@@ -55,13 +31,10 @@ float userHeight = 175; // Centimeters
 byte userAge = 23;
 bool isMale = 0;
 
-// Selection of current exercise
-float exerciseDuration = 30; // Seconds
-float caloriesGoal = 100;
-byte chosenActivityIdx = 0;
+// Class with unchangable variables: 'CaloriesBurntCalculation'
+// Class with changable variables: 'ExerciseSettings' (weight, height, age, gender) --> Declare object here, and initialize it in if-statement in loop()
 
 float balanceFactor = 0.35;
-float delayValue = 200;
 
 // ---------------------------------------------------------------------------------------
 
@@ -70,15 +43,17 @@ byte seconds = 0;
 byte minutes = 0;
 byte hours = 0;
 
+BurndownChartBackEnd burndownChart (200, 30, 100, 0);
+
 void setup() {
   Serial.begin(115200);  //Start serial communication
   lis.begin(Wire1);      //Start accelerometer
 
   //Check whether accelerometer is working
-  while (!lis) {
+  while (!lis)
+  {
     Serial.println("ERROR accelerometer not working");
   }
-
 
   lis.setOutputDataRate(LIS3DHTR_DATARATE_25HZ);  //Data output rate (5Hz up to 5kHz)
   lis.setFullScaleRange(LIS3DHTR_RANGE_2G);       //Scale range (2g up to 16g)
@@ -90,17 +65,10 @@ void setup() {
   spr.createSprite(TFT_HEIGHT, TFT_WIDTH);
   spr.setRotation(3);
 
-  totalNumberOfSegments = (exerciseDuration / (delayValue / 1000)) + 1;
-
   // NOTE: THIS MIGHT BE REDUNDANT
   tft.setRotation(3); // set the screen orientation
   tft.setTextColor(TFT_BLACK); //set text color
   tft.setTextSize(3); //set text size
-
-  standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2; // Average of the min and max MET-Values of chosen activity
-  proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
-  minMovement = (float)metRanges[chosenActivityIdx][0] / proportionalConstant; // Minimal movement required for user to be considered actually doing the selected activity
-  maxMovement = (float)metRanges[chosenActivityIdx][1] / proportionalConstant; // Maximal movement boundary
 }
 
 void loop()
@@ -109,6 +77,7 @@ void loop()
   {
     //                              **LINE CHART**
     // ---------------------------------------------------------------------------------------
+
     if(data[0].size() >= MAX_SIZE)
     {
       for (uint8_t i = 0; i<2; i++)
@@ -117,20 +86,14 @@ void loop()
       }
     }
 
-    currentSegments++;
-
-    if (currentSegments == totalNumberOfSegments)
-    {
-      isExercising = false;
-    }
+    burndownChart.currentSegments++;
+    isExercising = burndownChart.isExercising();
 
     spr.fillSprite(TFT_WHITE);
 
         // Settings for the line graph title
     auto header = text(80, 0)
                       .value("Burndown chart")
-                      // .align(center)
-                      // .valign(vcenter)
                       .width(spr.width())
                       .thickness(2);
 
@@ -138,7 +101,7 @@ void loop()
     header.draw(&spr); // Header height is the twice the height of the font
 
     auto headerY = text(15, 18)
-                  .value("Calories burned") // Note: New line '\n' doesn't work
+                  .value("Calories burned")
                   .backgroud(TFT_WHITE)
                   .color(TFT_RED)
                   .thickness(1);
@@ -147,17 +110,15 @@ void loop()
     headerY.draw(&spr); // Header height is the twice the height of the font
 
     auto headerX = text(240, 190)
-      .value("Time elapsed") // Note: New line '\n' doesn't work
+      .value("Time elapsed")
       .backgroud(TFT_WHITE)
       .thickness(1);
 
     headerX.height(headerX.font_height(&spr) * 2);
     headerX.draw(&spr); // Header height is the twice the height of the font
 
-    float expectedValue = ((currentSegments - 1) / totalNumberOfSegments) * caloriesGoal;
-
     data[0].push(caloriesBurned);
-    data[1].push(expectedValue);
+    data[1].push(burndownChart.getExpectedValue());
 
         // Settings for the line graph
     auto content = line_chart(graphUIXStartValue, header.height()); //(x,y) where the line graph begins   auto content = line_chart(20, header.height());
@@ -183,15 +144,15 @@ void loop()
 
     lis.getAcceleration(&prev_x , &prev_y, &prev_z);
 
-    delay(delayValue);
+    delay(burndownChart.delayValue);
 
     lis.getAcceleration(&current_x , &current_y, &current_z);
 
     float diff_x = abs(current_x - prev_x), diff_y = abs(current_y - prev_y), diff_z = abs(current_z - prev_z);
-    float movementValue = diff_x + diff_y + diff_z;
+    movementValue = diff_x + diff_y + diff_z;
+    burndownChart.movementValue = movementValue;
 
-    // User passes minimal movement-requirement for burning calories in selected exercise
-    if (movementValue >= minMovement)
+    if (burndownChart.userIsMovingFastEnough())
     {
       caloriesBurned += burnCalories(getMETValue(movementValue));
     }
@@ -214,7 +175,7 @@ void loop()
 // Takes into consideration the inputted user characteristics and how much the user has moved since last update of the burndown chart to calculate calories burnt
 float burnCalories(float movementValue) // Burn calories based on the movement-value
 {
-  float moveFactor = (movementValue / delayValue) * balanceFactor; // Measurement of how much user has moved since last iteration in 'loop()'
+  float moveFactor = (movementValue / burndownChart.delayValue) * balanceFactor;
 
   if (isMale) // Multiply with 'balanceFactor'
   {
@@ -228,7 +189,8 @@ float burnCalories(float movementValue) // Burn calories based on the movement-v
 
 float getMETValue(float movementValue)
 {
-  return movementValue * proportionalConstant;
+  // return movementValue * proportionalConstant;
+  return movementValue * burndownChart.proportionalConstant;
 }
 
 void updateTimer()
