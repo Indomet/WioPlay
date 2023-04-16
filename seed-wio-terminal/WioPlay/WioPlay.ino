@@ -1,15 +1,13 @@
+#include "seeed_line_chart.h"
+TFT_eSPI tft;
+TFT_eSprite spr = TFT_eSprite(&tft);
+
 #include "LIS3DHTR.h"   //include accelerometer library
-#include"TFT_eSPI.h"  // drawing shapes
 #include <map>
+LIS3DHTR <TwoWire> lis;  //Initialize accelerometer
 
 using std::string;
-LIS3DHTR <TwoWire> lis;  //Initialize accelerometer
-TFT_eSPI tft;
-
-//                              **LINE CHART**
-// ---------------------------------------------------------------------------------------
-#include "seeed_line_chart.h"
-TFT_eSprite spr = TFT_eSprite(&tft);
+#include"TFT_eSPI.h"
 
 #define MAX_SIZE 10 // maximum size of data displayed at once in graph
 doubles data[2];
@@ -226,6 +224,7 @@ float burnCalories(float movementValue) // Burn calories based on the movement-v
   {
     return (655.1 + (4.35 * userWeight) + (4.7 * userHeight) - (4.7 * userAge)) * moveFactor;
   }
+}
 
 float getMETValue(float movementValue)
 {
