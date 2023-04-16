@@ -1,9 +1,58 @@
 #include "LIS3DHTR.h"   //include accelerometer library
 #include"TFT_eSPI.h"  // drawing shapes
+#include <map>
 
-
+using std::string;
 LIS3DHTR <TwoWire> lis;  //Initialize accelerometer
 TFT_eSPI tft;
+
+// Note: Row[i] is equivalent to the (i)th activity
+// Note: Retrieve standard-value by getting the average of min and max value
+// The minimal and maximal met-values for each physical activity
+byte metRanges[3][2] =
+{
+  {3, 6},  // Walking
+  {9, 23}, // Running
+  {5, 8}   // Hiking
+};
+
+// Movement values required to acquire average/standard MET-value for specified exercise
+float standardMovementValues[] =
+{
+  0.3,  // Walking
+  3,    // Running
+  1.5   // Hiking
+};
+
+float standard;
+float minMovement; // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
+float maxMovement; // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
+float proportionalConstant;
+float movementValue;
+
+// Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
+float caloriesBurned = 0;
+bool isExercising = true;
+
+// Settings: Selection of physical user characteristics
+float userWeight = 65; // Kilogram
+float userHeight = 175; // Centimeters
+byte userAge = 23;
+bool isMale = 0;
+
+// Selection of current exercise
+float exerciseDuration = 30; // Seconds
+float caloriesGoal = 100;
+byte chosenActivityIdx = 0;
+
+// Timer
+byte seconds = 0;
+byte minutes = 0;
+byte hours = 0;
+
+float balanceFactor = 0.35;
+float delayValue = 200;
+
 
 void setup() {
   Serial.begin(115200);  //Start serial communication
@@ -13,13 +62,19 @@ void setup() {
   while (!lis) {
     Serial.println("ERROR accelerometer not working");
   }
+
   lis.setOutputDataRate(LIS3DHTR_DATARATE_25HZ);  //Data output rate (5Hz up to 5kHz)
   lis.setFullScaleRange(LIS3DHTR_RANGE_2G);       //Scale range (2g up to 16g)
   tft.begin();
   tft.setRotation(3); // set the screen orientation
   tft.setTextColor(TFT_BLACK); //set text color
-  tft.setTextSize(3); //set text size 
+  tft.setTextSize(3); //set text size
 
+  // 
+  standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2; // Average of the min and max MET-Values of chosen activity
+  proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
+  minMovement = (float)metRanges[chosenActivityIdx][0] / proportionalConstant; // Minimal movement required for user to be considered actually doing the selected activity
+  maxMovement = (float)metRanges[chosenActivityIdx][1] / proportionalConstant; // Maximal movement boundary
 }
 
 void loop() {
@@ -28,24 +83,65 @@ void loop() {
 
   lis.getAcceleration(&prev_x , &prev_y, &prev_z);
 
-  delay(200);
+  delay(delayValue);
 
   lis.getAcceleration(&current_x , &current_y, &current_z);
 
   float diff_x = abs(current_x - prev_x), diff_y = abs(current_y - prev_y), diff_z = abs(current_z - prev_z);
+  float movementValue = diff_x + diff_y + diff_z;
 
-  if (diff_x > 0.5 || diff_y > 0.5 || diff_z > 0.5) {  // If the difference is greater than a certain number (indicating movement), print the movement
+  if (movementValue >= minMovement)
+  {
+    caloriesBurned += burnCalories(getMETValue(movementValue));
     Serial.println("Movement detected!");
    
     tft.fillScreen(TFT_BLUE); //fill background 
-    tft.drawString("Movement detected!",0,0); //draw text string 
-    delay(500);
-   
-  } else {
-    Serial.println("No movement");
+    tft.drawString("Movement detected!",0,0); //draw text string
+  }
+  else
+  {
+    Serial.println("Not moving enough!");
     tft.fillScreen(TFT_RED);
     tft.drawString("No movement!",0,0); 
-    delay(500);
   }
 
+  updateTimer();
+}
+
+// Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
+// Takes into consideration the inputted user characteristics and how much the user has moved since last update of the burndown chart to calculate calories burnt
+float burnCalories(float movementValue) // Burn calories based on the movement-value
+{
+  float moveFactor = (movementValue / delayValue) * balanceFactor; // Measurement of how much user has moved since last iteration in 'loop()'
+
+  if (isMale) // Multiply with 'balanceFactor'
+  {
+    return (66 + (6.2 * userWeight) + (12.7 * userHeight) - (6.76 * userAge)) * moveFactor;
+  }
+  else
+  {
+    return (655.1 + (4.35 * userWeight) + (4.7 * userHeight) - (4.7 * userAge)) * moveFactor;
+  }
+
+float getMETValue(float movementValue)
+{
+  return movementValue * proportionalConstant;
+}
+
+void updateTimer()
+{
+  seconds++;
+  delay(1000);
+
+  if (seconds == 60)
+  {
+    minutes++;
+    seconds = 0;
+
+    if (minutes == 60)
+    {
+      hours++;
+      minutes = 0;
+    }
+  }
 }
