@@ -1,4 +1,5 @@
 #include "Arduino.h"
+// #include "UserInformation.h"
 
 class BurndownChartBackEnd // Logic and functionality of the burndown chart
 {
@@ -14,9 +15,11 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
   byte chosenActivityIdx; // 0
 
   float totalNumberOfSegments; // Number of update segments in graph until goal is reached
-  float currentSegments = 0;
+  float currentSegments;
+  float balanceFactor;
 
-  float movementValue;
+  // float movementValue;
+  float caloriesBurnt;
 
 // Note: Row[i] is equivalent to the (i)th activity
 // Note: Retrieve standard-value by getting the average of min and max value
@@ -44,6 +47,9 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
     this->caloriesGoal = caloriesGoal;
     this->chosenActivityIdx = chosenActivityIdx;
 
+    caloriesBurnt = 0;
+    currentSegments = 0;
+    balanceFactor = 0.08;
     totalNumberOfSegments = (exerciseDuration / (delayValue / 1000)) + 1;
 
     standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2; // Average of the min and max MET-Values of chosen activity
@@ -62,8 +68,44 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
     return ((currentSegments - 1) / totalNumberOfSegments) * caloriesGoal;    
   }
 
-  bool userIsMovingFastEnough()
+  bool userIsMovingFastEnough(float movementValue)
   {
     return movementValue >= minMovement;
   }
+
+  // ----------------------------------------------------
+
+// Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
+// Takes into consideration the inputted user characteristics and how much the user has moved since last update of the burndown chart to calculate calories burnt
+float burnCalories(UserInformation userInformation, float movementValue) // Burn calories based on the movement-value
+{
+  movementValue = getMETValue(movementValue);
+  float moveFactor = (movementValue / delayValue) * balanceFactor;
+
+  if (userInformation.isMale)
+  {
+    return (66 + (6.2 * userInformation.userWeight) + (12.7 * userInformation.userHeight) - (6.76 * userInformation.userAge)) * moveFactor;
+  }
+  else
+  {
+    return (655.1 + (4.35 * userInformation.userWeight) + (4.7 * userInformation.userHeight) - (4.7 * userInformation.userAge)) * moveFactor;
+  }
+}
+
+float getMETValue(float movementValue)
+{
+  return movementValue * proportionalConstant;
+}
+
+void updateBurnDownChart(UserInformation userInformation, float movementValue)
+{
+  if (userIsMovingFastEnough(movementValue))
+  {
+    caloriesBurnt += burnCalories(userInformation, movementValue);
+  }
+  else
+  {
+    Serial.println("You are not exercising hard enough for the selected exercise!");
+  }
+}
 };

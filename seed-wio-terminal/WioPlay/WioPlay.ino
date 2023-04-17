@@ -12,38 +12,19 @@ using std::string;
 #define MAX_SIZE 10 // maximum size of data displayed at once in graph
 doubles data[2];
 
+#include "UserInformation.h"
 #include "BurndownChartBackEnd.h"
 
 float movementValue;
 
 float graphUIXStartValue = 20; // X-coordinate in terminal for the graph to start at
-// ---------------------------------------------------------------------------------------
 
-//                              **CALORIES BURNT**
-// ---------------------------------------------------------------------------------------
-
-float caloriesBurned = 0;
+float caloriesBurnt = 0;
 bool isExercising = true;
 
-// Settings: Selection of physical user characteristics
-float userWeight = 65; // Kilogram
-float userHeight = 175; // Centimeters
-byte userAge = 23;
-bool isMale = 0;
 
-// Class with unchangable variables: 'CaloriesBurntCalculation'
-// Class with changable variables: 'ExerciseSettings' (weight, height, age, gender) --> Declare object here, and initialize it in if-statement in loop()
-
-float balanceFactor = 0.35;
-
-// ---------------------------------------------------------------------------------------
-
-// Timer
-byte seconds = 0;
-byte minutes = 0;
-byte hours = 0;
-
-BurndownChartBackEnd burndownChart (200, 30, 100, 0);
+UserInformation userInformation (67, 175, 23, 0);
+BurndownChartBackEnd burndownChart (1000, 20, 20, 0); // (float delayValue, float exerciseDuration, float caloriesGoal, byte chosenActivityIdx)
 
 void setup() {
   Serial.begin(115200);  //Start serial communication
@@ -75,9 +56,6 @@ void loop()
 {
   if (isExercising)
   {
-    //                              **LINE CHART**
-    // ---------------------------------------------------------------------------------------
-
     if(data[0].size() >= MAX_SIZE)
     {
       for (uint8_t i = 0; i<2; i++)
@@ -117,7 +95,7 @@ void loop()
     headerX.height(headerX.font_height(&spr) * 2);
     headerX.draw(&spr); // Header height is the twice the height of the font
 
-    data[0].push(caloriesBurned);
+    data[0].push(burndownChart.caloriesBurnt);
     data[1].push(burndownChart.getExpectedValue());
 
         // Settings for the line graph
@@ -131,14 +109,10 @@ void loop()
         .max_size(MAX_SIZE)
         .color(TFT_RED, TFT_BLUE)
         .backgroud(TFT_WHITE)
-        // Thickness
         .draw(&spr);
 
     spr.pushSprite(0, 0);
-    // ---------------------------------------------------------------------------------------
 
-    //                              **CALORIES BURNED**
-    // ---------------------------------------------------------------------------------------
     float current_x, current_y, current_z;  //Initialize variables to store accelerometer values
     float prev_x, prev_y, prev_z;
 
@@ -150,63 +124,13 @@ void loop()
 
     float diff_x = abs(current_x - prev_x), diff_y = abs(current_y - prev_y), diff_z = abs(current_z - prev_z);
     movementValue = diff_x + diff_y + diff_z;
-    burndownChart.movementValue = movementValue;
 
-    if (burndownChart.userIsMovingFastEnough())
-    {
-      caloriesBurned += burnCalories(getMETValue(movementValue));
-    }
-    else
-    {
-      Serial.println("You are not exercising hard enough for the selected exercise!");
-    }
-
-    updateTimer();
+    burndownChart.updateBurnDownChart(userInformation, movementValue);
   }
   else
   {
     tft.fillScreen(TFT_RED);
     tft.setTextSize(3);
     tft.drawString("Menu here!", 50, 70);
-  }
-}
-
-// Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
-// Takes into consideration the inputted user characteristics and how much the user has moved since last update of the burndown chart to calculate calories burnt
-float burnCalories(float movementValue) // Burn calories based on the movement-value
-{
-  float moveFactor = (movementValue / burndownChart.delayValue) * balanceFactor;
-
-  if (isMale) // Multiply with 'balanceFactor'
-  {
-    return (66 + (6.2 * userWeight) + (12.7 * userHeight) - (6.76 * userAge)) * moveFactor;
-  }
-  else
-  {
-    return (655.1 + (4.35 * userWeight) + (4.7 * userHeight) - (4.7 * userAge)) * moveFactor;
-  }
-}
-
-float getMETValue(float movementValue)
-{
-  // return movementValue * proportionalConstant;
-  return movementValue * burndownChart.proportionalConstant;
-}
-
-void updateTimer()
-{
-  seconds++;
-  delay(1000);
-
-  if (seconds == 60)
-  {
-    minutes++;
-    seconds = 0;
-
-    if (minutes == 60)
-    {
-      hours++;
-      minutes = 0;
-    }
   }
 }
