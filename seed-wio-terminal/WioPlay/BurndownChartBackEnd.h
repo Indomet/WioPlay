@@ -17,8 +17,6 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
   float totalNumberOfSegments; // Number of update segments in graph until goal is reached
   float currentSegments;
   float balanceFactor;
-
-  // float movementValue;
   float caloriesBurnt;
 
 // Note: Row[i] is equivalent to the (i)th activity
