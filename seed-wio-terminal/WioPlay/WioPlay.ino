@@ -50,7 +50,7 @@ void loop()
 
     burndownChartFrontEnd.update(burndownChartBackEnd);
 
-    motionDetection.readPrevAccelValues();
+    motionDetection.recordPreviousAcceleration();
 
     /*
     float current_x, current_y, current_z;  //Initialize variables to store accelerometer values
@@ -67,8 +67,8 @@ void loop()
     float diff_x = abs(current_x - prev_x), diff_y = abs(current_y - prev_y), diff_z = abs(current_z - prev_z);
     movementValue = diff_x + diff_y + diff_z;
     */
-    motionDetection.readCurrentAccelValues();
-    movementValue = motionDetection.getMovementValue();
+  
+    movementValue =  motionDetection.detectMotion();
 
     burndownChartBackEnd.updateBurnDownChart(userInformation, movementValue);
   }
