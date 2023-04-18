@@ -1,5 +1,4 @@
-#include "Arduino.h"
-// #include "UserInformation.h"
+// #include "Arduino.h"
 
 class BurndownChartBackEnd // Logic and functionality of the burndown chart
 {
@@ -8,7 +7,6 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
   float minMovement; // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
   float maxMovement; // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
   float proportionalConstant;
-  float delayValue; // 200
 
   float exerciseDuration; // 30 (Seconds)
   float caloriesGoal; // 100 --> Put in 'ExerciseSettings'
@@ -18,25 +16,6 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
   float currentSegments;
   float balanceFactor;
   float caloriesBurnt;
-
-// Note: Row[i] is equivalent to the (i)th activity
-// Note: Retrieve standard-value by getting the average of min and max value
-// The minimal and maximal met-values for each physical activity
-// Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
-  byte metRanges[3][2] =
-  {
-    {3, 6},  // Walking
-    {9, 23}, // Running
-    {5, 8}   // Hiking
-  };
-
-  // Movement values required to acquire average/standard MET-value for specified exercise
-  float standardMovementValues[3] =
-  {
-    0.3,  // Walking
-    3,    // Running
-    1.5   // Hiking
-  };
 
   BurndownChartBackEnd(float delayValue, float exerciseDuration, float caloriesGoal, byte chosenActivityIdx)
   {
@@ -66,13 +45,6 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
     return ((currentSegments - 1) / totalNumberOfSegments) * caloriesGoal;    
   }
 
-  bool userIsMovingFastEnough(float movementValue)
-  {
-    return movementValue >= minMovement;
-  }
-
-  // ----------------------------------------------------
-
 // Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
 // Takes into consideration the inputted user characteristics and how much the user has moved since last update of the burndown chart to calculate calories burnt
 float burnCalories(UserInformation userInformation, float movementValue) // Burn calories based on the movement-value
@@ -90,12 +62,8 @@ float burnCalories(UserInformation userInformation, float movementValue) // Burn
   }
 }
 
-float getMETValue(float movementValue)
-{
-  return movementValue * proportionalConstant;
-}
-
-void updateBurnDownChart(UserInformation userInformation, float movementValue)
+// Only burn calories if user's movement-intensity corresponds with selected exercise
+void sufficientMovementInquiry(UserInformation userInformation, float movementValue)
 {
   if (userIsMovingFastEnough(movementValue))
   {
@@ -105,5 +73,50 @@ void updateBurnDownChart(UserInformation userInformation, float movementValue)
   {
     Serial.println("You are not exercising hard enough for the selected exercise!");
   }
+}
+
+float getDelayValue()
+{
+  return delayValue;
+}
+
+void changeAttributeValues(float newDelayValue, float newExerciseDuration, float newCaloriesGoal, byte newChosenActivityIdx)
+{
+  delayValue = newDelayValue;
+  exerciseDuration = newExerciseDuration;
+  caloriesGoal = newCaloriesGoal;
+  chosenActivityIdx = newChosenActivityIdx;
+}
+
+private:
+float delayValue;
+
+// Note: Row[i] is equivalent to the (i)th activity
+// Note: Retrieve standard-value by getting the average of min and max value
+// The minimal and maximal met-values for each physical activity
+// Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
+byte metRanges[3][2] =
+{
+  {3, 6},  // Walking
+  {9, 23}, // Running
+  {5, 8}   // Hiking
+};
+
+// Movement values required to acquire average/standard MET-value for specified exercise
+float standardMovementValues[3] =
+{
+  0.3,  // Walking
+  3,    // Running
+  1.5   // Hiking
+};
+
+float getMETValue(float movementValue)
+{
+  return movementValue * proportionalConstant;
+}
+
+bool userIsMovingFastEnough(float movementValue)
+{
+  return movementValue >= minMovement;
 }
 };

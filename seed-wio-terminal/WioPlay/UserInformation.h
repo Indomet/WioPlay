@@ -11,9 +11,15 @@ class UserInformation
 
   UserInformation(float userWeight, float userHeight, byte userAge, bool isMale)
   {
-    this->userWeight = userWeight;
-    this->userHeight = userHeight;
-    this->userAge = userAge;
+    setInformation(userWeight, userHeight, userAge, isMale);
+  }
+
+  // User changes self-description of physicality
+  void setInformation(float newUserWeight, float newUserHeight, byte newUserAge, bool isMale)
+  {
+    userWeight = newUserWeight;
+    userHeight = newUserHeight;
+    userAge = newUserAge;
     this->isMale = isMale;
   }
 };
