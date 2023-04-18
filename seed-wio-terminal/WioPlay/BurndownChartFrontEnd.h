@@ -15,7 +15,7 @@ class BurndownChartFrontEnd
     this->graphUIXStartValue = graphUIXStartValue;
   }
 
-  void start()
+  void initializeUI()
   {
     tft.begin();
     tft.setRotation(3);
@@ -26,20 +26,19 @@ class BurndownChartFrontEnd
     spr.setRotation(3);
   }
 
-  void checkMax()
+  // Make sure that the number of data-points displayed in the graph at once never exceeds the predetermined limit
+  void controlNumberOfDataPointsInGraph()
   {
     if(data[0].size() >= MAX_SIZE)
     {
-      for (byte i = 0; i<numberOfGraphValues; i++)
-      {
-        data[i].pop(); // Remove the first read variable
-      }
+      removeEarliestDataPoints();
     }
 
     spr.fillSprite(TFT_WHITE);
   }
 
-  void update(BurndownChartBackEnd burndownChartBackEnd)
+  // Update headers and graph-values in real-time
+  void updateGraphVizuals(BurndownChartBackEnd burndownChartBackEnd)
   {
     spr.fillSprite(TFT_WHITE);
 
@@ -69,8 +68,9 @@ class BurndownChartFrontEnd
     headerX.height(headerX.font_height(&spr) * 2);
     headerX.draw(&spr); // Header height is the twice the height of the font
 
-    data[0].push(burndownChartBackEnd.caloriesBurnt);
-    data[1].push(burndownChartBackEnd.getExpectedValue());
+    vizualiseGraphValues(burndownChartBackEnd);
+    // data[0].push(burndownChartBackEnd.caloriesBurnt);
+    // data[1].push(burndownChartBackEnd.getExpectedValue());
 
     // Settings for the line graph
     auto content = line_chart(graphUIXStartValue, header.height()); //(x,y) where the line graph begins   auto content = line_chart(20, header.height());
@@ -88,6 +88,26 @@ class BurndownChartFrontEnd
     spr.pushSprite(0, 0);
   }
 
+  void changeAttributeValues(float newGraphUIXStartValue)
+  {
+    graphUIXStartValue = newGraphUIXStartValue;
+  }
+
   private:
   const byte numberOfGraphValues = 2;
+
+  // Don't display the data-points added earliest on the graph. Delete them to sustain the memory limit
+  void removeEarliestDataPoints()
+  {
+    for (byte i = 0; i<numberOfGraphValues; i++)
+    {
+      data[i].pop(); // Remove the first read variable
+    }
+  }
+
+  void vizualiseGraphValues(BurndownChartBackEnd burndownChartBackEnd)
+  {
+    data[0].push(burndownChartBackEnd.caloriesBurnt);
+    data[1].push(burndownChartBackEnd.getExpectedValue());
+  }
 };
