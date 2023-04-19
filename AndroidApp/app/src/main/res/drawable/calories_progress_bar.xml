@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--Creating an outer ring for the progress bar The color is invisible for aesthetics-->
+    <item>
+        <shape
+            android:shape="ring"
+            android:thicknessRatio="30"
+            android:useLevel="false">
+            <solid android:color="@color/invisible_color" />
+        </shape>
+    </item>
+    <!--Creating an outer ring for the entire progress bar-->
+    <item>
+        <shape
+            android:thickness="1dp"
+            android:innerRadius="18dp"
+            android:shape="ring"
+            android:thicknessRatio="16"
+            android:useLevel="false">
+            <solid android:color="@color/outer_circle_color" />
+
+        </shape>
+    </item>
+    <item>
+        <rotate
+            android:fromDegrees="270"
+            android:toDegrees="270">
+            <shape
+                android:shape="ring"
+                android:thicknessRatio="30"
+                android:useLevel="true">
+                <gradient
+                    android:endColor="@color/light_red"
+                    android:startColor="@color/dark_red"
+                    android:type="sweep" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
