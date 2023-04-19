@@ -1,10 +1,7 @@
-import Core.Parser;
-import Utils.IOScanner;
-import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import java.util.Arrays;
+import Core.Parser;
 
 public class ParseTest {
 
@@ -30,6 +27,16 @@ public class ParseTest {
                     """;
         String[] chunks = {"5|e--D--e--D--e-----d--c----|", "4|---------------b--------a-|"};
         assertEquals(Arrays.toString(chunks), Arrays.toString(Parser.splitBars(notes)));
+
+    }
+
+    @Test
+    public void shouldParseCorrectly() {
+
+        String bar = "5|e--D--e|";
+        //Parser.parse(bar);
+        String result = "NOTE_E5, 0, 0, NOTE_DS5, 0, 0, NOTE_E5";
+        assertEquals(bar, result);
 
     }
 
