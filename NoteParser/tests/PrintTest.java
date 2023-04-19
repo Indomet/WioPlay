@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class printTest {
+public class PrintTest {
 
     private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
