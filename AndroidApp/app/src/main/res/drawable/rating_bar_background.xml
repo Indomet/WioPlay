@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--stroke is for the border-->
+    <stroke
+        android:width="2dp"
+        android:color="#202020"
+        />
+    <!--linear gradient -->
+    <gradient
+        android:type="linear"
+        android:endColor="@color/dark_grey"
+        android:startColor="@color/light_grey"
+        android:angle="135"
+        />
+    <corners android:radius="50dp"/>
+</shape>
