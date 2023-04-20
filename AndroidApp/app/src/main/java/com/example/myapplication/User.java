@@ -6,15 +6,17 @@ public class User {
     private float height;
     private float weight;
     private String gender;
+    private int CalorieCredit;
 
     //Empty constructor
-    //todo make the user start in settings to input stuff and cant leave if they dont do it
+    //todo make the user start in settings to input stuff and cant leave if they don't do it
     //and the values to not be 0
     User(){
     age = 0;
     height =0;
     weight=0;
     username="username";
+    CalorieCredit = 0; //A new user starts with 0 CalorieCurrency
     }
     public void setUsername(String username) {
         this.username = username;
@@ -58,9 +60,20 @@ public class User {
         return gender;
     }
 
+    public void updateCredit(float calorie){
+        //calorie can be positive when gaining, and negative when spending.
+        int diff = Math.round(calorie);
+        this.CalorieCredit += diff;
+    }
+    public int getCalorieCredit(){
+        return this.CalorieCredit;
+    }
+
     public String toString(){
         return age+","+height+","+weight;
     }
+
+
 
 
 }
