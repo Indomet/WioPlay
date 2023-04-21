@@ -6,7 +6,7 @@ using std::string;
 #include "MotionDetection.h"
 #include "UserInformation.h"
 #include "BurndownChart.h"
-
+#include "MqttConnection.h"
 float movementValue;
 bool isExercising = true;
 
@@ -17,22 +17,25 @@ BurndownChart burndownChart;
 void setup()
 {
   Serial.begin(115200);  //Start serial communication
-
+  setupMqtt();
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
 }
 
 void loop()
 {
+  loopMqtt();
   // Exercise isn't complete yet: Continually read movement-values and update chart accordingly
   if (isExercising)
   {
+   // mqttConnection.loopMqtt();
     burndownChart.controlConstraints();
-
+    
     motionDetection.recordPreviousAcceleration(); // Read previous user-position
     delay(burndownChart.getDelayValue());
+    
     movementValue =  motionDetection.detectMotion(); // Read current user-position
-
+    
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
     isExercising = burndownChart.isExercising();
   }
