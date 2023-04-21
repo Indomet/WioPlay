@@ -1,7 +1,6 @@
 TFT_eSPI tft;
-TFT_eSprite spr = TFT_eSprite(&tft);
 
-#include"TFT_eSPI.h"
+#include "TFT_eSPI.h"
 
 #define MAX_SIZE 10 // maximum size of data displayed at once in graph
 doubles data[2];
@@ -21,9 +20,6 @@ class BurndownChartFrontEnd
     tft.setRotation(3);
     tft.setTextColor(TFT_BLACK); //set text color
     tft.setTextSize(3); //set text size
-
-    spr.createSprite(TFT_HEIGHT, TFT_WIDTH);
-    spr.setRotation(3);
   }
 
   // Make sure that the number of data-points displayed in the graph at once never exceeds the predetermined limit
@@ -34,22 +30,22 @@ class BurndownChartFrontEnd
       removeEarliestDataPoints();
     }
 
-    spr.fillSprite(TFT_WHITE);
+    tft.fillScreen(TFT_WHITE);
   }
 
   // Update headers and graph-values in real-time
   void updateGraphVizuals(BurndownChartBackEnd burndownChartBackEnd)
   {
-    spr.fillSprite(TFT_WHITE);
+    tft.fillScreen(TFT_WHITE);
 
     // Settings for the line graph title
     auto header = text(80, 0)
                       .value("Burndown chart")
-                      .width(spr.width())
+                      .width(tft.width())
                       .thickness(2);
 
-    header.height(header.font_height(&spr) * 2); // * 2
-    header.draw(&spr); // Header height is the twice the height of the font
+    header.height(header.font_height(&tft) * 2); // * 2
+    header.draw(&tft); // Header height is the twice the height of the font
 
     auto headerY = text(15, 18)
                   .value("Calories burned")
@@ -57,16 +53,16 @@ class BurndownChartFrontEnd
                   .color(TFT_RED)
                   .thickness(1);
 
-    headerY.height(headerY.font_height(&spr) * 2);
-    headerY.draw(&spr); // Header height is the twice the height of the font
+    headerY.height(headerY.font_height(&tft) * 2);
+    headerY.draw(&tft); // Header height is the twice the height of the font
 
     auto headerX = text(240, 190)
       .value("Time elapsed")
       .backgroud(TFT_WHITE)
       .thickness(1);
 
-    headerX.height(headerX.font_height(&spr) * 2);
-    headerX.draw(&spr); // Header height is the twice the height of the font
+    headerX.height(headerX.font_height(&tft) * 2);
+    headerX.draw(&tft); // Header height is the twice the height of the font
 
     vizualiseGraphValues(burndownChartBackEnd);
     // data[0].push(burndownChartBackEnd.caloriesBurnt);
@@ -75,17 +71,17 @@ class BurndownChartFrontEnd
     // Settings for the line graph
     auto content = line_chart(graphUIXStartValue, header.height()); //(x,y) where the line graph begins   auto content = line_chart(20, header.height());
     content
-        .height(spr.height() - header.height() * 1.5) // actual height of the line chart
-        .width(spr.width() - content.x() * 2)         // actual width of the line chart
+        .height(tft.height() - header.height() * 1.5) // actual height of the line chart
+        .width(tft.width() - content.x() * 2)         // actual width of the line chart
         .based_on(0.0)                                // Starting point of y-axis, must be a float
         .show_circle(true, false)
         .value({data[0], data[1]})
         .max_size(MAX_SIZE)
         .color(TFT_RED, TFT_BLUE)
         .backgroud(TFT_WHITE)
-        .draw(&spr);
+        .draw(&tft);
 
-    spr.pushSprite(0, 0);
+    //tft.fillScreen(TFT_BLACK);
   }
 
   void changeAttributeValues(float newGraphUIXStartValue)
