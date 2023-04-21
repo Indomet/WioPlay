@@ -24,6 +24,9 @@ public class BrokerConnection extends AppCompatActivity {
     public static final String CLIENT_ID = "Android Phone";   // the app client ID name
     public static final int QOS = 0;    // quality of service
 
+    public static BrokerConnection brokerConnection=null; // This the object to be returned everytime an object is returned
+                                                      // everytime an object is returned from another lass
+
     private boolean isConnected = false;
     private MqttClient mqttClient;
     private Context context;
@@ -41,11 +44,23 @@ public class BrokerConnection extends AppCompatActivity {
     }
 
     //we automatically try to connect the broke in the constructor by calling the connectToMqttBroker method
-    public BrokerConnection(Context context){
+    private BrokerConnection(Context context){
         this.context = context;
         mqttClient = new MqttClient(context, MQTT_SERVER, CLIENT_ID);
         connectToMqttBroker();
     }
+
+
+    public static BrokerConnection getInstance(Context context){
+        if(brokerConnection==null){
+            brokerConnection=new BrokerConnection(context);
+        }
+        return brokerConnection;
+    }
+
+
+
+
 
     public void connectToMqttBroker() {
         if (!isConnected) {
