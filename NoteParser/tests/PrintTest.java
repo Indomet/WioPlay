@@ -1,12 +1,12 @@
-import Utils.IOScanner;
+import java.io.ByteArrayOutputStream;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import Utils.IOScanner;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
