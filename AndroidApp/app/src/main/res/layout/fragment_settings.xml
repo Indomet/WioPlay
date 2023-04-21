@@ -189,6 +189,7 @@
                 app:layout_constraintStart_toEndOf="@+id/weight_textview"
                 app:layout_constraintTop_toTopOf="@+id/weight_textview"
                 android:inputType="numberDecimal"
+
                 />
 
             <EditText
@@ -222,6 +223,7 @@
                 app:layout_constraintStart_toEndOf="@+id/age_textview"
                 app:layout_constraintTop_toTopOf="@+id/age_textview"
                 android:inputType="number"
+
                 />
 
             <Spinner
