@@ -47,6 +47,7 @@ public class MusicFragment extends Fragment {
         //Linear displays a single line of items vertically
 
 
+
         return rootView;
     }
 }
