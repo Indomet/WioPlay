@@ -64,6 +64,7 @@ public class User {
         //calorie can be positive when gaining, and negative when spending.
         int diff = Math.round(calorie);
         this.CalorieCredit += diff;
+
     }
     public int getCalorieCredit(){
         return this.CalorieCredit;
