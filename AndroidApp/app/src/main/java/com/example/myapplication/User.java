@@ -16,7 +16,7 @@ public class User {
     height =0;
     weight=0;
     username="username";
-    CalorieCredit = 0; //A new user starts with 0 CalorieCurrency
+    CalorieCredit = 727; //A new user starts with 0 CalorieCurrency
     }
     public void setUsername(String username) {
         this.username = username;

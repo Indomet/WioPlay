@@ -217,15 +217,11 @@
                 android:gravity="center"
                 app:flow_horizontalAlign="center"
                 android:textSize="20sp"
-
                 app:layout_constraintBottom_toBottomOf="@id/gender_textview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/gender_textview"
                 app:layout_constraintTop_toTopOf="@id/gender_textview" />
-
-
-
 
             <Button
                 android:id="@+id/Save_Button"
