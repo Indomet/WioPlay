@@ -1,10 +1,11 @@
 package com.example.myapplication;
 
-import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,96 +21,98 @@ import java.util.List;
 
 
 public class NewWorkoutFragment extends Fragment {
-    private BrokerConnection broker;
     private View rootView;
-    private Spinner exerciseTypeSpinner;
 
     private EditText durationEditText;
-    private Button startWorkoutButton;
-    private int targetCalories;
 
     private TextView targetCaloriesTextView;
 
-    private ImageButton incrementButton,decrementButton;
+    private WorkoutManager workoutManager;
 
-    private final int CHANGE_TARGET_CALORIES_AMOUNT=20;
-
-
-
-    private WorkoutStartedListener workoutStartedListener;
-    //This interface is a contract between this class to notify other classes that implement it that a message has arrived
-    public interface WorkoutStartedListener{
-        public void onWorkoutStarted(int calories,String duration);
+    //The following 6 methods are to maintain th lifecycle of the fragment by using the parent class method
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
-    //attach a class to listen to incoming messages with this setter
-    public void setWorkoutStartedListener(WorkoutStartedListener workoutStartedListener){
-        this.workoutStartedListener=workoutStartedListener;
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView= inflater.inflate(R.layout.fragment_new_workout, container, false);
-        exerciseTypeSpinner = rootView.findViewById(R.id.exercise_type_spinner);
+        Spinner exerciseTypeSpinner = rootView.findViewById(R.id.exercise_type_spinner);
 
         List<String> genders = List.of("Running","Walking","Cycling","Hiking");
         ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(rootView.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,genders);
         exerciseTypeSpinner.setAdapter(exerciseAdapter);
-        broker = MainActivity.brokerConnection;
         durationEditText = rootView.findViewById(R.id.duration_edit_text);
-        startWorkoutButton = rootView.findViewById(R.id.start_button);
+        Button startWorkoutButton = rootView.findViewById(R.id.start_button);
         startWorkoutButton.setOnClickListener(view->startWorkout());
 
-        targetCalories =0;
         targetCaloriesTextView = rootView.findViewById(R.id.user_calorie_goal);
-        targetCaloriesTextView.setText(Integer.toString(targetCalories));
-        incrementButton = rootView.findViewById(R.id.plus_calories_btn);
-        decrementButton = rootView.findViewById(R.id.minus_calories_btn);
 
-        incrementButton.setOnClickListener(view -> changeCalorieGoal(CHANGE_TARGET_CALORIES_AMOUNT));
-        decrementButton.setOnClickListener(view -> changeCalorieGoal(-CHANGE_TARGET_CALORIES_AMOUNT));
+        workoutManager = WorkoutManager.getInstance();
 
+        targetCaloriesTextView.setText(Integer.toString(workoutManager.getCalorieGoal()));
+        ImageButton incrementButton = rootView.findViewById(R.id.plus_calories_btn);
+        ImageButton decrementButton = rootView.findViewById(R.id.minus_calories_btn);
 
-
+        incrementButton.setOnClickListener(view -> changeCalorieGoal(workoutManager.getCHANGE_TARGET_CALORIES_AMOUNT()));
+        decrementButton.setOnClickListener(view -> changeCalorieGoal(-workoutManager.getCHANGE_TARGET_CALORIES_AMOUNT()));
 
         return rootView;
     }
-
+    //here we set the calorie goal based on if the uer want sto burn more or less calories. If they want
+    //to decrease the goal, then the parameter passed is negative
     public void changeCalorieGoal(int changeAmount){
-        targetCalories = Math.max(0,targetCalories+changeAmount);
-        targetCaloriesTextView.setText(Integer.toString(targetCalories));
+        workoutManager.setCalorieGoal(Math.max(0,workoutManager.getCalorieGoal()+changeAmount));
+        targetCaloriesTextView.setText(Integer.toString(workoutManager.getCalorieGoal()));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void startWorkout(){
+        //validate that time written is valid and the calorie goal are above 0
         String duration = durationEditText.getText().toString();
-        boolean durationIsValid = validateDuration(duration);
+        boolean durationIsValid = workoutManager.validateDuration(duration);
+        boolean calorieGoalIsValid = workoutManager.getCalorieGoal()>0;
+
         if(!durationIsValid){
-            Toast.makeText(rootView.getContext(), "Please input a valid time Hours:Minutes:Seconds", Toast.LENGTH_SHORT).show();
+            Toast.makeText(rootView.getContext(), "Please input a valid time Hours:Minutes", Toast.LENGTH_SHORT).show();
         }
-        else if(workoutStartedListener != null){
-            //indicates that a workout has started and gives the calories and duration to the observer
-            workoutStartedListener.onWorkoutStarted(targetCalories,duration);
+        else if(!calorieGoalIsValid){
+            Toast.makeText(rootView.getContext(), "Please set a calorie goal above 0", Toast.LENGTH_SHORT).show();
         }
+
+        else {
+            //TODO publish data to WIO terminal
+            workoutManager.setWorkoutHasStarted(true);
+
+        }
+
     }
 
-    public boolean validateDuration(String time) {
-        String[] separatedTime = time.split(":");
-        if (separatedTime.length != 3) {
-            return false;
-        }
-        for (int i = 0; i < separatedTime.length; i++) {
-            final int HOURS = 24;
-            final int MINUTES_OR_SECONDS = 60;
-            int timeInput = Integer.parseInt(separatedTime[i]);
-            if (i == 0 && (HOURS - timeInput >= 24 || HOURS - timeInput <= 0)) {
-                return false;
-            } else if (MINUTES_OR_SECONDS - timeInput > 60 ||  MINUTES_OR_SECONDS - timeInput < 0) {
-                return false;
 
-            }
-        }
-        return true;
-    }
 }
