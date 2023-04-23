@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +14,12 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
-
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
 
     private ArrayList<Song> songsList = new ArrayList<>();
     private Context context;
+
+    private boolean confirm;
 
     public SongLibraryAdapter(Context context) {
         this.context = context;
@@ -35,42 +38,29 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //position is the index of the items in the recycler view
         int currentPosition = holder.getBindingAdapterPosition();
-        Song currentSong = songsList.get(currentPosition);
         int duration = songsList.get(currentPosition).getDuration();
-
-
-
+        Song currentSong = songsList.get(currentPosition); //This has to be initialized here to work properly.
         holder.songTitle.setText(songsList.get(currentPosition).getTitle());
-
         holder.songDuration.setText((duration / 60) + ":" + String.format("%02d", duration % 60));
+
         if(!currentSong.isUnlocked()){
             holder.songPrice.setText(Integer.toString(currentSong.getPrice())+" CC");
         }else{
             holder.songPrice.setText("Play");
         }
         //TODO Glide framework image display
-
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(currentSong.isUnlocked()){
-                    //TODO: Play song
-                    Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+                    playSong(currentSong);
                 }else{
-                    //TODO: popup window to confirm unlock song by spending Calorie Credits
-                    if(MainActivity.user.getCalorieCredit() >= currentSong.getPrice()){
-                        MainActivity.user.updateCredit(-currentSong.getPrice());//deducted
-                        currentSong.setUnlocked(true);
-                        updateData();
-                        Toast.makeText(context, "Unlocked " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
-                        //TODO: notify data change in fragment_music
-                    }else{
+                    if (MainActivity.user.getCalorieCredit() >= currentSong.getPrice()) {
+                        confirmationDialog(currentSong); //Calls the popup window
+                    } else {
                         Toast.makeText(context, "Not enough calorie credits", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Locked, " +currentSong.getTitle() + " costs " + currentSong.getPrice() + " Calorie Credits", Toast.LENGTH_SHORT).show();
                     }
-                    //Toast.makeText(context, "Locked, " +currentSong.getTitle() + " costs " + currentSong.getPrice() + " Calorie Credits", Toast.LENGTH_SHORT).show();
-
-
-
                 }
             }
         });
@@ -90,6 +80,38 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         TextView view =((MainActivity)context).findViewById(R.id.user_balance); //Updates balance display in MusicFragment
         view.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
         notifyDataSetChanged();
+    }
+
+    private void unlockSong(@NonNull Song currentSong) {
+        MainActivity.user.updateCredit(-currentSong.getPrice());
+        currentSong.setUnlocked(true);
+        updateData();
+        Toast.makeText(context, "Unlocked " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+        }
+
+
+
+    private void playSong(@NonNull Song currentSong) {
+        Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+        // TODO: Implement the logic to play the song
+    }
+    public void confirmationDialog(Song currentSong) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Unlock song?");
+        builder.setMessage("Do you wish to unlock this song?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                confirm = true;
+                unlockSong(currentSong);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                confirm = false;
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
