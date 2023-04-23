@@ -19,12 +19,13 @@
 
 
     <ProgressBar
+
+        android:max="1000"
         android:id="@+id/calorie_progress_bar"
         style="@style/red_calorie_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="45dp"
-        android:progress="60"
         android:scaleX="4"
         android:scaleY="4"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -43,16 +44,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/calorie_progress_bar" />
 
-    <TextView
-        android:id="@+id/calories_burnt_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="243"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/calories_burnt_label" />
+        <TextView
+            android:id="@+id/calories_burnt_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calories_burnt_label" />
 
     <Button
         android:id="@+id/start_new_workout_button"
@@ -73,15 +72,14 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
 
         <ImageView
             android:id="@+id/watch"
             android:layout_width="60dp"
             android:layout_height="60dp"
-
-
             android:layout_marginTop="60dp"
             android:src="@drawable/timer_icon"
             app:layout_constraintEnd_toStartOf="@+id/line_for_time"
@@ -95,12 +93,13 @@
 
             android:layout_marginTop="50dp"
             android:src="@drawable/hourglass_icon"
-            app:layout_constraintEnd_toStartOf="@+id/line_for_time_left_to_caloriegoal"
+            app:layout_constraintEnd_toEndOf="@+id/time_left_to_reach_calorie_goal_text"
+            app:layout_constraintLeft_toRightOf="@id/watch"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/watch" />
 
         <TextView
-            android:id="@+id/time_elapsed_textView"
+            android:id="@+id/watch_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -119,7 +118,6 @@
             android:layout_marginTop="10dp"
             android:text="@string/hourglass_text"
             android:textColor="@color/orange"
-            app:layout_constraintEnd_toStartOf="@+id/line_for_time_left_to_caloriegoal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hourglass" />
 
@@ -135,18 +133,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/line_for_time_left_to_caloriegoal"
-            android:layout_width="120dp"
-            android:layout_height="2dp"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="545dp"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/start_new_workout_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
 
         <TextView
             android:id="@+id/time_elapsed_textview"
@@ -154,7 +140,7 @@
 
             android:layout_height="wrap_content"
             android:layout_marginTop="406dp"
-            android:text="00:00:00"
+            android:text="0:00:00"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/line_for_time"
@@ -168,18 +154,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="521dp"
-            android:text="00:00:00"
+            android:text="0:00:00"
             android:textColor="@color/white"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/line_for_time_left_to_caloriegoal"
-            app:layout_constraintEnd_toEndOf="@+id/line_for_time_left_to_caloriegoal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/line_for_time_left_to_caloriegoal"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/time_left_to_reach_calorie_goal_text"
+            app:layout_constraintEnd_toEndOf="@+id/line_for_time"
+            app:layout_constraintStart_toStartOf="@+id/line_for_time"
+            app:layout_constraintTop_toBottomOf="@+id/hourglass" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     </HorizontalScrollView>
 </ScrollView>

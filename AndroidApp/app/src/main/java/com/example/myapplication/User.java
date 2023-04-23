@@ -6,6 +6,7 @@ public class User {
     private float height;
     private float weight;
     private String gender;
+    boolean isWorkingOut;
 
     //Empty constructor
     //todo make the user start in settings to input stuff and cant leave if they dont do it
@@ -15,6 +16,7 @@ public class User {
     height =0;
     weight=0;
     username="username";
+    isWorkingOut=false;
     }
     public void setUsername(String username) {
         this.username = username;
