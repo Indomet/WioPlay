@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.ClipData;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
+import android.view.SearchEvent;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -70,7 +73,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     public boolean changeFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).setReorderingAllowed(true)
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+// Add or replace the fragment using the FragmentManager
+        fragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, fragment)
                 .addToBackStack(null)
                 .commit();
         return true;
