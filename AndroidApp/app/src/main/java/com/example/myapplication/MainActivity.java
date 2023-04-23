@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private WorkoutFragment workoutFragment;
     private SearchFragment searchFragment;
     private MusicFragment musicFragment;
-    private  SettingsFragment settingsFragment;
+    private SettingsFragment settingsFragment;
 
     //TODO THIS IS TO BE REFACTORED ITS BAD PRACTICE make into singleton pattern
     public static BrokerConnection brokerConnection;
