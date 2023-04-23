@@ -20,8 +20,8 @@
     <color name = "dark_purple">#6777c9</color>
     <color name = "near_white">#d9d9d9</color>
     <color name = "gold">#FFD700</color>
-
-
+    <color name="ButtonTint">#a2a3f9</color>
+    <color name="music_background">#2B2B2B</color>
 
 
 </resources>
