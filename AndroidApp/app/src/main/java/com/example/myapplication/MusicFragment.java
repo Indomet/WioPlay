@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,9 +18,14 @@ import java.util.ArrayList;
 
 public class MusicFragment extends Fragment {
 
+    private LifecycleOwner lifecycleOwner;
     private RecyclerView recyclerView;
     private TextView userBalance;
     private View rootView;
+    private ArrayList<Song> songsList = new ArrayList<>();
+
+    private boolean hasCreated = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,16 +36,18 @@ public class MusicFragment extends Fragment {
 
         userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
 
+        if(!hasCreated) {
+            //The song list database
+            //TODO: replace with reading data from music list file
+            songsList.add(new Song("Song 1", 185, 200, "", true));
+            songsList.add(new Song("Song 2", 200, 250, "", true));
+            songsList.add(new Song("Song 3", 170, 300, "", false));
+            songsList.add(new Song("Song 4", 180, 200, "", false));
+            songsList.add(new Song("Song 5", 200, 250, "", false));
+            songsList.add(new Song("Song 6", 173, 300, "", false));
+            hasCreated = true;
+        }
 
-        //The song list database
-        //TODO: replace with reading data from music list file
-        ArrayList<Song> songsList = new ArrayList<>();
-        songsList.add(new Song("Song 1", 185, 200, "", true));
-        songsList.add(new Song("Song 2", 200, 250, "", true));
-        songsList.add(new Song("Song 3", 170, 300, "", false));
-        songsList.add(new Song("Song 4", 180, 200, "", false));
-        songsList.add(new Song("Song 5", 200, 250, "", false));
-        songsList.add(new Song("Song 6", 173, 300, "", false));
 
         SongLibraryAdapter adapter = new SongLibraryAdapter(recyclerView.getContext());
         adapter.setSongsList(songsList);
@@ -47,7 +56,7 @@ public class MusicFragment extends Fragment {
         //Linear displays a single line of items vertically
 
 
-
         return rootView;
     }
+
 }
