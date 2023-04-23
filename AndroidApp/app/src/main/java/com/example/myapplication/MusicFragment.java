@@ -1,21 +1,67 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 public class MusicFragment extends Fragment {
 
+    private AlertDialog dialog;
+
+    private RecyclerView recyclerView;
+    private TextView userBalance;
+    private View rootView;
+    private ArrayList<Song> songsList = new ArrayList<>();
+
+    private boolean hasCreated = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_music, container, false);
+
+        rootView = inflater.inflate(R.layout.fragment_music, container, false);
+        recyclerView = rootView.findViewById(R.id.songLibraryView);
+        userBalance = rootView.findViewById(R.id.user_balance);
+
+        userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+
+        if(!hasCreated) {
+            //The song list database
+            //TODO: replace with reading data from music list file
+            songsList.add(new Song("Song 1", 185, 200, "", true));
+            songsList.add(new Song("Song 2", 200, 250, "", true));
+            songsList.add(new Song("Song 3", 170, 300, "", false));
+            songsList.add(new Song("Song 4", 180, 200, "", false));
+            songsList.add(new Song("Song 5", 200, 250, "", false));
+            songsList.add(new Song("Song 6", 173, 300, "", false));
+            hasCreated = true;
+        }
+
+
+        SongLibraryAdapter adapter = new SongLibraryAdapter(recyclerView.getContext());
+        adapter.setSongsList(songsList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false));
+        //Linear displays a single line of items vertically
+
+
+        return rootView;
     }
+
+
+
+
+
+
 }
