@@ -7,6 +7,7 @@ public class User {
     private float weight;
     private String gender;
     private int CalorieCredit;
+    boolean isWorkingOut;
 
     //Empty constructor
     //todo make the user start in settings to input stuff and cant leave if they don't do it
@@ -17,7 +18,9 @@ public class User {
     weight=0;
     username="username";
     CalorieCredit = 727; //A new user starts with 0 CalorieCurrency
+    isWorkingOut=false;
     }
+    
     public void setUsername(String username) {
         this.username = username;
 
