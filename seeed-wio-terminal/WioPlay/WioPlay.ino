@@ -1,10 +1,11 @@
 #include "seeed_line_chart.h"
 #include <map>
-
-using std::string;
-
-#include "MotionDetection.h"
+#include <ArduinoJson.h>
 #include "UserInformation.h"
+UserInformation userInformation (67, 175, 23, 0); // (userWeight, userHeight, userAge, isMale)
+
+DynamicJsonDocument doc(1024);
+#include "MotionDetection.h"
 #include "BurndownChart.h"
 #include "MqttConnection.h"
 #include "MusicPlayer.h"
@@ -12,7 +13,6 @@ using std::string;
 float movementValue;
 bool isExercising = true;
 
-UserInformation userInformation (67, 175, 23, 0); // (userWeight, userHeight, userAge, isMale)
 MotionDetection motionDetection;
 BurndownChart burndownChart;
 MusicPlayer player(song, sizeof(song) / sizeof(int), 1.2);

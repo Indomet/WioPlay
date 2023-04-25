@@ -11,16 +11,13 @@
 
 
 // Update these with values suitable for your network.
-const char* ssid = SSID; // WiFi Name
+const char* ssid = SSID;          // WiFi Name
 const char* password = PASSWORD;  // WiFi Password
-const char* server = my_IPv4;  // MQTT Broker URL
+const char* server = my_IPv4;     // MQTT Broker URL
 
 
-
-const char* TOPIC_sub = "calories";
+const char* TOPIC_sub = "User/Data/Change";
 const char* TOPIC_pub_connection = "helloworld";
-
-
 
 WiFiClient wioClient;
 PubSubClient client(wioClient);
@@ -40,7 +37,7 @@ void setup_wifi() {
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  WiFi.begin(ssid, password); // Connecting WiFi
+  WiFi.begin(ssid, password);  // Connecting WiFi
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -55,25 +52,36 @@ void setup_wifi() {
   tft.print("Connected!");
 
   Serial.println("IP address: ");
-  Serial.println(WiFi.localIP()); // Display Local IP Address
+  Serial.println(WiFi.localIP());  // Display Local IP Address
 }
-String getPayload() {
+
+void updateSettings(char json[]) {
+
+  deserializeJson(doc, json);
+  int age = doc["age"];
+  const char* name = doc["username"];
+  const char* sex = doc["sex"];
+  float weight = doc["weight"];
+  float height = doc["height"];
+  float calorieCredit = doc["calorieCredit"];
+  userInformation.setInformation(weight, height, age, strcmp("Female", sex) == 0 ? false : true);
+
 }
+
 void printMessage(String message) {
-  int bgColor;    // declare a backgroundColor
-  int textColor = TFT_WHITE;    // initializee the text color to white
+  int bgColor;                // declare a backgroundColor
+  int textColor = TFT_WHITE;  // initializee the text color to white
   String displayText = "Received message:";
 
   bgColor = TFT_RED;
   // Update TFT display and print input message
-  tft.fillScreen(bgColor);   
-  tft.setTextColor(textColor, bgColor);    // set the text and background color                   
-  tft.setTextSize(2);                      
-  tft.setCursor((320 - tft.textWidth(displayText)) / 2, 90);    // Make sure to align the text to the center of the screen
-  tft.println(displayText);     // print the text
-  tft.setCursor((320 - tft.textWidth(message)) / 2, 120);         
+  tft.fillScreen(bgColor);
+  tft.setTextColor(textColor, bgColor);  // set the text and background color
+  tft.setTextSize(2);
+  tft.setCursor((320 - tft.textWidth(displayText)) / 2, 90);  // Make sure to align the text to the center of the screen
+  tft.println(displayText);                                   // print the text
+  tft.setCursor((320 - tft.textWidth(message)) / 2, 120);
   tft.println(message);
-
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -81,7 +89,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
-// process payload and convert it to a string
+  // process payload and convert it to a string
   char buff_p[length];
   for (int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
@@ -90,9 +98,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
   buff_p[length] = '\0';
   String message = String(buff_p);
-// end of conversion
+  // end of conversion
   printMessage(message);
-
+  char charBuf[message.length() + 1];
+  message.toCharArray(charBuf, message.length() + 1);
+  if (strcmp(TOPIC_sub, topic) == 0) {
+    updateSettings(charBuf);
+  }
 }
 
 
@@ -129,7 +141,7 @@ void setupMqtt() {
   tft.setRotation(3);
 
   setup_wifi();
-  client.setServer(server, 1883); // Connect the MQTT Server   hive_mqtt_server
+  client.setServer(server, 1883);  // Connect the MQTT Server   hive_mqtt_server
   client.setCallback(callback);
 }
 
@@ -140,5 +152,4 @@ void loopMqtt() {
     reconnect();
   }
   client.loop();
-
 }
