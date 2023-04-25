@@ -7,9 +7,9 @@ import android.widget.Toast;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+//import org.eclipse.paho.client.mqttv3.MqttException;
 //import org.eclipse.paho.android.service.MqttAndroidClient;
 // we use this for api 31 and above, since above is not updated yet
 import info.mqtt.android.service.Ack;
