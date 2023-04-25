@@ -163,10 +163,4 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
             }
         });
     }
-
-
-
-
-
-
 }
