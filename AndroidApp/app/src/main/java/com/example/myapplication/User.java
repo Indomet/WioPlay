@@ -5,9 +5,8 @@ public class User {
     private int age;
     private float height;
     private float weight;
-    private String gender;
+    private String sex;
     private int CalorieCredit;
-    boolean isWorkingOut;
 
     //Empty constructor
     //todo make the user start in settings to input stuff and cant leave if they don't do it
@@ -18,7 +17,6 @@ public class User {
     weight=0;
     username="username";
     CalorieCredit = 727; //A new user starts with 0 CalorieCurrency
-    isWorkingOut=false;
     }
     
     public void setUsername(String username) {
@@ -55,12 +53,12 @@ public class User {
         return weight;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
-    public String getGender() {
-        return gender;
+    public String getSex() {
+        return sex;
     }
 
     public void updateCredit(float calorie){

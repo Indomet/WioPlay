@@ -22,4 +22,5 @@ class UserInformation
     userAge = newUserAge;
     this->isMale = isMale;
   }
+  
 };
