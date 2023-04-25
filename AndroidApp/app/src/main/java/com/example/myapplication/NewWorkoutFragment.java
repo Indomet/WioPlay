@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ public class NewWorkoutFragment extends Fragment {
     private TextView targetCaloriesTextView;
 
     private WorkoutManager workoutManager;
+    Spinner exerciseTypeSpinner;
 
     //The following 6 methods are to maintain th lifecycle of the fragment by using the parent class method
     @Override
@@ -63,9 +66,9 @@ public class NewWorkoutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView= inflater.inflate(R.layout.fragment_new_workout, container, false);
-        Spinner exerciseTypeSpinner = rootView.findViewById(R.id.exercise_type_spinner);
+        exerciseTypeSpinner = rootView.findViewById(R.id.exercise_type_spinner);
 
-        List<String> genders = List.of("Running","Walking","Cycling","Hiking");
+        List<String> genders = List.of("Running","Walking","Hiking");
         ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(rootView.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,genders);
         exerciseTypeSpinner.setAdapter(exerciseAdapter);
         durationEditText = rootView.findViewById(R.id.duration_edit_text);
@@ -107,8 +110,20 @@ public class NewWorkoutFragment extends Fragment {
         }
 
         else {
-            //TODO publish data to WIO terminal
+            //TODO use singleton
             workoutManager.setWorkoutHasStarted(true);
+            String workoutType = exerciseTypeSpinner.getSelectedItem().toString();
+            //publish the exercise type, calorie goal and duration
+            workoutManager.setWorkoutType(workoutType);
+            workoutManager.setDurationInSeconds(workoutManager.timeToSeconds(duration));
+            Log.d("tag","duration in sec is "+workoutManager.getDurationInSeconds());
+            try {
+                String json = Util.toJSON(workoutManager);
+                Toast.makeText(rootView.getContext(), json, Toast.LENGTH_SHORT).show();
+                MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.WORKOUT_STARTED_TOPIC,Util.toJSON(workoutManager),MainActivity.brokerConnection.QOS,null);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
 
         }
 
