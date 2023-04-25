@@ -70,8 +70,13 @@ public class SettingsFragment extends Fragment {
 
     private void publishSavedData(){
         updateUserInfo();
-        MainActivity.brokerConnection.getMqttClient().publish("User/Data/Change",MainActivity.user.toString()
-                ,MainActivity.brokerConnection.QOS,null);
+        try {//todo use singleotn
+            MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
+            ,Util.toJSON(MainActivity.user)
+                    ,MainActivity.brokerConnection.QOS,null);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -81,7 +86,7 @@ public class SettingsFragment extends Fragment {
         MainActivity.user.setHeight(Float.parseFloat(heightEditText.getText().toString()));
         MainActivity.user.setWeight(Float.parseFloat(weightEditText.getText().toString()));
 
-        MainActivity.user.setGender(genderSpinner.getSelectedItem().toString());
+        MainActivity.user.setSex(genderSpinner.getSelectedItem().toString());
 
 
     }
