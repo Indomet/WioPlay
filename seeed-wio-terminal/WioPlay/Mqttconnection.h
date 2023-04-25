@@ -6,7 +6,7 @@
 #define PASSWORD "Password-here" 
 #define my_IPv4 "Broker-adress-here"
 */
-#include "WifiInformation.h" 
+#include "WifiInformation.h"
 
 
 
@@ -17,6 +17,7 @@ const char* server = my_IPv4;     // MQTT Broker URL
 
 
 const char* TOPIC_sub = "User/Data/Change";
+const char* Workout_sub = "User/Workout/Start";
 const char* TOPIC_pub_connection = "helloworld";
 
 WiFiClient wioClient;
@@ -65,6 +66,16 @@ void updateSettings(char json[]) {
   float height = doc["height"];
   float calorieCredit = doc["calorieCredit"];
   userInformation.setInformation(weight, height, age, strcmp("Female", sex) == 0 ? false : true);
+}
+
+void updateChart(char json[]) {
+
+  deserializeJson(doc, json);
+  float calorieGoal = doc["calorieGoal"];
+  float duration = doc["durationInSeconds"];
+  byte workoutType = doc["workoutType"];
+
+  burndownChartBackEnd.changeAttributeValues(1000, duration, calorieGoal, workoutType);
 
 }
 
@@ -102,8 +113,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
   printMessage(message);
   char charBuf[message.length() + 1];
   message.toCharArray(charBuf, message.length() + 1);
+
   if (strcmp(TOPIC_sub, topic) == 0) {
     updateSettings(charBuf);
+  } else if (strcmp(Workout_sub, topic) == 0) {
+    updateChart(charBuf);
   }
 }
 
@@ -125,6 +139,11 @@ void reconnect() {
       client.subscribe(TOPIC_sub);
       Serial.print("Subcribed to: ");
       Serial.println(TOPIC_sub);
+      //subscribe to start
+      client.subscribe(Workout_sub);
+      Serial.print("Subcribed to: ");
+      Serial.println(Workout_sub);
+
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
