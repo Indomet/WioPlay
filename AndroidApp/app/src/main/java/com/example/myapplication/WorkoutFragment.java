@@ -16,10 +16,12 @@ import android.widget.Button;
 
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class WorkoutFragment extends Fragment implements BrokerConnection.MessageListener {
 
+    private View rootView;
     private  WorkoutManager workoutManager;
     private ProgressBar calorieProgressBar;
 
@@ -80,7 +82,7 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_workout, container, false);
+        rootView = inflater.inflate(R.layout.fragment_workout, container, false);
         workoutManager=WorkoutManager.getInstance();
         calorieProgressBar = rootView.findViewById(R.id.calorie_progress_bar);
 
@@ -122,13 +124,12 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
     @Override
     public void onMessageArrived(String payload) {
         if (workoutManager.getWorkoutHasStarted()) {
-            workoutManager.addToCaloriesBurnt(Integer.parseInt(payload));
+            workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
             calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurntTextView.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
         }
 
         //TODO update the time left gto reach goal view
-        //TODO check iof workout is done
         if (workoutManager.isGoalAchieved()) {
             workoutManager.stopWorkout();
 
