@@ -13,6 +13,8 @@ import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import info.mqtt.android.service.Ack;
+
 public class BrokerConnection extends AppCompatActivity {
 
     // topics to subscribe to
@@ -43,7 +45,7 @@ public class BrokerConnection extends AppCompatActivity {
     //we automatically try to connect the broke in the constructor by calling the connectToMqttBroker method
     public BrokerConnection(Context context){
         this.context = context;
-        mqttClient = new MqttClient(context, MQTT_SERVER, CLIENT_ID);
+        mqttClient = new MqttClient(context, MQTT_SERVER, CLIENT_ID, Ack.AUTO_ACK);
         connectToMqttBroker();
     }
 
