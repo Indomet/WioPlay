@@ -44,9 +44,10 @@ public class Parser {
                     }
 
                     else {
-                        StringBuilder x = new StringBuilder();
-                        x.append(parseNote(letter)).append(octave);
-                        result.append("NOTE_" + x.toString().toUpperCase() + ",");
+                        result
+                                .append("NOTE_")
+                                .append((parseNote(letter) + octave).toUpperCase())
+                                .append(",");
                     }
                 }
             }

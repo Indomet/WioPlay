@@ -1,9 +1,9 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import Core.Parser;
 
-public class ParseTest {
+public class TestParse {
 
     @Test
     public void shouldNotSplitSameBar() {
@@ -13,7 +13,7 @@ public class ParseTest {
                     4|---------------b--------a-|
                     """;
             String[] chunks = {notes.trim()};
-            assertEquals(Arrays.toString(chunks), Arrays.toString(Parser.splitBars(notes)));
+            Assertions.assertEquals(Arrays.toString(chunks), Arrays.toString(Parser.splitBars(notes)));
 
     }
 
@@ -26,7 +26,7 @@ public class ParseTest {
                     4|---------------b--------a-|
                     """;
         String[] chunks = {"5|e--D--e--D--e-----d--c----|", "4|---------------b--------a-|"};
-        assertEquals(Arrays.toString(chunks), Arrays.toString(Parser.splitBars(notes)));
+        Assertions.assertEquals(Arrays.toString(chunks), Arrays.toString(Parser.splitBars(notes)));
 
     }
 
@@ -36,7 +36,7 @@ public class ParseTest {
         String bar = "5|e--D--e|";
         String[] bars = Parser.splitBars(bar);
         String[] result = Parser.parse(bars);
-        assertEquals("[NOTE_E5, 0, 0, NOTE_DS5, 0, 0, NOTE_E5]", Arrays.toString(result));
+        Assertions.assertEquals("[NOTE_E5, 0, 0, NOTE_DS5, 0, 0, NOTE_E5]", Arrays.toString(result));
 
     }
 
