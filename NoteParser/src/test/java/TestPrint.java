@@ -1,17 +1,13 @@
 import java.io.ByteArrayOutputStream;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
+
 import java.io.PrintStream;
 import java.util.ArrayList;
 import Utils.IOScanner;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
-public class PrintTest {
+public class TestPrint {
 
     private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -41,7 +37,7 @@ public class PrintTest {
     @Test
     public void shouldSeparateCorrectly() {
         IOScanner.printSeparator();
-        assertEquals("----------", outContent.toString());
+        Assertions.assertEquals("----------", outContent.toString());
     }
 
     @Test
@@ -59,7 +55,7 @@ public class PrintTest {
         \t1- orange
         \t2- pear""";
 
-        assertEquals(result, outContent.toString());
+        Assertions.assertEquals(result, outContent.toString());
 
     }
 
