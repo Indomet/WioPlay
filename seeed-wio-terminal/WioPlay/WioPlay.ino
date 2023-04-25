@@ -42,6 +42,7 @@ void loop()
     movementValue =  motionDetection.detectMotion(); // Read current user-position
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
     isExercising = burndownChart.isExercising();
+    client.publish("calories", String(burndownChartBackEnd.caloriesBurnt).c_str());
 
   }
 
