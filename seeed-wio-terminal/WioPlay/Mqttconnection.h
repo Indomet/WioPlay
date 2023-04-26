@@ -18,7 +18,7 @@ const char* server = my_IPv4;     // MQTT Broker URL
 
 const char* TOPIC_sub = "User/Data/Change";
 const char* Workout_sub = "User/Workout/Start";
-const char* TOPIC_pub_connection = "helloworld";
+const char* TOPIC_pub_connection = "Send/Calorie/Burn/Data";
 
 WiFiClient wioClient;
 PubSubClient client(wioClient);
