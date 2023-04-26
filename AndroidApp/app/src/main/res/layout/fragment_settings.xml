@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/light_grey"
     android:fillViewport="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/settingsFragment">
 
     <ScrollView
         android:layout_width="match_parent"
