@@ -12,7 +12,6 @@ public class WorkoutManager {
     private static WorkoutManager singleton;
     private int workoutType;
     private int durationInSeconds;
-
     HashMap<String,Integer> workoutsMap;
 
     private WorkoutManager(){

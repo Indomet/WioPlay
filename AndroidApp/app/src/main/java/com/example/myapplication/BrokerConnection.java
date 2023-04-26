@@ -19,7 +19,7 @@ public class BrokerConnection extends AppCompatActivity {
     public static final String SETTINGS_CHANGE_TOPIC = "User/Data/Change";
     public static final String WORKOUT_STARTED_TOPIC = "User/Workout/Start";
     public static final String SUB_TOPIC = "Send/Calorie/Burn/Data";
-    public static final String LOCALHOST = "broker.emqx.io"; // Ip address of the local host
+    public static final String LOCALHOST = "broker.hivemq.com"; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
     public static final String CLIENT_ID = "Android Phone";   // the app client ID name
     public static final int QOS = 0;    // quality of service
