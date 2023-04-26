@@ -125,14 +125,16 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
     public void onMessageArrived(String payload) {
         if (workoutManager.getWorkoutHasStarted()) {
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
+            //TODO update the calorie balance and lifetime calories, but thats a seperate issue
+
             calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurntTextView.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
+
         }
 
         //TODO update the time left gto reach goal view
         if (workoutManager.isGoalAchieved()) {
             workoutManager.stopWorkout();
-
             calorieProgressBar.setProgress(0,true);
             caloriesBurntTextView.setText("0");
             caloriesBurntLabel.setText(WORKOUT_NOT_STARTED);
