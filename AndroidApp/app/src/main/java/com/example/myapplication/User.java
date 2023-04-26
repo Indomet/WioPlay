@@ -5,20 +5,31 @@ public class User {
     private int age;
     private float height;
     private float weight;
-    private String sex;
-    private int CalorieCredit;
+    private String gender;
+    private static User theUser = null;
 
     //Empty constructor
     //todo make the user start in settings to input stuff and cant leave if they don't do it
     //and the values to not be 0
-    User(){
+
+
+
+    // This lines of code makes shure that only one object is returned
+
+
+    private User(){
     age = 0;
     height =0;
     weight=0;
     username="username";
     CalorieCredit = 727; //A new user starts with 0 CalorieCurrency
     }
-    
+    public static User getInstance(){
+      if(theUser== null){
+          theUser = new User();
+      }
+      return theUser;
+    }
     public void setUsername(String username) {
         this.username = username;
 

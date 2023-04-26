@@ -2,11 +2,16 @@ package com.example.myapplication;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,11 +38,19 @@ public class SettingsFragment extends Fragment {
         heightEditText = rootView.findViewById(R.id.height_edittext);
         ageEditText = rootView.findViewById(R.id.age_edit_text);
 
+
+        
+
+
+         // I will need to talk to Ali about this method, If they really need to be there.
         /*
-        weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
-        heightEditText.setText(Integer.toString(MainActivity.user.getAge()));
-        ageEditText.setText(Integer.toString(MainActivity.user.getAge()));
-        */
+        {
+        //weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
+
+        //ageEditText.setText(Integer.toString(MainActivity.user.getAge()));
+        //heightEditText.setText(Integer.toString(MainActivity.user.getAge()));
+         }
+         */
 
         saveButton.setOnClickListener(view -> publishSavedData());
         //TODO make gender take enum instead of string
@@ -67,6 +80,12 @@ public class SettingsFragment extends Fragment {
 
         return rootView;
     }
+    private int changeToString(String sentance){
+         int number = Integer.parseInt(sentance);
+         return number;
+    }
+    // this is for getting the same user
+
 
     private void publishSavedData(){
         updateUserInfo();
@@ -91,4 +110,100 @@ public class SettingsFragment extends Fragment {
 
     }
 
+    public void changescreen(){
+
+        SettingsFragment settingsFragment = new SettingsFragment();
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,settingsFragment).setReorderingAllowed(true).addToBackStack(null).commit();
+    
+
+
+    }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        weightEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // This method is called to notify that the text is about to change
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+               String currentnumberString=weightEditText.getText().toString();
+               if(!currentnumberString.isEmpty()){
+                   int currentNumber= changeToString(currentnumberString);
+                   if(currentNumber<0){
+                       Toast.makeText(getActivity(),"the value can not be negative",Toast.LENGTH_LONG).show();
+                   } else if (currentNumber>650){
+                       changescreen();
+                       Toast.makeText(getActivity(),"value can not be over 650",Toast.LENGTH_LONG).show();
+                   }
+               }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+        });
+
+        heightEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String currentnumberString=heightEditText.getText().toString();
+                if(!currentnumberString.isEmpty()) {
+                    int currentNumber = changeToString(currentnumberString);
+                    if (currentNumber < 0) {
+                        Toast.makeText(getActivity(), "the value can not be negative", Toast.LENGTH_LONG).show();
+                    } else if (currentNumber > 300) {
+                        changescreen();
+                        Toast.makeText(getActivity(), "value can not be over 300", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+        });
+
+        ageEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+              String currentnumberString=ageEditText.getText().toString();
+              if(!currentnumberString.isEmpty()) {
+                  int currentNumber = changeToString(currentnumberString);
+                  if (currentNumber < 0) {
+                      Toast.makeText(getActivity(), "the value can not be negative", Toast.LENGTH_LONG).show();
+                  } else if (currentNumber > 150) {
+                      changescreen();
+                      Toast.makeText(getActivity(), "value can not be over 150", Toast.LENGTH_LONG).show();
+                  }
+              }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
 }
