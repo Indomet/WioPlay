@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 
 import android.content.ClipData;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -30,9 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     //TODO THIS IS TO BE REFACTORED ITS BAD PRACTICE make into singleton pattern
     public static BrokerConnection brokerConnection;
-    public static User user= User.getInstance(); // This is changed in order to have the same object evertime this method in called
-
-
+    public static User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +45,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
         changeFragment(musicFragment);
         bottomNavigation.setOnItemSelectedListener(this);
-        brokerConnection = BrokerConnection.getInstance(getApplicationContext());// the instance of the brockerConnection class
-                                                                                 // that is being returned is one object evertime
+        brokerConnection = new BrokerConnection(getApplicationContext());
+
+
+
     }
-
-
 
     @Override   //This method checks which fragment was selected by the user
     //and switches the layout accordingly
