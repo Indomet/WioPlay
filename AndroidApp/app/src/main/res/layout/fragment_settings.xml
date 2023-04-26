@@ -175,7 +175,10 @@
                 app:layout_constraintBottom_toBottomOf="@+id/weight_textview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/weight_textview"
-                app:layout_constraintTop_toTopOf="@+id/weight_textview" />
+                app:layout_constraintTop_toTopOf="@+id/weight_textview"
+                android:inputType="numberDecimal"
+
+                />
 
             <EditText
                 android:id="@+id/height_edittext"
@@ -205,7 +208,10 @@
                 app:layout_constraintBottom_toBottomOf="@+id/age_textview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/age_textview"
-                app:layout_constraintTop_toTopOf="@+id/age_textview" />
+                app:layout_constraintTop_toTopOf="@+id/age_textview"
+                android:inputType="number"
+
+                />
 
             <Spinner
                 android:id="@+id/sex_spinner"
