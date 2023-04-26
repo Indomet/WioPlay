@@ -88,6 +88,11 @@ void changeAttributeValues(float newDelayValue, float newExerciseDuration, float
   chosenActivityIdx = newChosenActivityIdx;
 }
 
+bool checkIfUserAccomplishedGoal()
+{
+  return caloriesBurnt >= caloriesGoal;
+}
+
 private:
 float delayValue;
 

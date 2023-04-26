@@ -22,6 +22,7 @@ void setup()
 {
   Serial.begin(9600);  //Start serial communication
   setupMqtt();
+
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
 }
@@ -29,12 +30,11 @@ void setup()
 void loop()
 {
   loopMqtt();
+  
   // Exercise isn't complete yet: Continually read movement-values and update chart accordingly
-
-
   if (isExercising)
   {
-   //mqttConnection.loopMqtt();
+    mqttConnection.loopMqtt();
     burndownChart.controlConstraints();
     motionDetection.recordPreviousAcceleration(); // Read previous user-position
     //delay(burndownChart.getDelayValue());
@@ -44,15 +44,25 @@ void loop()
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
     isExercising = burndownChart.isExercising();
     client.publish(calorie_pub, String(burndownChartBackEnd.caloriesBurnt).c_str());
-
   }
 
   // Exercise is completed: Inactivate burndown chart and show panel
   else
-  {    
-    tft.fillScreen(TFT_RED);
+  {
     tft.setTextSize(3);
-    tft.drawString("Menu here!", 50, 70);
-  }
 
+    // User completed goal
+    if (burndownChart.checkIfUserAccomplishedGoal())
+    {
+      tft.fillScreen(TFT_GREEN);
+      tft.drawString("Accomplished goal!", 20, 70);
+    }
+
+    // User didn't attain the set goal
+    else
+    {
+      tft.fillScreen(TFT_RED);
+      tft.drawString("Menu here!", 50, 70);
+    }
+  }
 }

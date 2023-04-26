@@ -36,6 +36,12 @@ class BurndownChart
     updateGraphVizuals();
   }
 
+  bool checkIfUserAccomplishedGoal()
+  {
+    return burndownChartBackEnd.checkIfUserAccomplishedGoal();
+  }
+
+
   private:
   void controlNumberOfDataPointsInGraph()
   {
