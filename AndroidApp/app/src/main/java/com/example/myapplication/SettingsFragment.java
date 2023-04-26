@@ -1,5 +1,4 @@
 package com.example.myapplication;
-
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,14 +15,8 @@ import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class SettingsFragment extends Fragment {
     private View rootView;
@@ -62,9 +55,29 @@ public class SettingsFragment extends Fragment {
         saveButton.setOnClickListener(view -> publishSavedData());
         //TODO make gender take enum instead of string
         genderSpinner= rootView.findViewById(R.id.sex_spinner);
-        List<String> genders = List.of("Female","Male");
-        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(rootView.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,genders);
+        String[] genders = {"Select", "Female", "Male", "Other"};
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(
+                this.getContext(),
+                android.R.layout.simple_selectable_list_item,
+                genders
+        );
+
         genderSpinner.setAdapter(genderAdapter);
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position > 0) {
+                    Toast.makeText(rootView.getContext(), genders[position] + " Selected", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(rootView.getContext(), "Gender cannot be blank", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         return rootView;
     }
     private int changeToString(String sentance){
@@ -76,8 +89,13 @@ public class SettingsFragment extends Fragment {
 
     private void publishSavedData(){
         updateUserInfo();
-        MainActivity.brokerConnection.getMqttClient().publish("User/Data/Change",MainActivity.user.toString()
-                ,MainActivity.brokerConnection.QOS,null);
+        try {//todo use singleotn
+            MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
+            ,Util.toJSON(MainActivity.user)
+                    ,MainActivity.brokerConnection.QOS,null);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -86,7 +104,10 @@ public class SettingsFragment extends Fragment {
         MainActivity.user.setAge(Integer.parseInt(ageEditText.getText().toString()));
         MainActivity.user.setHeight(Float.parseFloat(heightEditText.getText().toString()));
         MainActivity.user.setWeight(Float.parseFloat(weightEditText.getText().toString()));
-        MainActivity.user.setGender(genderSpinner.getSelectedItem().toString());
+
+        MainActivity.user.setSex(genderSpinner.getSelectedItem().toString());
+
+
     }
 
     public void changescreen(){
