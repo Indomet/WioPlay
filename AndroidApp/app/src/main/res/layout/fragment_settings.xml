@@ -8,14 +8,11 @@
     android:fillViewport="true"
     android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="40dp"
             tools:context=".SettingsFragment">
 
             <ImageView
@@ -232,9 +229,78 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/age_textview" />
+                app:layout_constraintTop_toBottomOf="@+id/age_textview"
+                />
 
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_local_fire_department_24"
+                app:layout_constraintEnd_toEndOf="@+id/balance_label"
+                app:layout_constraintStart_toStartOf="@+id/balance_label"
+                app:layout_constraintTop_toTopOf="@+id/balance_label" />
 
+            <TextView
+                android:id="@+id/balance_label"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/calorie_icon_box"
+                android:elevation="-1dp"
+                android:gravity="center"
+                android:text="Balance"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/usercircle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/usercircle"
+                app:layout_constraintTop_toTopOf="@+id/usercircle" />
+
+            <TextView
+                android:id="@+id/life_time_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/calorie_icon_box"
+                android:elevation="-1dp"
+                android:gravity="center"
+                android:text="Total Calories Burnt"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/usercircle"
+                app:layout_constraintEnd_toStartOf="@+id/usercircle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/usercircle" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_star_rate_24"
+                app:layout_constraintBottom_toBottomOf="@+id/userIcon"
+                app:layout_constraintEnd_toEndOf="@+id/life_time_label"
+                android:layout_marginBottom="50dp"
+                app:layout_constraintStart_toStartOf="@+id/life_time_label" />
+
+            <TextView
+                android:id="@+id/total_calories_burnt_text_view"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                app:layout_constraintBottom_toBottomOf="@+id/life_time_label"
+                app:layout_constraintEnd_toEndOf="@+id/life_time_label"
+                app:layout_constraintStart_toStartOf="@+id/life_time_label"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+            <TextView
+                android:id="@+id/current_balance_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/black"
+
+                app:layout_constraintBottom_toBottomOf="@+id/balance_label"
+                app:layout_constraintEnd_toEndOf="@+id/balance_label"
+                app:layout_constraintStart_toStartOf="@+id/balance_label"
+                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 </ScrollView>
