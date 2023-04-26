@@ -51,6 +51,9 @@ void loop()
   {
     tft.setTextSize(3);
 
+    String caloriesPerSecondComparison = String(burndownChart.displayCalorieStatistics().c_str());
+    tft.drawString(caloriesPerSecondComparison, 5, 50);
+
     // User completed goal
     if (burndownChart.checkIfUserAccomplishedGoal())
     {

@@ -2,8 +2,11 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd (1000, 20, 20, 0); // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd (1000, 10, 20, 0); // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd (20); // (float graphUIXStartValue)
+
+#include <iostream>
+#include <string>
 
 class BurndownChart
 {
@@ -11,6 +14,15 @@ class BurndownChart
   void initializeUI()
   {
     burndownChartFrontEnd.initializeUI();
+  }
+
+  // Returns a string comparing the actual calories burnt per second with the expected
+  std::string displayCalorieStatistics()
+  {
+    std::string actual = std::to_string(burndownChartBackEnd.getActualCaloriesPerSecond());
+    std::string expected = std::to_string(burndownChartBackEnd.getExpectedCaloriesPerSecond());
+
+    return actual + ", " + expected;
   }
 
   bool isExercising()
