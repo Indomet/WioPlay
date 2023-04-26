@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsFragment extends Fragment {
@@ -21,6 +22,9 @@ public class SettingsFragment extends Fragment {
     private EditText ageEditText;
 
     private Spinner genderSpinner;
+    private TextView lifeTimeCurrency;
+    private TextView currentBalance;
+
 
 
     @Override
@@ -64,7 +68,11 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-
+        currentBalance = rootView.findViewById(R.id.current_balance_text_view);
+        lifeTimeCurrency = rootView.findViewById(R.id.total_calories_burnt_text_view);
+        //TODO use singleton
+        currentBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+        lifeTimeCurrency.setText(Integer.toString(MainActivity.user.getLifeTimeCredit()));
         return rootView;
     }
 
