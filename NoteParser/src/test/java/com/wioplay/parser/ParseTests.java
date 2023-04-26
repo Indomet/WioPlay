@@ -1,9 +1,11 @@
+package com.wioplay.parser;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
-import Core.Parser;
+import com.wioplay.parser.Core.Parser;
 
-public class ParseTest {
+public class ParseTests {
 
     @Test
     public void shouldNotSplitSameBar() {

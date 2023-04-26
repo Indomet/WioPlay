@@ -1,4 +1,4 @@
-package Utils;
+package com.wioplay.parser.Utils;
 
 import java.util.ArrayList;
 import java.util.Scanner;
