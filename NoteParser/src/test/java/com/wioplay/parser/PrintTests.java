@@ -1,3 +1,5 @@
+package com.wioplay.parser;
+
 import java.io.ByteArrayOutputStream;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -5,18 +7,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import Utils.IOScanner;
+import com.wioplay.parser.Utils.IOScanner;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class PrintTest {
+public class PrintTests {
 
     private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private static final PrintStream originalOut = System.out;
     private static final PrintStream originalErr = System.err;
+
+    private static String NEW_LINE = System.lineSeparator();
 
     //redirect output stream to referenced data so that we can test
     @BeforeAll
@@ -53,11 +57,10 @@ public class PrintTest {
         fruits.add("pear");
 
         IOScanner.printList("Fruits", fruits);
-        String result = """
-        Fruits:
-        \t0- apple
-        \t1- orange
-        \t2- pear""";
+        String result = "Fruits:" + NEW_LINE +
+        "\t0- apple" + NEW_LINE +
+        "\t1- orange" + NEW_LINE +
+        "\t2- pear";
 
         assertEquals(result, outContent.toString());
 

@@ -1,4 +1,4 @@
-package Core;
+package com.wioplay.parser.Core;
 
 /*
 This class handles all processing of musical notes to an array of frequencies
