@@ -9,7 +9,7 @@ public class User {
     private static User theUser = null;
 
     //Empty constructor
-    //todo make the user start in settings to input stuff and cant leave if they dont do it
+    //todo make the user start in settings to input stuff and cant leave if they don't do it
     //and the values to not be 0
 
 
@@ -22,6 +22,7 @@ public class User {
     height =0;
     weight=0;
     username="username";
+    CalorieCredit = 727; //A new user starts with 0 CalorieCurrency
     }
     public static User getInstance(){
       if(theUser== null){
@@ -63,17 +64,29 @@ public class User {
         return weight;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
-    public String getGender() {
-        return gender;
+    public String getSex() {
+        return sex;
+    }
+
+    public void updateCredit(float calorie){
+        //calorie can be positive when gaining, and negative when spending.
+        int diff = Math.round(calorie);
+        this.CalorieCredit += diff;
+
+    }
+    public int getCalorieCredit(){
+        return this.CalorieCredit;
     }
 
     public String toString(){
         return age+","+height+","+weight;
     }
+
+
 
 
 }
