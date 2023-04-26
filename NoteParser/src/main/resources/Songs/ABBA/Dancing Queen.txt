@@ -1,3 +1,9 @@
+name: Dancing Queen
+artist: ABBA
+imageURL: https://i.scdn.co/image/ab67616d0000b27370f7a1b35d5165c85b95a0e0
+tempo: 100.804
+notes:
+
 5|------------------C-------|
 4|--------------------b-b-b-|
 
