@@ -93,6 +93,16 @@ bool checkIfUserAccomplishedGoal()
   return caloriesBurnt >= caloriesGoal;
 }
 
+float getActualCaloriesPerSecond()
+{
+  return caloriesBurnt / exerciseDuration; // Note: For now, we assume that 'exerciseDuration' is measured in seconds
+}
+
+float getExpectedCaloriesPerSecond()
+{
+  return caloriesGoal / exerciseDuration;
+}
+
 private:
 float delayValue;
 

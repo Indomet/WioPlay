@@ -10,7 +10,7 @@ private:
   int* song;
   int size;
   int tempo;
-  int position;
+  int position;  
 
 public:
   MusicPlayer(int* song, int size, float tempo) {
@@ -44,7 +44,6 @@ private:
   }
 
 public:
-
   void playChunk() {
     for (int i = this->position; i < this->position + CHUNK_SIZE; i++) {
       play(i);
