@@ -16,6 +16,7 @@ bool isExercising = true;
 MotionDetection motionDetection;
 BurndownChart burndownChart;
 MusicPlayer player(song, sizeof(song) / sizeof(int), 1.2);
+const char* calorie_pub = "Send/Calorie/Burn/Data";
 
 void setup()
 {
@@ -42,7 +43,7 @@ void loop()
     movementValue =  motionDetection.detectMotion(); // Read current user-position
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
     isExercising = burndownChart.isExercising();
-    client.publish("calories", String(burndownChartBackEnd.caloriesBurnt).c_str());
+    client.publish(calorie_pub, String(burndownChartBackEnd.caloriesBurnt).c_str());
 
   }
 
