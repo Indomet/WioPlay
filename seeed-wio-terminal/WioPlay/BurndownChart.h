@@ -2,8 +2,11 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd (1000, 20, 20, 0); // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd (1000, 15, 20, 0); // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd (20); // (float graphUIXStartValue)
+
+#include <iostream>
+#include <string>
 
 class BurndownChart
 {
@@ -11,6 +14,31 @@ class BurndownChart
   void initializeUI()
   {
     burndownChartFrontEnd.initializeUI();
+  }
+
+  // Returns a string comparing the actual calories burnt per second with the expected
+  std::string displayCalorieStatistics()
+  {
+    std::string actual = std::to_string(burndownChartBackEnd.getActualCaloriesPerSecond());
+    // std::string expected = std::to_string(burndownChartBackEnd.getExpectedCaloriesPerSecond());
+    std::string expected = std::to_string(burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond());    
+
+    return actual + ", " + expected;
+  }
+
+  float getGeneralExpectedCaloriesPerSecond()
+  {
+    return burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond();
+  }
+
+  float getActualCaloriesPerSecond()
+  {
+    return burndownChartBackEnd.getActualCaloriesPerSecond();
+  }
+
+  float getExpectedCaloriesPerSecond()
+  {
+    return burndownChartBackEnd.getExpectedCaloriesPerSecond();
   }
 
   bool isExercising()
@@ -28,12 +56,27 @@ class BurndownChart
     burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue);
   }
 
-  // Control constraints such as A,B,C in real-time
+  // Constrain dynamic variables in front-end and back-end in real-time
   void controlConstraints()
   {
     controlNumberOfDataPointsInGraph();
     increaseSegments();
     updateGraphVizuals();
+  }
+
+  bool checkIfUserAccomplishedGoal()
+  {
+    return burndownChartBackEnd.checkIfUserAccomplishedGoal();
+  }
+
+  float getTimeElapsed()
+  {
+    return burndownChartBackEnd.getTimeElapsed();
+  }
+
+  void updateTimeElapsed(float duration)
+  {
+    burndownChartBackEnd.updateTimeElapsed(duration);
   }
 
   private:
@@ -44,7 +87,7 @@ class BurndownChart
 
   void increaseSegments()
   {
-    burndownChartBackEnd.currentSegments++;
+    burndownChartBackEnd.increaseCurrentSegments();
   }
 
   void updateGraphVizuals()
