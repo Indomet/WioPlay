@@ -12,6 +12,9 @@
 # * Caches downloaded dependencies and plugins between invocation.
 # * Verify but don't deploy merge requests.
 # * Deploy built artifacts from master branch only.
+default:
+  tags:
+    - docker
 
 variables:
   # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
