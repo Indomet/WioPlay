@@ -44,8 +44,10 @@ void loop()
     burndownChart.updateTimeElapsed(player.getCurrentPauseChunkDuration());
 
     // TEMPORARY
+    Serial.println("***********************");
     Serial.println(burndownChart.getTimeElapsed());
     Serial.println(burndownChart.getActualCaloriesPerSecond());
+    Serial.println(burndownChart.getExpectedCaloriesPerSecond());
     Serial.println("***********************");
 
     movementValue =  motionDetection.detectMotion(); // Read current user-position

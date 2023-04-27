@@ -20,14 +20,25 @@ class BurndownChart
   std::string displayCalorieStatistics()
   {
     std::string actual = std::to_string(burndownChartBackEnd.getActualCaloriesPerSecond());
-    std::string expected = std::to_string(burndownChartBackEnd.getExpectedCaloriesPerSecond());
+    // std::string expected = std::to_string(burndownChartBackEnd.getExpectedCaloriesPerSecond());
+    std::string expected = std::to_string(burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond());    
 
     return actual + ", " + expected;
+  }
+
+  float getGeneralExpectedCaloriesPerSecond()
+  {
+    return burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond();
   }
 
   float getActualCaloriesPerSecond()
   {
     return burndownChartBackEnd.getActualCaloriesPerSecond();
+  }
+
+  float getExpectedCaloriesPerSecond()
+  {
+    return burndownChartBackEnd.getExpectedCaloriesPerSecond();
   }
 
   bool isExercising()

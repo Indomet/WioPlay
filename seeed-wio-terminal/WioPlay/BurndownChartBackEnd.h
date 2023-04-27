@@ -1,3 +1,6 @@
+#include<iostream>
+#include<algorithm>
+
 class BurndownChartBackEnd // Has the responsibility of dealing with logic and functionality of the burndown chart
 {
   public:
@@ -84,22 +87,22 @@ bool checkIfUserAccomplishedGoal()
   return caloriesBurnt >= caloriesGoal;
 }
 
-/*
-float getActualCaloriesPerSecond()
-{
-  return caloriesBurnt / exerciseDuration; // Note: For now, we assume that 'exerciseDuration' is measured in seconds
-}
-*/
-
 // Returns the calories burnt per second at a given point of time. If 'timeElapsed' = 'exerciseDuration', the method gets the calories burnt across the entire workout
 float getActualCaloriesPerSecond()
 {
   return caloriesBurnt / (timeElapsed / 1000);
 }
 
-// TODO: Adjust method below
-// Functioanlity to add: "Draw 'expected line from current-calories burnt to 'goal', read the calories needed for that and the seconds left to do it and calculate expectedCaloriesPerSecond"
+// Expected calories to burn per second from current calories burnt to reach goal
 float getExpectedCaloriesPerSecond()
+{
+  float caloriesLeft = max(0, caloriesGoal - caloriesBurnt);
+  float secondsLeft = exerciseDuration - (timeElapsed / 1000);
+
+  return caloriesLeft / secondsLeft;
+}
+
+float getGeneralExpectedCaloriesPerSecond()
 {
   return caloriesGoal / exerciseDuration;
 }
