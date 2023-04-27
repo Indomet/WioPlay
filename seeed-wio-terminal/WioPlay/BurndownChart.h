@@ -2,7 +2,7 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd (1000, 10, 20, 0); // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd (1000, 15, 20, 0); // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd (20); // (float graphUIXStartValue)
 
 #include <iostream>
@@ -25,6 +25,11 @@ class BurndownChart
     return actual + ", " + expected;
   }
 
+  float getActualCaloriesPerSecond()
+  {
+    return burndownChartBackEnd.getActualCaloriesPerSecond();
+  }
+
   bool isExercising()
   {
     return burndownChartBackEnd.isExercising();
@@ -40,7 +45,7 @@ class BurndownChart
     burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue);
   }
 
-  // Control constraints such as A,B,C in real-time
+  // Constrain dynamic variables in front-end and back-end in real-time
   void controlConstraints()
   {
     controlNumberOfDataPointsInGraph();
@@ -53,6 +58,15 @@ class BurndownChart
     return burndownChartBackEnd.checkIfUserAccomplishedGoal();
   }
 
+  float getTimeElapsed()
+  {
+    return burndownChartBackEnd.getTimeElapsed();
+  }
+
+  void updateTimeElapsed(float duration)
+  {
+    burndownChartBackEnd.updateTimeElapsed(duration);
+  }
 
   private:
   void controlNumberOfDataPointsInGraph()

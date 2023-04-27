@@ -38,7 +38,15 @@ void loop()
     burndownChart.controlConstraints();
     motionDetection.recordPreviousAcceleration(); // Read previous user-position
     //delay(burndownChart.getDelayValue());
+
     player.playChunk();
+
+    burndownChart.updateTimeElapsed(player.getCurrentPauseChunkDuration());
+
+    // TEMPORARY
+    Serial.println(burndownChart.getTimeElapsed());
+    Serial.println(burndownChart.getActualCaloriesPerSecond());
+    Serial.println("***********************");
 
     movementValue =  motionDetection.detectMotion(); // Read current user-position
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
