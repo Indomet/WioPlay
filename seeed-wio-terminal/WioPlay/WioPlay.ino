@@ -7,7 +7,7 @@ UserInformation userInformation (67, 175, 23, 0); // (userWeight, userHeight, us
 DynamicJsonDocument doc(1024);
 #include "MotionDetection.h"
 #include "BurndownChart.h"
-#include "MqttConnection.h"
+// #include "MqttConnection.h"
 #include "MusicPlayer.h"
 
 float movementValue;
@@ -21,7 +21,7 @@ const char* calorie_pub = "Send/Calorie/Burn/Data";
 void setup()
 {
   Serial.begin(9600);  //Start serial communication
-  setupMqtt();
+  // setupMqtt();
 
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
@@ -29,12 +29,12 @@ void setup()
 
 void loop()
 {
-  loopMqtt();
+  // loopMqtt();
   
   // Exercise isn't complete yet: Continually read movement-values and update chart accordingly
   if (isExercising)
   {
-    mqttConnection.loopMqtt();
+    // mqttConnection.loopMqtt();
     burndownChart.controlConstraints();
     motionDetection.recordPreviousAcceleration(); // Read previous user-position
     //delay(burndownChart.getDelayValue());
@@ -43,7 +43,7 @@ void loop()
     movementValue =  motionDetection.detectMotion(); // Read current user-position
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
     isExercising = burndownChart.isExercising();
-    client.publish(calorie_pub, String(burndownChartBackEnd.caloriesBurnt).c_str());
+    // client.publish(calorie_pub, String(burndownChartBackEnd.caloriesBurnt).c_str());
   }
 
   // Exercise is completed: Inactivate burndown chart and show panel

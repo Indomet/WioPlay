@@ -62,7 +62,7 @@ class BurndownChart
 
   void increaseSegments()
   {
-    burndownChartBackEnd.currentSegments++;
+    burndownChartBackEnd.increaseCurrentSegments();
   }
 
   void updateGraphVizuals()
