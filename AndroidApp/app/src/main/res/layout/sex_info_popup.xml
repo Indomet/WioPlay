@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_round_layour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textview_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/why_we_ask_for_it"
+            android:textColor="@color/dark_grey"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/sex_info_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/textview_header"
+            app:layout_constraintStart_toStartOf="@+id/textview_header"
+            app:layout_constraintTop_toBottomOf="@id/textview_header"
+            android:text="@string/sex_info_pt1"
+            android:textSize="21sp"
+            android:layout_marginTop="30dp"
+
+            />
+        <TextView
+            android:id="@+id/sex_info_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/sex_info_1"
+            app:layout_constraintStart_toStartOf="@+id/sex_info_1"
+            app:layout_constraintTop_toBottomOf="@id/sex_info_1"
+            android:text= "@string/by_knowing_your_sex_we_can_provide_you_with_the_most_accurate_calculateion_based_on_your_biological_compositon_that_are_better_suited_to_your_needs_and_goals"
+            android:layout_marginTop="30dp"
+             android:textSize="21sp"
+            />
+        <TextView
+            android:id="@+id/sex_info_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/sex_info_2"
+            app:layout_constraintStart_toStartOf="@+id/sex_info_2"
+            app:layout_constraintTop_toBottomOf="@id/sex_info_2"
+            android:text= "@string/rest_assured_that_we_value_diversity_and_inclusivity_and_your_response_will_not_impact_the_caluclations_in_any_major_way"
+            android:layout_marginTop="30dp"
+            android:textSize="21sp"
+            />
+        <Button
+            android:id="@+id/sex_info_ok_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/sex_info_3"
+            app:layout_constraintStart_toStartOf="@+id/sex_info_3"
+            app:layout_constraintTop_toBottomOf="@id/sex_info_3"
+            android:text="@string/ok_text"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@color/dark_purple"
+            android:layout_marginTop="30dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
