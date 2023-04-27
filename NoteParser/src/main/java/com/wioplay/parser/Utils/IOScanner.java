@@ -38,4 +38,5 @@ public class IOScanner {
         System.out.println(message);
     }
 
+
 }
