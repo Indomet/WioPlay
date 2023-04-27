@@ -16,6 +16,9 @@ default:
   tags:
     - docker
 
+before_script:
+  - cd NoteParser
+
 variables:
   # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
   MAVEN_OPTS: >-
