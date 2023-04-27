@@ -10,6 +10,7 @@ class BurndownChartBackEnd // Has the responsibility of dealing with logic and f
 
     caloriesBurnt = 0;
     currentSegments = 0;
+    timeElapsed = 0;
     balanceFactor = 0.08;
     totalNumberOfSegments = (exerciseDuration / (delayValue / 1000)) + 1;
 
@@ -60,7 +61,8 @@ void sufficientMovementInquiry(UserInformation userInformation, float movementVa
   }
   else
   {
-    Serial.println("You are not exercising hard enough for the selected exercise!");
+    Serial.println(" ");
+    // Serial.println("You are not exercising hard enough for the selected exercise!");
   }
 }
 
@@ -82,11 +84,21 @@ bool checkIfUserAccomplishedGoal()
   return caloriesBurnt >= caloriesGoal;
 }
 
+/*
 float getActualCaloriesPerSecond()
 {
   return caloriesBurnt / exerciseDuration; // Note: For now, we assume that 'exerciseDuration' is measured in seconds
 }
+*/
 
+// Returns the calories burnt per second at a given point of time. If 'timeElapsed' = 'exerciseDuration', the method gets the calories burnt across the entire workout
+float getActualCaloriesPerSecond()
+{
+  return caloriesBurnt / (timeElapsed / 1000);
+}
+
+// TODO: Adjust method below
+// Functioanlity to add: "Draw 'expected line from current-calories burnt to 'goal', read the calories needed for that and the seconds left to do it and calculate expectedCaloriesPerSecond"
 float getExpectedCaloriesPerSecond()
 {
   return caloriesGoal / exerciseDuration;
@@ -95,6 +107,16 @@ float getExpectedCaloriesPerSecond()
 void increaseCurrentSegments()
 {
   currentSegments++;
+}
+
+float getTimeElapsed()
+{
+  return timeElapsed;
+}
+
+void updateTimeElapsed(float duration)
+{
+  timeElapsed += duration;
 }
 
 private:
@@ -107,6 +129,7 @@ byte chosenActivityIdx; // 0
 float totalNumberOfSegments; // Number of update segments in graph until goal is reached
 float currentSegments;
 float balanceFactor;
+float timeElapsed;
 
 float exerciseDuration; // 30 (Seconds)
 float caloriesGoal; // 100 --> Put in 'ExerciseSettings'
