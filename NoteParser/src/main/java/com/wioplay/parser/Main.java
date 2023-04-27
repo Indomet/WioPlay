@@ -1,8 +1,8 @@
 package com.wioplay.parser;
 
-import com.wioplay.parser.Network.Mqtt;
-import com.wioplay.parser.Utils.IOScanner;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import com.wioplay.parser.Network.MQTTConnection;
+import com.wioplay.parser.Utils.IOScanner;
 
 public class Main {
 
@@ -10,7 +10,7 @@ public class Main {
 
         try {
 
-            new Mqtt("Parser");
+            new MQTTConnection("Parser");
             IOScanner.printSeparator();
             System.out.println();
 
