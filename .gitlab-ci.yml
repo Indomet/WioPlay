@@ -39,7 +39,7 @@ variables:
 # for verifying and deploying images
 # Maven 3.8.x REQUIRES HTTPS repositories.
 # See https://maven.apache.org/docs/3.8.1/release-notes.html#how-to-fix-when-i-get-a-http-repository-blocked for more.
-image: maven:3-openjdk-8
+image: maven:latest
 
 # Cache downloaded dependencies and plugins between builds.
 # To keep cache across branches add 'key: "$CI_JOB_NAME"'
