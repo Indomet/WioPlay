@@ -1,16 +1,16 @@
 package com.wioplay.parser.Network.Subscriptions;
 
-import com.wioplay.parser.Utils.IOScanner;
-import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import com.wioplay.parser.Network.AbstractSubscription;
 
-public class HelloWorld implements IMqttMessageListener {
+public class HelloWorld extends AbstractSubscription {
+
+    public HelloWorld() {
+        super("hello-world");
+    }
 
     @Override
-    public void messageArrived(String s, MqttMessage mqttMessage) {
-
-        IOScanner.println("Received Message: " + s);
-
+    public void messageArrived(String message) {
+        System.out.printf("Received message: %s\n", message);
     }
 
 }
