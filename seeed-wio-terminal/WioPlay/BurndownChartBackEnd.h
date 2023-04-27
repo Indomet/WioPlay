@@ -1,22 +1,6 @@
-// #include "Arduino.h"
-
-class BurndownChartBackEnd // Logic and functionality of the burndown chart
+class BurndownChartBackEnd // Has the responsibility of dealing with logic and functionality of the burndown chart
 {
   public:
-  float standard;
-  float minMovement; // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
-  float maxMovement; // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
-  float proportionalConstant;
-
-  float exerciseDuration; // 30 (Seconds)
-  float caloriesGoal; // 100 --> Put in 'ExerciseSettings'
-  byte chosenActivityIdx; // 0
-
-  float totalNumberOfSegments; // Number of update segments in graph until goal is reached
-  float currentSegments;
-  float balanceFactor;
-  float caloriesBurnt;
-
   BurndownChartBackEnd(float delayValue, float exerciseDuration, float caloriesGoal, byte chosenActivityIdx)
   {
     this->delayValue = delayValue;
@@ -38,6 +22,11 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
   bool isExercising()
   {
     return currentSegments < totalNumberOfSegments;
+  }
+
+  float getCaloriesBurnt()
+  {
+    return caloriesBurnt;
   }
 
   float getExpectedValue()
@@ -103,8 +92,25 @@ float getExpectedCaloriesPerSecond()
   return caloriesGoal / exerciseDuration;
 }
 
+void increaseCurrentSegments()
+{
+  currentSegments++;
+}
+
 private:
 float delayValue;
+float standard;
+float minMovement; // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
+float maxMovement; // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
+float proportionalConstant;
+byte chosenActivityIdx; // 0
+float totalNumberOfSegments; // Number of update segments in graph until goal is reached
+float currentSegments;
+float balanceFactor;
+
+float exerciseDuration; // 30 (Seconds)
+float caloriesGoal; // 100 --> Put in 'ExerciseSettings'
+float caloriesBurnt;
 
 // Note: Row[i] is equivalent to the (i)th activity
 // Note: Retrieve standard-value by getting the average of min and max value
