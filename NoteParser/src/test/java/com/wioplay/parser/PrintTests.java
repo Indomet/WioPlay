@@ -20,7 +20,7 @@ public class PrintTests {
     private static final PrintStream originalOut = System.out;
     private static final PrintStream originalErr = System.err;
 
-    private static String NEW_LINE = System.lineSeparator();
+    private static final String NEW_LINE = System.lineSeparator();
 
     //redirect output stream to referenced data so that we can test
     @BeforeAll
