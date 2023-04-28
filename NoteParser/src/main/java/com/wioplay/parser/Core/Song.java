@@ -9,7 +9,7 @@ public class Song {
     private final double tempo;
     private final int cost;
 
-    public Song(String title, String imageURL, int tempo, int cost) {
+    public Song(String title, String imageURL, double tempo, int cost) {
         this.title = title;
         this.imageURL = imageURL;
         this.tempo = tempo;
