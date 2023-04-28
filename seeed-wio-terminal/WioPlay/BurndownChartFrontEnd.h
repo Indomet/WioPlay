@@ -103,7 +103,7 @@ class BurndownChartFrontEnd
 
   void vizualiseGraphValues(BurndownChartBackEnd burndownChartBackEnd)
   {
-    data[0].push(burndownChartBackEnd.caloriesBurnt);
+    data[0].push(burndownChartBackEnd.getCaloriesBurnt());
     data[1].push(burndownChartBackEnd.getExpectedValue());
   }
 };

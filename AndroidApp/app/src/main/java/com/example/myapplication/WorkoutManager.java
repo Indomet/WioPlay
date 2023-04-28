@@ -1,11 +1,8 @@
 package com.example.myapplication;
 
-import android.os.Build;
+import android.util.Log;
 
-import androidx.annotation.RequiresApi;
-
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 
 //This class manages the workout. Updates the target goal, the calories they burn and keeps track of the time
 public class WorkoutManager {
@@ -15,6 +12,9 @@ public class WorkoutManager {
     private int calorieGoal;
     private int secondsElapsed;
     private static WorkoutManager singleton;
+    private int workoutType;
+    private int durationInSeconds;
+    HashMap<String,Integer> workoutsMap;
 
     private WorkoutManager(){
         //The constructor sets the default values then they are changed according to the user input from the UI
@@ -23,6 +23,12 @@ public class WorkoutManager {
         calorieGoal=0;
         caloriesBurnt=0;
         workoutHasStarted = false;
+        workoutType=0;
+        durationInSeconds=0;
+        workoutsMap = new HashMap<>();
+        workoutsMap.put("Walking",0);
+        workoutsMap.put("Running",1);
+        workoutsMap.put("Hiking",2);
 
     }
     //singleton design pattern as the user only needs 1 workout manager to manage the backend logic
@@ -45,15 +51,13 @@ public class WorkoutManager {
     }
 
     //validates the time using the LocalTime import
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean validateDuration(String time) {
+         String pattern = "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$";
+            return time.matches(pattern);
+    }
 
-        try {
-            LocalTime.parse(time);
-        } catch (DateTimeParseException | NullPointerException e) {
-            return false;
-        }
-        return true;
+    public void setDurationInSeconds(int seconds){
+        durationInSeconds=seconds;
     }
 
 
@@ -96,19 +100,49 @@ public class WorkoutManager {
     public int getCaloriesBurnt(){
         return caloriesBurnt;
     }
-    public void addToCaloriesBurnt(int caloriesToAdd){
-        caloriesBurnt+=caloriesToAdd;
+    public void setCaloriesBurnt(int caloriesBurnt){
+        this.caloriesBurnt=caloriesBurnt;
+    }
+    public int getWorkoutType(){
+        return workoutType;
     }
 
+    public void setWorkoutType(String workoutType){
+        this.workoutType=workoutsMap.get(workoutType);
+    }
+    public int getDurationInSeconds(){
+        return durationInSeconds;
+    }
 
-
-    //potentially a useful function to display statistics
-    /*public int getRemainingCalories(int caloriesBurned) {
-        int remainingCalories = calorieGoal - caloriesBurned;
-        if (remainingCalories < 0) {
-            return 0;
+    public static int timeToSeconds(String time) {
+        String hours = "";
+        String mins = "";
+        boolean hasReachedMins = false;
+        for (int i = 0; i < time.length(); i++) {
+            Character c = time.charAt(i);
+            if (c == ':') {
+                hasReachedMins = true;
+            } else if (!hasReachedMins) {
+                hours += c;
+            } else {
+                mins += c;
+            }
         }
-        return remainingCalories;
-    }*/
+        int result = (Integer.parseInt(hours) * 3600) + (Integer.parseInt(mins) * 60);
+        return result;
+    }
+
+    public String calculateTimeLeft(){
+        //formula is  (timeTakenSoFar / caloriesBurntSoFar) * caloriesLeftToBurn= time left
+        //first we get it into seconds then convert it into a string
+    int secondsLeftToAchieveGoal = (secondsElapsed/caloriesBurnt) * (calorieGoal-caloriesBurnt);
+    int hours = secondsLeftToAchieveGoal / 3600;
+    int minutes = (secondsLeftToAchieveGoal % 3600) / 60;
+    int seconds = secondsElapsed%60;
+    String temp= String.format("%02d:%02d:%02d", hours, minutes,seconds);
+        Log.d("tag","temp is "+temp);
+
+        return temp;
+    }
 
     }
