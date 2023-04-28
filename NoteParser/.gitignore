@@ -167,4 +167,6 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+Parser-tcpbrokerhivemqcom
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,macos

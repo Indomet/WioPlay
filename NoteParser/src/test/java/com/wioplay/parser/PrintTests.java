@@ -1,22 +1,19 @@
 package com.wioplay.parser;
 
 import java.io.ByteArrayOutputStream;
-
-import org.junit.jupiter.api.*;
-
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import com.wioplay.parser.Utils.IOScanner;
 
 
-<<<<<<<< HEAD:NoteParser/src/test/java/com/wioplay/parser/PrintTests.java
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class PrintTests {
-========
-public class TestPrint {
->>>>>>>> main:NoteParser/src/test/java/TestPrint.java
 
     private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -48,7 +45,7 @@ public class TestPrint {
     @Test
     public void shouldSeparateCorrectly() {
         IOScanner.printSeparator();
-        Assertions.assertEquals("----------", outContent.toString());
+        assertEquals("----------", outContent.toString());
     }
 
     @Test
@@ -61,11 +58,11 @@ public class TestPrint {
 
         IOScanner.printList("Fruits", fruits);
         String result = "Fruits:" + NEW_LINE +
-        "\t0- apple" + NEW_LINE +
-        "\t1- orange" + NEW_LINE +
-        "\t2- pear";
+                "\t0- apple" + NEW_LINE +
+                "\t1- orange" + NEW_LINE +
+                "\t2- pear";
 
-        Assertions.assertEquals(result, outContent.toString());
+        assertEquals(result, outContent.toString());
 
     }
 
