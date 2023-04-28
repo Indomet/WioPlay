@@ -1,8 +1,0 @@
-com\wioplay\parser\Network\MQTTConnection.class
-com\wioplay\parser\Core\Note.class
-com\wioplay\parser\Main.class
-com\wioplay\parser\Network\Subscriptions\HelloWorld.class
-com\wioplay\parser\Core\Parser.class
-com\wioplay\parser\Utils\IOScanner.class
-com\wioplay\parser\Core\Song.class
-com\wioplay\parser\Network\AbstractSubscription.class
