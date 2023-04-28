@@ -101,7 +101,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/weight_textview" />
 
             <TextView
-                android:id="@+id/gender_textview"
+                android:id="@+id/sex_textview"
                 android:layout_width="200dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="24dp"
@@ -109,7 +109,7 @@
                 android:drawablePadding="-60dp"
                 android:gravity="center"
                 android:paddingStart="40dp"
-                android:text="Gender"
+                android:text="Sex"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:drawableLeftCompat="@drawable/sharp_female_24"
@@ -129,8 +129,8 @@
 
                 android:textSize="20sp"
                 app:drawableLeftCompat="@drawable/twotone_elderly_24"
-                app:layout_constraintEnd_toEndOf="@+id/gender_textview"
-                app:layout_constraintTop_toBottomOf="@+id/gender_textview" />
+                app:layout_constraintEnd_toEndOf="@+id/sex_textview"
+                app:layout_constraintTop_toBottomOf="@+id/sex_textview" />
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -215,11 +215,11 @@
                 android:gravity="center"
                 app:flow_horizontalAlign="center"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@id/gender_textview"
+                app:layout_constraintBottom_toBottomOf="@id/sex_textview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/gender_textview"
-                app:layout_constraintTop_toTopOf="@id/gender_textview" />
+                app:layout_constraintStart_toEndOf="@+id/sex_textview"
+                app:layout_constraintTop_toTopOf="@id/sex_textview" />
 
             <Button
                 android:id="@+id/Save_Button"
@@ -252,10 +252,10 @@
                 android:gravity="center"
                 android:text="Balance"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/usercircle"
+                app:layout_constraintBottom_toBottomOf="@+id/editButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/usercircle"
-                app:layout_constraintTop_toTopOf="@+id/usercircle" />
+                app:layout_constraintTop_toBottomOf="@+id/userIcon" />
 
             <TextView
                 android:id="@+id/life_time_label"
@@ -266,31 +266,31 @@
                 android:gravity="center"
                 android:text="Total Calories Burnt"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/usercircle"
+                app:layout_constraintBottom_toBottomOf="@+id/editButton"
                 app:layout_constraintEnd_toStartOf="@+id/usercircle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/usercircle" />
+                app:layout_constraintTop_toBottomOf="@+id/userIcon" />
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_star_rate_24"
-                app:layout_constraintBottom_toBottomOf="@+id/userIcon"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/life_time_label"
-                android:layout_marginBottom="50dp"
-                app:layout_constraintStart_toStartOf="@+id/life_time_label" />
+                app:layout_constraintStart_toStartOf="@+id/life_time_label"
+                app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
             <TextView
                 android:id="@+id/total_calories_burnt_text_view"
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/life_time_label"
                 app:layout_constraintEnd_toEndOf="@+id/life_time_label"
                 app:layout_constraintStart_toStartOf="@+id/life_time_label"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toTopOf="@+id/editButton" />
 
             <TextView
                 android:id="@+id/current_balance_text_view"
@@ -303,5 +303,18 @@
                 app:layout_constraintEnd_toEndOf="@+id/balance_label"
                 app:layout_constraintStart_toStartOf="@+id/balance_label"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+            <ImageButton
+                android:id="@+id/sex_info_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_info_24"
+                app:layout_constraintBottom_toBottomOf="@+id/sex_spinner"
+                app:layout_constraintEnd_toStartOf="@+id/sex_spinner"
+                app:layout_constraintStart_toStartOf="@+id/editButton"
+                app:layout_constraintTop_toTopOf="@+id/sex_spinner" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
