@@ -51,8 +51,7 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
     private boolean stopwatchRunning = false;
     private final String WORKOUT_NOT_STARTED = "No ongoing workout";
 
-    private int currentCalories = 0;
-    private int calorieDiff;
+    private TextView timeLeftToReachGoal;
 
     //required empty constructor
     public WorkoutFragment() {
@@ -130,6 +129,8 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
 
         newWorkoutFragment = new NewWorkoutFragment();
         caloriesBurntTextView.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
+        timeLeftToReachGoal = rootView.findViewById(R.id.time_left_to_reach_goal_textview);
+
         return rootView;
 
     }
@@ -150,11 +151,8 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
 
             calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurntTextView.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
-            currentCalories = workoutManager.getCaloriesBurnt();
-
-            //TODO: add calorieDiff to user balance.
-
-
+            String timeLeft = workoutManager.calculateTimeLeft();
+            timeLeftToReachGoal.setText(timeLeft);
         }
 
         //TODO update the time left gto reach goal view
@@ -164,6 +162,7 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
             caloriesBurntLabel.setText(WORKOUT_NOT_STARTED);
             createPopWindow();
             workoutManager.stopWorkout();
+            timeLeftToReachGoal.setText("0:00:00");
 
         }
     }
