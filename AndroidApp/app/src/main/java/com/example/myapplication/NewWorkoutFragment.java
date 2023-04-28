@@ -103,7 +103,7 @@ public class NewWorkoutFragment extends Fragment {
         boolean calorieGoalIsValid = workoutManager.getCalorieGoal()>0;
 
         if(!durationIsValid){
-            Toast.makeText(rootView.getContext(), "Please input a valid time Hours:Minutes", Toast.LENGTH_SHORT).show();
+            Toast.makeText(rootView.getContext(), "Please input a valid time Hours:Minutes", Toast.LENGTH_SHORT).show(); //Shouldn't this be Minutes:Seconds?
         }
         else if(!calorieGoalIsValid){
             Toast.makeText(rootView.getContext(), "Please set a calorie goal above 0", Toast.LENGTH_SHORT).show();
@@ -118,9 +118,9 @@ public class NewWorkoutFragment extends Fragment {
             workoutManager.setDurationInSeconds(workoutManager.timeToSeconds(duration));
             Log.d("tag","duration in sec is "+workoutManager.getDurationInSeconds());
             try {
-                String json = Util.toJSON(workoutManager);
+                String json = Util.objectToJSON(workoutManager);
                 Toast.makeText(rootView.getContext(), json, Toast.LENGTH_SHORT).show();
-                MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.WORKOUT_STARTED_TOPIC,Util.toJSON(workoutManager),MainActivity.brokerConnection.QOS,null);
+                MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager),MainActivity.brokerConnection.QOS,null);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
