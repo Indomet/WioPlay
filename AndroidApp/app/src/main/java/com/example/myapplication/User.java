@@ -133,5 +133,16 @@ public class User {
         }
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
 
 }
