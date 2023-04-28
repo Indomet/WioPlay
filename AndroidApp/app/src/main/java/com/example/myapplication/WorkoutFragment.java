@@ -137,8 +137,6 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
             currentCalories = workoutManager.getCaloriesBurnt();
 
             //TODO: add calorieDiff to user balance.
-            MainActivity.user.setCalorieCredit(calorieDiff);
-            MainActivity.user.saveUserData();
 
 
         }

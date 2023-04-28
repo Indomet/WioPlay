@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     private BottomNavigationView bottomNavigation;
@@ -20,8 +21,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     //TODO THIS IS TO BE REFACTORED ITS BAD PRACTICE make into singleton pattern
     public static BrokerConnection brokerConnection;
 
-
-    public static User user = new User();
+    public static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         String filePath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
         File userFile = new File(filePath);
-        user = new User(userFile);
-        //user.setCalorieCredit(9000);
 
-        user.saveUserData();
+        user = new User(userFile);
+//        user.setCalorieCredit(9000);
+
 
 
 
