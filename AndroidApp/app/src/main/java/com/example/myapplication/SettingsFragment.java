@@ -15,15 +15,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import java.io.File;
+import java.io.IOException;
 
 public class SettingsFragment extends Fragment {
     private View rootView;
@@ -54,9 +54,22 @@ public class SettingsFragment extends Fragment {
         ageEditText.setText(Integer.toString(MainActivity.user.getAge()));
         */
 
-        saveButton.setOnClickListener(view -> publishSavedData());
-        //TODO make sex take enum instead of string
-        sexSpinner = rootView.findViewById(R.id.sex_spinner);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            String filePath = rootView.getContext().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+            File userFile = new File(filePath);
+            @Override
+            public void onClick(View v) {
+                try {
+                    updateUserInfo();
+                } catch (Exception e) {
+                    String message= e.getMessage();
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+                //TODO make sex take enum instead of string
+                sexSpinner = rootView.findViewById(R.id.sex_spinner);
         String[] sex = {"Select", "Female", "Male"};
         ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(
                 this.getContext(),
@@ -85,7 +98,7 @@ public class SettingsFragment extends Fragment {
         lifeTimeCurrency = rootView.findViewById(R.id.total_calories_burnt_text_view);
         //TODO use singleton
         currentBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
-        lifeTimeCurrency.setText(Integer.toString(MainActivity.user.getLifeTimeCredit()));
+        lifeTimeCurrency.setText(Integer.toString(MainActivity.user.getLifeTimeCalories()));
         return rootView;
     }
 
@@ -108,15 +121,15 @@ public class SettingsFragment extends Fragment {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
 
-        try {//todo use singleotn
+        try {//todo use singleton
         MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
-         ,Util.toJSON(MainActivity.user)
+         ,Util.objectToJSON(MainActivity.user)
          ,MainActivity.brokerConnection.QOS, null);
          } catch (IllegalAccessException e) {
          e.printStackTrace();
         }
-
     }
+//TODO: READ ONLY??? SO READ FIRST THEN WRITE TO /data/user/0/com.example.myapplication/files/user.json
 
     private void updateUserInfo() throws Exception {
 
@@ -130,8 +143,7 @@ public class SettingsFragment extends Fragment {
             int age = Integer.parseInt(ageEditText.getText().toString());
             float height = Float.parseFloat(heightEditText.getText().toString());
             float weight = Float.parseFloat((weightEditText.getText().toString()));
-
-            // checking if all entered numbers are within specific ranges
+// checking if all entered numbers are within specific ranges
             checkTheRange(0, 450, weight);
             checkTheRange(0, 120, height);
             checkTheRange(0,150,age);
@@ -143,11 +155,13 @@ public class SettingsFragment extends Fragment {
             MainActivity.user.setWeight(weight);
 
             MainActivity.user.setSex(sexSpinner.getSelectedItem().toString());
-
+    }
 
             // tobe thrown if any of the Editfield is not filled
-        } else
+         else {
             throw new Exception("Fill in all fields");
+        }
+
     }
 
 

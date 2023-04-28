@@ -2,11 +2,8 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -21,7 +18,9 @@ public class BrokerConnection extends AppCompatActivity {
     public static final String SETTINGS_CHANGE_TOPIC = "User/Data/Change";
     public static final String WORKOUT_STARTED_TOPIC = "User/Workout/Start";
     public static final String SUB_TOPIC = "Send/Calorie/Burn/Data";
-    public static final String LOCALHOST = "broker.hivemq.com"; // Ip address of the local host
+
+    public static  final String SONG_LIST_TOPIC = "Send/Song";
+    public static final String LOCALHOST = "broker.emqx.io"; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
     public static final String CLIENT_ID = "Android Phone";   // the app client ID name
     public static final int QOS = 0;    // quality of service
@@ -63,6 +62,7 @@ public class BrokerConnection extends AppCompatActivity {
                     Toast.makeText(context, successfulConnection, Toast.LENGTH_LONG).show();
 
                     mqttClient.subscribe(SUB_TOPIC,0, null);
+                    mqttClient.subscribe(SONG_LIST_TOPIC,0, null);
 
                 }
 

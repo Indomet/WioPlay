@@ -12,13 +12,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import java.io.File;
 import java.util.ArrayList;
 
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
 
     private ArrayList<Song> songsList = new ArrayList<>();
     private Context context;
-
     private boolean confirm;
 
     public SongLibraryAdapter(Context context) {
@@ -82,7 +82,9 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         notifyDataSetChanged();
     }
 
-    private void unlockSong(@NonNull Song currentSong) {
+    private void unlockSong(@NonNull Song currentSong){
+        String filePath = context.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+        File userFile = new File(filePath);
         MainActivity.user.updateCredit(-currentSong.getPrice());
         currentSong.setUnlocked(true);
         updateData();
@@ -102,7 +104,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 confirm = true;
-                unlockSong(currentSong);
+                    unlockSong(currentSong);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

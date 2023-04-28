@@ -33,6 +33,8 @@ import nl.dionsegijn.konfetti.core.models.Shape;
 import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class WorkoutFragment extends Fragment implements BrokerConnection.MessageListener {
 
@@ -141,6 +143,8 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
 
     @Override
     public void onMessageArrived(String payload) {
+        calorieDiff = Math.abs(workoutManager.getCaloriesBurnt() - currentCalories);
+
         if (workoutManager.getWorkoutHasStarted()) {
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
             //TODO update the calorie balance and lifetime calories, but thats a seperate issue
