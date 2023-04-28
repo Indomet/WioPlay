@@ -33,6 +33,8 @@ import nl.dionsegijn.konfetti.core.models.Shape;
 import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class WorkoutFragment extends Fragment implements BrokerConnection.MessageListener {
 
@@ -48,6 +50,9 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
     private TextView timeElapsed;
     private boolean stopwatchRunning = false;
     private final String WORKOUT_NOT_STARTED = "No ongoing workout";
+
+    private int currentCalories = 0;
+    private int calorieDiff;
 
     //required empty constructor
     public WorkoutFragment() {
@@ -137,12 +142,18 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
 
     @Override
     public void onMessageArrived(String payload) {
+        calorieDiff = Math.abs(workoutManager.getCaloriesBurnt() - currentCalories);
+
         if (workoutManager.getWorkoutHasStarted()) {
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
             //TODO update the calorie balance and lifetime calories, but thats a seperate issue
 
             calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurntTextView.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
+            currentCalories = workoutManager.getCaloriesBurnt();
+
+            //TODO: add calorieDiff to user balance.
+
 
         }
 
