@@ -143,7 +143,6 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
 
     @Override
     public void onMessageArrived(String payload) {
-        calorieDiff = Math.abs(workoutManager.getCaloriesBurnt() - currentCalories);
 
         if (workoutManager.getWorkoutHasStarted()) {
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
