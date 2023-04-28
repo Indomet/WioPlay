@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         user = new User(userFile);
         //user.setCalorieCredit(9000);
 
-        user.saveUserData();
-
 
 
     }
