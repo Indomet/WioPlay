@@ -39,18 +39,11 @@ public class User {
         saveUserData();
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public void setAge(int age) {
         this.age = age;
         saveUserData();
     }
 
-    public int getAge() {
-        return age;
-    }
 
     public void setHeight(float height) {
         this.height = height;
@@ -66,9 +59,6 @@ public class User {
         saveUserData();
     }
 
-    public float getWeight() {
-        return weight;
-    }
 
     public void setSex(String sex) {
         this.sex = sex;
