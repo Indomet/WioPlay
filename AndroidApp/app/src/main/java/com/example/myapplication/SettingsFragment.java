@@ -13,6 +13,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.IOException;
+
 public class SettingsFragment extends Fragment {
     private View rootView;
     private Button saveButton;
@@ -39,9 +48,18 @@ public class SettingsFragment extends Fragment {
         ageEditText.setText(Integer.toString(MainActivity.user.getAge()));
         */
 
-        saveButton.setOnClickListener(view -> publishSavedData());
-        //TODO make gender take enum instead of string
-        genderSpinner= rootView.findViewById(R.id.sex_spinner);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            String filePath = rootView.getContext().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+            File userFile = new File(filePath);
+            @Override
+            public void onClick(View v) {
+                    updateUserInfo();
+                    MainActivity.user.saveUserData();
+            }
+        });
+
+                //TODO make gender take enum instead of string
+                genderSpinner = rootView.findViewById(R.id.sex_spinner);
         String[] genders = {"Select", "Female", "Male", "Other"};
         ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(
                 this.getContext(),
@@ -70,25 +88,23 @@ public class SettingsFragment extends Fragment {
 
     private void publishSavedData(){
         updateUserInfo();
-        try {//todo use singleotn
+        try {//todo use singleton
             MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
-            ,Util.toJSON(MainActivity.user)
+            ,Util.objectToJSON(MainActivity.user)
                     ,MainActivity.brokerConnection.QOS,null);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
     }
+//TODO: READ ONLY??? SO READ FIRST THEN WRITE TO /data/user/0/com.example.myapplication/files/user.json
 
     private void updateUserInfo(){
         //TODO exception handling
         MainActivity.user.setAge(Integer.parseInt(ageEditText.getText().toString()));
         MainActivity.user.setHeight(Float.parseFloat(heightEditText.getText().toString()));
         MainActivity.user.setWeight(Float.parseFloat(weightEditText.getText().toString()));
-
         MainActivity.user.setSex(genderSpinner.getSelectedItem().toString());
-
-
     }
+
 
 }

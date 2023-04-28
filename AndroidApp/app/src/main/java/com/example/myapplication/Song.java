@@ -1,5 +1,9 @@
 package com.example.myapplication;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import java.util.Iterator;
+
 public class Song {
     private String title;
     private int duration; //in seconds
@@ -54,4 +58,21 @@ public class Song {
     public void setUnlocked(boolean unlocked) {
         isUnlocked = unlocked;
     }
+
+    //TODO
+    /*
+    public void temp(){
+        Iterator<JsonNode> it = node.get("song").elements();
+
+        for (; it.hasNext(); it.next()) {
+        }
+
+        while(it.hasNext()){
+            //save to object
+            it.next();
+        }
+    }
+    }
+
+     */
 }

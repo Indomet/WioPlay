@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 
-public class MusicFragment extends Fragment {
+public class MusicFragment extends Fragment{
 
-    private AlertDialog dialog;
 
     private RecyclerView recyclerView;
     private TextView userBalance;
@@ -48,7 +45,6 @@ public class MusicFragment extends Fragment {
             hasCreated = true;
         }
 
-
         SongLibraryAdapter adapter = new SongLibraryAdapter(recyclerView.getContext());
         adapter.setSongsList(songsList);
         recyclerView.setAdapter(adapter);
@@ -58,10 +54,5 @@ public class MusicFragment extends Fragment {
 
         return rootView;
     }
-
-
-
-
-
 
 }
