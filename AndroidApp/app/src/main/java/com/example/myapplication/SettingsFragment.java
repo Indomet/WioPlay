@@ -1,4 +1,7 @@
 package com.example.myapplication;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -28,7 +32,7 @@ public class SettingsFragment extends Fragment {
     private EditText heightEditText;
     private EditText ageEditText;
 
-    private Spinner genderSpinner;
+    private Spinner sexSpinner;
     private TextView lifeTimeCurrency;
     private TextView currentBalance;
 
@@ -51,36 +55,49 @@ public class SettingsFragment extends Fragment {
         */
 
         saveButton.setOnClickListener(view -> publishSavedData());
-        //TODO make gender take enum instead of string
-        genderSpinner = rootView.findViewById(R.id.sex_spinner);
-        String[] genders = {"Select", "Female", "Male", "Other"};
-        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(
+        //TODO make sex take enum instead of string
+        sexSpinner = rootView.findViewById(R.id.sex_spinner);
+        String[] sex = {"Select", "Female", "Male"};
+        ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(
                 this.getContext(),
                 android.R.layout.simple_selectable_list_item,
-                genders
+                sex
         );
 
-        genderSpinner.setAdapter(genderAdapter);
-        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sexSpinner.setAdapter(sexAdapter);
+        sexSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
-                    Toast.makeText(rootView.getContext(), genders[position] + " Selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(rootView.getContext(), sex[position] + " Selected", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(rootView.getContext(), "Gender cannot be blank", Toast.LENGTH_SHORT).show();
+                Toast.makeText(rootView.getContext(), "Sex cannot be blank", Toast.LENGTH_SHORT).show();
             }
         });
 
+        ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
+        sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
         currentBalance = rootView.findViewById(R.id.current_balance_text_view);
         lifeTimeCurrency = rootView.findViewById(R.id.total_calories_burnt_text_view);
         //TODO use singleton
         currentBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
         lifeTimeCurrency.setText(Integer.toString(MainActivity.user.getLifeTimeCredit()));
         return rootView;
+    }
+
+    private void showSexInfoPopup() {
+
+        Dialog popUpWindow = new Dialog(getActivity());
+        popUpWindow.setContentView(R.layout.sex_info_popup);
+        popUpWindow.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //setting the ok button to remove the popup when the user clicks on it
+        Button button = popUpWindow.findViewById(R.id.sex_info_ok_btn);
+        button.setOnClickListener(view -> popUpWindow.dismiss());
+        popUpWindow.show();
     }
 
     private void publishSavedData() {
@@ -125,7 +142,7 @@ public class SettingsFragment extends Fragment {
             MainActivity.user.setHeight(height);
             MainActivity.user.setWeight(weight);
 
-            MainActivity.user.setSex(genderSpinner.getSelectedItem().toString());
+            MainActivity.user.setSex(sexSpinner.getSelectedItem().toString());
 
 
             // tobe thrown if any of the Editfield is not filled
