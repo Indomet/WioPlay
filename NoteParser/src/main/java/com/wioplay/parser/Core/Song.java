@@ -4,13 +4,15 @@ import java.util.Objects;
 
 public class Song {
 
-    private final String name;
+    private final String title;
     private final String imageURL;
+    private final double tempo;
     private final int cost;
 
-    public Song(String name, String imageURL, int cost) {
-        this.name = name;
+    public Song(String title, String imageURL, int tempo, int cost) {
+        this.title = title;
         this.imageURL = imageURL;
+        this.tempo = tempo;
         this.cost = cost;
     }
 
@@ -19,8 +21,8 @@ public class Song {
         throw new UnsupportedOperationException();
     }
 
-    public String getName() {
-        return this.name;
+    public String getTitle() {
+        return this.title;
     }
 
     public String getImageURL() {
@@ -36,18 +38,18 @@ public class Song {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
-        return cost == song.cost && Objects.equals(name, song.name) && Objects.equals(imageURL, song.imageURL);
+        return cost == song.cost && Objects.equals(title, song.title) && Objects.equals(imageURL, song.imageURL);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, imageURL, cost);
+        return Objects.hash(title, imageURL, cost);
     }
 
     @Override
     public String toString() {
         return "Song{" +
-                "name='" + name + '\'' +
+                "name='" + title + '\'' +
                 ", imageURL='" + imageURL + '\'' +
                 ", cost=" + cost +
                 '}';
