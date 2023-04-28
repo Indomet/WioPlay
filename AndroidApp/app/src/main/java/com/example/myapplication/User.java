@@ -49,7 +49,7 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-
+        saveUserData();
     }
 
     public String getUsername() {
@@ -58,6 +58,7 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
+        saveUserData();
     }
 
     public int getAge() {
@@ -66,7 +67,7 @@ public class User {
 
     public void setHeight(float height) {
         this.height = height;
-
+        saveUserData();
     }
 
     public float getHeight() {
@@ -75,6 +76,7 @@ public class User {
 
     public void setWeight(float weight) {
         this.weight = weight;
+        saveUserData();
     }
 
     public float getWeight() {
@@ -83,6 +85,7 @@ public class User {
 
     public void setSex(String sex) {
         this.sex = sex;
+        saveUserData();
     }
 
     public String getSex() {
@@ -93,6 +96,7 @@ public class User {
         //calorie can be positive when gaining, and negative when spending.
         int diff = Math.round(calorie);
         this.calorieCredit += diff;
+        saveUserData();
 
     }
     public int getCalorieCredit(){
@@ -101,6 +105,7 @@ public class User {
 
     public void setCalorieCredit(int calorieCredit){
         this.calorieCredit = calorieCredit;
+        saveUserData();
     }
 
     public String toString(){
@@ -113,6 +118,7 @@ public class User {
 
     public void setLifeTimeCalories(int lifeTimeCalories) {
         this.lifeTimeCalories = lifeTimeCalories;
+        saveUserData();
     }
 
     private void load(File userFile) throws IOException {

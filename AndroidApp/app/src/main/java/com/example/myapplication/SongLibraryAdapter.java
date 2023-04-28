@@ -86,7 +86,6 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         String filePath = context.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
         File userFile = new File(filePath);
         MainActivity.user.updateCredit(-currentSong.getPrice());
-        MainActivity.user.saveUserData();
         currentSong.setUnlocked(true);
         updateData();
         Toast.makeText(context, "Unlocked " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();

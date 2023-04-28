@@ -54,7 +54,6 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                     updateUserInfo();
-                    MainActivity.user.saveUserData();
             }
         });
 
