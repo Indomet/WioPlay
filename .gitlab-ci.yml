@@ -61,9 +61,9 @@ cache:
   stage: test
   script:
     - 'mvn $MAVEN_CLI_OPTS verify'
-  except:
-    variables:
-      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  # except:
+  #   variables:
+  #     - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # Verify merge requests using JDK8
 verify:jdk8:
