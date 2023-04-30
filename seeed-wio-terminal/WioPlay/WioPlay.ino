@@ -6,9 +6,11 @@ UserInformation userInformation (67, 175, 23, 0); // (userWeight, userHeight, us
 
 DynamicJsonDocument doc(1024);
 #include "MotionDetection.h"
+#include "Scenes.h"
 #include "BurndownChart.h"
 #include "MqttConnection.h"
 #include "MusicPlayer.h"
+
 
 float movementValue;
 bool isExercising = true;
@@ -22,13 +24,16 @@ BurndownChart burndownChart;
 MusicPlayer player(song, sizeof(song) / sizeof(int), 1.2);
 const char* calorie_pub = "Send/Calorie/Burn/Data";
 
+
+
 void setup()
 {
   Serial.begin(9600);  //Start serial communication
   setupMqtt();
-
+  setupButton();
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
+  menuNavigationOnPress(showSecondScene, showFirstScene);
 }
 
 void loop()
@@ -39,7 +44,10 @@ void loop()
   if (isExercising)
   {
     // mqttConnection.loopMqtt();
+   
     burndownChart.controlConstraints();
+    menuNavigationOnPress(showFirstScene, showSecondScene);
+    
     motionDetection.recordPreviousAcceleration(); // Read previous user-position
     //delay(burndownChart.getDelayValue());
 
@@ -65,6 +73,9 @@ void loop()
   {
     displayExerciseResults();
   }
+}
+void showSecondScene() {
+burndownChart.updateGraphVizuals();
 }
 
 void displayExerciseResults()
