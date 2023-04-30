@@ -1,6 +1,4 @@
-TFT_eSPI tft;
 
-#include "TFT_eSPI.h"
 
 #define MAX_SIZE 10 // maximum size of data displayed at once in graph
 doubles data[2];
@@ -30,7 +28,7 @@ class BurndownChartFrontEnd
       removeEarliestDataPoints();
     }
 
-    tft.fillScreen(TFT_WHITE);
+    // tft.fillScreen(TFT_WHITE);
   }
 
   // Update headers and graph-values in real-time

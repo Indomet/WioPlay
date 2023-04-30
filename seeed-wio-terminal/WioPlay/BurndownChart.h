@@ -61,7 +61,7 @@ class BurndownChart
   {
     controlNumberOfDataPointsInGraph();
     increaseSegments();
-    updateGraphVizuals();
+    // updateGraphVizuals();
   }
 
   bool checkIfUserAccomplishedGoal()
@@ -79,7 +79,7 @@ class BurndownChart
     burndownChartBackEnd.updateTimeElapsed(duration);
   }
 
-  private:
+  // private:
   void controlNumberOfDataPointsInGraph()
   {
     burndownChartFrontEnd.controlNumberOfDataPointsInGraph();
