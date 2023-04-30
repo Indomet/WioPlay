@@ -26,6 +26,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_9
         targetCompatibility JavaVersion.VERSION_1_9
     }
+    buildToolsVersion '33.0.2'
 }
 
 dependencies {
@@ -54,6 +55,7 @@ dependencies {
 
     implementation 'nl.dionsegijn:konfetti-compose:2.0.2'
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
+    implementation 'com.github.gastricspark:scrolldatepicker:0.0.1'
 
 
 
