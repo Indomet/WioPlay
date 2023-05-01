@@ -7,5 +7,5 @@
         android:endColor="#6270D7"
         android:startColor="#A484CA"
         />
-    <size android:height="200dp" android:width="20dp"/>
+    <size android:height="200dp" android:width="200dp"/>
 </shape>
