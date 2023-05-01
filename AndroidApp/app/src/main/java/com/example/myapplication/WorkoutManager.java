@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.util.Log;
+
 import java.util.HashMap;
 
 //This class manages the workout. Updates the target goal, the calories they burn and keeps track of the time
@@ -130,15 +132,17 @@ public class WorkoutManager {
         return result;
     }
 
+    public String calculateTimeLeft(){
+        //formula is  (timeTakenSoFar / caloriesBurntSoFar) * caloriesLeftToBurn= time left
+        //first we get it into seconds then convert it into a string
+    int secondsLeftToAchieveGoal = (secondsElapsed/caloriesBurnt) * (calorieGoal-caloriesBurnt);
+    int hours = secondsLeftToAchieveGoal / 3600;
+    int minutes = (secondsLeftToAchieveGoal % 3600) / 60;
+    int seconds = secondsElapsed%60;
+    String temp= String.format("%02d:%02d:%02d", hours, minutes,seconds);
+        Log.d("tag","temp is "+temp);
 
-
-    //potentially a useful function to display statistics
-    /*public int getRemainingCalories(int caloriesBurned) {
-        int remainingCalories = calorieGoal - caloriesBurned;
-        if (remainingCalories < 0) {
-            return 0;
-        }
-        return remainingCalories;
-    }*/
+        return temp;
+    }
 
     }
