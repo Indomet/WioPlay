@@ -28,12 +28,13 @@ const char* calorie_pub = "Send/Calorie/Burn/Data";
 
 void setup()
 {
-  Serial.begin(9600);  //Start serial communication
+  Serial.begin(115200);  //Start serial communication
   setupMqtt();
   setupButton();
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
-  menuNavigationOnPress(showSecondScene, showFirstScene);
+  menuNavigationOnPress(showSecondScene, showFirstScene); //this is here to start burndownchart in the background
+  menuNavigationOnPress(showFirstScene, showSecondScene);
 }
 
 void loop()
@@ -46,6 +47,7 @@ void loop()
     // mqttConnection.loopMqtt();
    
     burndownChart.controlConstraints();
+    buttonOnPress();
     menuNavigationOnPress(showFirstScene, showSecondScene);
     
     motionDetection.recordPreviousAcceleration(); // Read previous user-position
@@ -56,11 +58,11 @@ void loop()
     burndownChart.updateTimeElapsed(player.getCurrentPauseChunkDuration());
 
     // TEMPORARY
-    Serial.println("***********************");
-    Serial.println(burndownChart.getTimeElapsed());
-    Serial.println(burndownChart.getActualCaloriesPerSecond());
-    Serial.println(burndownChart.getExpectedCaloriesPerSecond());
-    Serial.println("***********************");
+    // Serial.println("***********************");
+    // Serial.println(burndownChart.getTimeElapsed());
+    // Serial.println(burndownChart.getActualCaloriesPerSecond());
+    // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
+    // Serial.println("***********************");
 
     movementValue =  motionDetection.detectMotion(); // Read current user-position
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
