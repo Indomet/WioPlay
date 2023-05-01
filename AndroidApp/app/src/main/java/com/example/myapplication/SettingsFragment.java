@@ -1,4 +1,5 @@
 package com.example.myapplication;
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -31,6 +33,8 @@ public class SettingsFragment extends Fragment {
     private Spinner genderSpinner;
     private TextView lifeTimeCurrency;
     private TextView currentBalance;
+    private ImageButton editButton;
+    private Dialog dialog;
 
 
 
@@ -43,6 +47,8 @@ public class SettingsFragment extends Fragment {
         weightEditText = rootView.findViewById(R.id.kg_edittext);
         heightEditText = rootView.findViewById(R.id.height_edittext);
         ageEditText = rootView.findViewById(R.id.age_edit_text);
+        editButton = rootView.findViewById(R.id.editButton);
+        dialog =new Dialog(this.getContext());
 
         /*
         weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
@@ -59,6 +65,21 @@ public class SettingsFragment extends Fragment {
                 android.R.layout.simple_selectable_list_item,
                 genders
         );
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.setContentView(R.layout.popupeditusername);
+                TextView closer = dialog.findViewById(R.id.closebtn);
+                closer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
 
         genderSpinner.setAdapter(genderAdapter);
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
