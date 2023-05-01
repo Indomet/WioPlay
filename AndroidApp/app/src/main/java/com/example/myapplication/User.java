@@ -16,24 +16,35 @@ public class User {
     private int calorieCredit;
     private int lifeTimeCalories;
     private File userFile;
+    private int lifeTimeCredit;
+    private static User user= null;
 
+    
+    
+    
     public User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
         load();
     }
-
     //todo make the user start in settings to input stuff and cant leave if they don't do it
     //and the values to not be 0
-    private void defaultUser() {
-        this.age = 0;
-        this.height = 0;
-        this.weight = 0;
-        this.username = "username";
-        this.calorieCredit = 727; //A new user starts with 0 CalorieCurrency
-        this.lifeTimeCalories = 0;
+    private User(){
+    age = 0;
+    height =0;
+    weight=0;
+    username="username";
+    calorieCredit = 727; //A new user starts with 0 CalorieCurrency
+    lifeTimeCredit=727;
+    }
+    public static User getInstance(){
+        if(user== null){
+            user = new User();
+        }
+        return user;
     }
 
+    
     public void setUsername(String username) {
         this.username = username;
         saveUserData();

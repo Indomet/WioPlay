@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/XLayout"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="475dp"
+    android:background="@color/dark_grey"
+    android:padding="5dp"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/closebtn"
+        android:layout_width="43dp"
+        android:layout_height="44dp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/user_circle"
+        android:gravity="center"
+        android:text="@string/X"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/Editusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:hint="@string/editUserName"
+        android:inputType="text"
+        android:shadowColor="@color/white"
+        android:textColor="@color/white"
+        android:textColorHint="@color/dark_purple"
+        android:textSize="25sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Editusername"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="133dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/Save"
+        android:textSize="25sp"/>
+
+
+
+</RelativeLayout>
+
+
