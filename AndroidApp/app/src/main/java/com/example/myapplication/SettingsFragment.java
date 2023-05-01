@@ -1,5 +1,7 @@
 package com.example.myapplication;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,7 +23,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import java.io.File;
+import java.io.IOException;
 
 public class SettingsFragment extends Fragment {
     private View rootView;
@@ -30,7 +34,7 @@ public class SettingsFragment extends Fragment {
     private EditText heightEditText;
     private EditText ageEditText;
 
-    private Spinner genderSpinner;
+    private Spinner sexSpinner;
     private TextView lifeTimeCurrency;
     private TextView currentBalance;
     private ImageButton editButton;
@@ -56,14 +60,27 @@ public class SettingsFragment extends Fragment {
         ageEditText.setText(Integer.toString(MainActivity.user.getAge()));
         */
 
-        saveButton.setOnClickListener(view -> publishSavedData());
-        //TODO make gender take enum instead of string
-        genderSpinner = rootView.findViewById(R.id.sex_spinner);
-        String[] genders = {"Select", "Female", "Male", "Other"};
-        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            String filePath = rootView.getContext().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+            File userFile = new File(filePath);
+            @Override
+            public void onClick(View v) {
+                try {
+                    updateUserInfo();
+                } catch (Exception e) {
+                    String message= e.getMessage();
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+                //TODO make sex take enum instead of string
+                sexSpinner = rootView.findViewById(R.id.sex_spinner);
+        String[] sex = {"Select", "Female", "Male"};
+        ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(
                 this.getContext(),
                 android.R.layout.simple_selectable_list_item,
-                genders
+                sex
         );
 
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -86,22 +103,35 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
-                    Toast.makeText(rootView.getContext(), genders[position] + " Selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(rootView.getContext(), sex[position] + " Selected", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(rootView.getContext(), "Gender cannot be blank", Toast.LENGTH_SHORT).show();
+                Toast.makeText(rootView.getContext(), "Sex cannot be blank", Toast.LENGTH_SHORT).show();
             }
         });
 
+        ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
+        sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
         currentBalance = rootView.findViewById(R.id.current_balance_text_view);
         lifeTimeCurrency = rootView.findViewById(R.id.total_calories_burnt_text_view);
         //TODO use singleton
         currentBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
         lifeTimeCurrency.setText(Integer.toString(User.getInstance().getLifeTimeCredit()));
         return rootView;
+    }
+
+    private void showSexInfoPopup() {
+
+        Dialog popUpWindow = new Dialog(getActivity());
+        popUpWindow.setContentView(R.layout.sex_info_popup);
+        popUpWindow.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //setting the ok button to remove the popup when the user clicks on it
+        Button button = popUpWindow.findViewById(R.id.sex_info_ok_btn);
+        button.setOnClickListener(view -> popUpWindow.dismiss());
+        popUpWindow.show();
     }
 
     private void publishSavedData() {
@@ -112,15 +142,15 @@ public class SettingsFragment extends Fragment {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
 
-        try {//todo use singleotn
+        try {//todo use singleton
         MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
          ,Util.toJSON(User.getInstance())
          ,MainActivity.brokerConnection.QOS, null);
          } catch (IllegalAccessException e) {
          e.printStackTrace();
         }
-
     }
+//TODO: READ ONLY??? SO READ FIRST THEN WRITE TO /data/user/0/com.example.myapplication/files/user.json
 
     private void updateUserInfo() throws Exception {
 
@@ -134,8 +164,7 @@ public class SettingsFragment extends Fragment {
             int age = Integer.parseInt(ageEditText.getText().toString());
             float height = Float.parseFloat(heightEditText.getText().toString());
             float weight = Float.parseFloat((weightEditText.getText().toString()));
-
-            // checking if all entered numbers are within specific ranges
+// checking if all entered numbers are within specific ranges
             checkTheRange(0, 450, weight);
             checkTheRange(0, 120, height);
             checkTheRange(0,150,age);
@@ -150,8 +179,10 @@ public class SettingsFragment extends Fragment {
 
 
             // tobe thrown if any of the Editfield is not filled
-        } else
+         else {
             throw new Exception("Fill in all fields");
+        }
+
     }
 
 
