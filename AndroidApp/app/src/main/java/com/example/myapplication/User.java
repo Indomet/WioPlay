@@ -14,9 +14,19 @@ public class User {
     private float weight;
     private String sex;
     private int calorieCredit;
+    private int lifeTimeCalories;
+    private File userFile;
     private int lifeTimeCredit;
     private static User user= null;
 
+    
+    
+    
+    public User(File userFile) {
+        this.defaultUser();
+        this.userFile = userFile;
+        load();
+    }
     //todo make the user start in settings to input stuff and cant leave if they don't do it
     //and the values to not be 0
     private User(){
