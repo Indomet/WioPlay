@@ -76,7 +76,6 @@ void updateChart(char json[]) {
   byte workoutType = doc["workoutType"];
 
   burndownChartBackEnd.changeAttributeValues(1000, duration, calorieGoal, workoutType);
-
 }
 
 // void printMessage(String message) {
