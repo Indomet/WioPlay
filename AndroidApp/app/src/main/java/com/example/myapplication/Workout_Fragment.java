@@ -34,18 +34,12 @@ import nl.dionsegijn.konfetti.core.models.Shape;
 import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.harrywhewell.scrolldatepicker.DayScrollDatePicker;
 
-import org.w3c.dom.Text;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 
 
-public class rework_workout extends Fragment implements BrokerConnection.MessageListener{
+public class Workout_Fragment extends Fragment implements BrokerConnection.MessageListener{
     private TextView userBalance;
     private TextView workoutsCount;
     private TextView username;
@@ -117,7 +111,7 @@ public class rework_workout extends Fragment implements BrokerConnection.Message
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_rework_workout, container, false);
+        rootView = inflater.inflate(R.layout.fragment_workout, container, false);
         workoutManager = WorkoutManager.getInstance();
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.setMessageListener(this);
@@ -127,7 +121,7 @@ public class rework_workout extends Fragment implements BrokerConnection.Message
     }
 
     private void widgetInit() {
-        weeklyCalendar = (DayScrollDatePicker) rootView.findViewById(R.id.day_date_picker);
+        weeklyCalendar = rootView.findViewById(R.id.day_date_picker);
         weeklyCalendar.getSelectedDate(date -> onDateSelected(date));
 
         userBalance = rootView.findViewById(R.id.workout_tab_user_balance);
@@ -147,12 +141,13 @@ public class rework_workout extends Fragment implements BrokerConnection.Message
         stopOrPlayStopwatch = rootView.findViewById(R.id.stop_or_start_stopwatch_btn);
         timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
         timeLeft = rootView.findViewById(R.id.time_left_textview);
-
+        //TODO ADD OTHER BTNS AND RPELACE WITH POPUP
         addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment());
         caloriesProgressbar.setMax(workoutManager.getCalorieGoal());
         caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
         if (!workoutManager.getWorkoutHasStarted()) {
-            caloriesProgressbar.setProgress(0);
+            caloriesBurnt.setText("0");
+            caloriesProgressbar.setProgress(0,true);
         }
 
     }
