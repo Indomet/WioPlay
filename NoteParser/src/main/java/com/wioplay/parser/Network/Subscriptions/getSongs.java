@@ -2,10 +2,10 @@ package com.wioplay.parser.Network.Subscriptions;
 
 import com.wioplay.parser.Network.AbstractSubscription;
 
-public class HelloWorld extends AbstractSubscription {
+public class getSongs extends AbstractSubscription {
 
-    public HelloWorld() {
-        super("hello-world");
+    public getSongs() {
+        super("songs/all");
     }
 
     @Override
