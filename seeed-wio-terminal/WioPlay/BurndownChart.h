@@ -2,98 +2,80 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd (1000, 55, 20, 0); // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
-BurndownChartFrontEnd burndownChartFrontEnd (20); // (float graphUIXStartValue)
+BurndownChartBackEnd burndownChartBackEnd(1000, 55, 20, 0);  // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartFrontEnd burndownChartFrontEnd(20);             // (float graphUIXStartValue)
 
 #include <iostream>
 #include <string>
 
-class BurndownChart
-{
-  public:
-  void initializeUI()
-  {
+class BurndownChart {
+public:
+  void initializeUI() {
     burndownChartFrontEnd.initializeUI();
   }
 
   // Returns a string comparing the actual calories burnt per second with the expected
-  std::string displayCalorieStatistics()
-  {
+  std::string displayCalorieStatistics() {
     std::string actual = std::to_string(burndownChartBackEnd.getActualCaloriesPerSecond());
     // std::string expected = std::to_string(burndownChartBackEnd.getExpectedCaloriesPerSecond());
-    std::string expected = std::to_string(burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond());    
+    std::string expected = std::to_string(burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond());
 
     return actual + ", " + expected;
   }
 
-  float getGeneralExpectedCaloriesPerSecond()
-  {
+  float getGeneralExpectedCaloriesPerSecond() {
     return burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond();
   }
 
-  float getActualCaloriesPerSecond()
-  {
+  float getActualCaloriesPerSecond() {
     return burndownChartBackEnd.getActualCaloriesPerSecond();
   }
 
-  float getExpectedCaloriesPerSecond()
-  {
+  float getExpectedCaloriesPerSecond() {
     return burndownChartBackEnd.getExpectedCaloriesPerSecond();
   }
 
-  bool isExercising()
-  {
+  bool isExercising() {
     return burndownChartBackEnd.isExercising();
   }
 
-  float getDelayValue()
-  {
+  float getDelayValue() {
     return burndownChartBackEnd.getDelayValue();
   }
 
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue)
-  {
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue) {
     burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue);
   }
 
   // Constrain dynamic variables in front-end and back-end in real-time
-  void controlConstraints()
-  {
+  void controlConstraints() {
     controlNumberOfDataPointsInGraph();
     increaseSegments();
     // updateGraphVizuals();
   }
 
-  bool checkIfUserAccomplishedGoal()
-  {
+  bool checkIfUserAccomplishedGoal() {
     return burndownChartBackEnd.checkIfUserAccomplishedGoal();
   }
 
-  float getTimeElapsed()
-  {
+  float getTimeElapsed() {
     return burndownChartBackEnd.getTimeElapsed();
   }
 
-  void updateTimeElapsed(float duration)
-  {
+  void updateTimeElapsed(float duration) {
     burndownChartBackEnd.updateTimeElapsed(duration);
   }
-  
-  void updateGraphVizuals()
-  {
+
+  void updateGraphVizuals() {
     burndownChartFrontEnd.updateGraphVizuals(burndownChartBackEnd);
   }
 
-  private:
-  void controlNumberOfDataPointsInGraph()
-  {
+private:
+  void controlNumberOfDataPointsInGraph() {
     burndownChartFrontEnd.controlNumberOfDataPointsInGraph();
   }
 
-  void increaseSegments()
-  {
+  void increaseSegments() {
     burndownChartBackEnd.increaseCurrentSegments();
   }
-
-
 };

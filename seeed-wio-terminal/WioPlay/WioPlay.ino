@@ -1,8 +1,9 @@
 #include "seeed_line_chart.h"
 #include <map>
 #include <ArduinoJson.h>
+#include "Seeed_FS.h"  // SD card library
 #include "UserInformation.h"
-UserInformation userInformation (67, 175, 23, 0); // (userWeight, userHeight, userAge, isMale)
+UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, userAge, isMale)
 
 DynamicJsonDocument doc(1024);
 #include "MotionDetection.h"
@@ -15,8 +16,8 @@ DynamicJsonDocument doc(1024);
 float movementValue;
 bool isExercising = true;
 
-byte caloriesPerSecondTextCoordinates[2] = {5, 50};
-byte exerciseResultTextCoordinates[2] = {15, 70};
+byte caloriesPerSecondTextCoordinates[2] = { 5, 50 };
+byte exerciseResultTextCoordinates[2] = { 15, 70 };
 
 MotionDetection motionDetection;
 BurndownChart burndownChart;
@@ -26,31 +27,30 @@ const char* calorie_pub = "Send/Calorie/Burn/Data";
 
 
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);  //Start serial communication
   setupMqtt();
   setupButton();
+    while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) { // setup ssd
+    Serial.print("ERROR sd card not recognized");
+  }
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
-  menuNavigationOnPress(showSecondScene, showFirstScene); //this is here to start burndownchart in the background
-  menuNavigationOnPress(showFirstScene, showSecondScene);
+  burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
+  menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 }
 
-void loop()
-{
+void loop() {
   loopMqtt();
-  
+
   // Exercise isn't complete yet: Continually read movement-values and update chart accordingly
-  if (isExercising)
-  {
-    // mqttConnection.loopMqtt();
-   
+  if (isExercising) {
+
     burndownChart.controlConstraints();
     buttonOnPress();
-    menuNavigationOnPress(showFirstScene, showSecondScene);
-    
-    motionDetection.recordPreviousAcceleration(); // Read previous user-position
+    menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
+
+    motionDetection.recordPreviousAcceleration();  // Read previous user-position
     //delay(burndownChart.getDelayValue());
 
     player.playChunk();
@@ -64,45 +64,40 @@ void loop()
     // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
     // Serial.println("***********************");
 
-    movementValue =  motionDetection.detectMotion(); // Read current user-position
+    movementValue = motionDetection.detectMotion();  // Read current user-position
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
     isExercising = burndownChart.isExercising();
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
 
   // Exercise is completed: Inactivate burndown chart and show panel
-  else
-  {
+  else {
     displayExerciseResults();
   }
 }
-void showSecondScene() {
-burndownChart.updateGraphVizuals();
+void showBurndownChartScene() {
+  burndownChart.updateGraphVizuals();
 }
 
-void displayExerciseResults()
-{
+void displayExerciseResults() {
   tft.setTextSize(3);
 
   displayCalorieSecondComparison();
 
   // User completed goal
-  if (burndownChart.checkIfUserAccomplishedGoal())
-  {
+  if (burndownChart.checkIfUserAccomplishedGoal()) {
     tft.fillScreen(TFT_GREEN);
     tft.drawString("Accomplished goal!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
   }
 
   // User didn't attain the set goal
-  else
-  {
+  else {
     tft.fillScreen(TFT_RED);
     tft.drawString("Menu here!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
   }
 }
 
-void displayCalorieSecondComparison()
-{
+void displayCalorieSecondComparison() {
   String caloriesPerSecondComparison = String(burndownChart.displayCalorieStatistics().c_str());
   tft.drawString(caloriesPerSecondComparison, caloriesPerSecondTextCoordinates[0], caloriesPerSecondTextCoordinates[1]);
 }
