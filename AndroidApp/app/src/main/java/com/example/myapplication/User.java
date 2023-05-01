@@ -8,11 +8,12 @@ public class User {
     private String sex;
     private int calorieCredit;
     private int lifeTimeCredit;
+    private static User user= null;
 
     //Empty constructor
     //todo make the user start in settings to input stuff and cant leave if they don't do it
     //and the values to not be 0
-    User(){
+    private User(){
     age = 0;
     height =0;
     weight=0;
@@ -20,6 +21,13 @@ public class User {
     calorieCredit = 727; //A new user starts with 0 CalorieCurrency
     lifeTimeCredit=727;
     }
+    public static User getInstance(){
+        if(user== null){
+            user = new User();
+        }
+        return user;
+    }
+
     
     public void setUsername(String username) {
         this.username = username;

@@ -34,7 +34,7 @@ public class MusicFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.songLibraryView);
         userBalance = rootView.findViewById(R.id.user_balance);
 
-        userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+        userBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
 
         if(!hasCreated) {
             //The song list database

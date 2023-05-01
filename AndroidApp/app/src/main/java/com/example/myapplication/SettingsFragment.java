@@ -78,8 +78,8 @@ public class SettingsFragment extends Fragment {
         currentBalance = rootView.findViewById(R.id.current_balance_text_view);
         lifeTimeCurrency = rootView.findViewById(R.id.total_calories_burnt_text_view);
         //TODO use singleton
-        currentBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
-        lifeTimeCurrency.setText(Integer.toString(MainActivity.user.getLifeTimeCredit()));
+        currentBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
+        lifeTimeCurrency.setText(Integer.toString(User.getInstance().getLifeTimeCredit()));
         return rootView;
     }
 
@@ -93,7 +93,7 @@ public class SettingsFragment extends Fragment {
 
         try {//todo use singleotn
         MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
-         ,Util.toJSON(MainActivity.user)
+         ,Util.toJSON(User.getInstance())
          ,MainActivity.brokerConnection.QOS, null);
          } catch (IllegalAccessException e) {
          e.printStackTrace();
@@ -121,11 +121,11 @@ public class SettingsFragment extends Fragment {
 
 
             //TODO exception handling
-            MainActivity.user.setAge(age);
-            MainActivity.user.setHeight(height);
-            MainActivity.user.setWeight(weight);
+            User.getInstance().setAge(age);
+            User.getInstance().setHeight(height);
+            User.getInstance().setWeight(weight);
 
-            MainActivity.user.setSex(genderSpinner.getSelectedItem().toString());
+            User.getInstance().setSex(genderSpinner.getSelectedItem().toString());
 
 
             // tobe thrown if any of the Editfield is not filled
