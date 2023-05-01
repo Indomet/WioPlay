@@ -83,6 +83,9 @@ public class SettingsFragment extends Fragment {
                 sex
         );
 
+        sexSpinner.setAdapter(sexAdapter);
+        sexSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
