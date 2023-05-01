@@ -55,7 +55,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
                 if(currentSong.isUnlocked()){
                     playSong(currentSong);
                 }else{
-                    if (MainActivity.user.getCalorieCredit() >= currentSong.getPrice()) {
+                    if (User.getInstance().getCalorieCredit() >= currentSong.getPrice()) {
                         confirmationDialog(currentSong); //Calls the popup window
                     } else {
                         Toast.makeText(context, "Not enough calorie credits", Toast.LENGTH_SHORT).show();
@@ -78,14 +78,14 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     public void updateData(){
         TextView view =((MainActivity)context).findViewById(R.id.user_balance); //Updates balance display in MusicFragment
-        view.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+        view.setText(Integer.toString(User.getInstance().getCalorieCredit()));
         notifyDataSetChanged();
     }
 
-    private void unlockSong(@NonNull Song currentSong){
+    private void unlockSong(@NonNull Song currentSong) {
         String filePath = context.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
         File userFile = new File(filePath);
-        MainActivity.user.updateCredit(-currentSong.getPrice());
+        User.getInstance().updateCredit(-currentSong.getPrice());
         currentSong.setUnlocked(true);
         updateData();
         Toast.makeText(context, "Unlocked " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();

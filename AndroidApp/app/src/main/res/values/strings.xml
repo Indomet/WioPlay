@@ -19,6 +19,9 @@
     <string name="gender_label">gender</string>
     <string name="age_label">age</string>
     <string name="rate_us_label">Rate Us!</string>
+    <string name="editUserName">Enter your name here</string>
+    <string name="X">X</string>
+    <string name="Save">Save</string>
     <string name="underline_label">___________</string>
     <string name="ok_text">Ok</string>
     <string name="congratulations_msg">Congratulations! You burnt</string>

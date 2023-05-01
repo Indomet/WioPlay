@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +37,8 @@ public class SettingsFragment extends Fragment {
     private Spinner sexSpinner;
     private TextView lifeTimeCurrency;
     private TextView currentBalance;
+    private ImageButton editButton;
+    private Dialog dialog;
 
 
 
@@ -47,6 +51,8 @@ public class SettingsFragment extends Fragment {
         weightEditText = rootView.findViewById(R.id.kg_edittext);
         heightEditText = rootView.findViewById(R.id.height_edittext);
         ageEditText = rootView.findViewById(R.id.age_edit_text);
+        editButton = rootView.findViewById(R.id.editButton);
+        dialog =new Dialog(this.getContext());
 
         /*
         weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
@@ -79,6 +85,24 @@ public class SettingsFragment extends Fragment {
 
         sexSpinner.setAdapter(sexAdapter);
         sexSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.setContentView(R.layout.popupeditusername);
+                TextView closer = dialog.findViewById(R.id.closebtn);
+                closer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        genderSpinner.setAdapter(genderAdapter);
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
@@ -97,8 +121,8 @@ public class SettingsFragment extends Fragment {
         currentBalance = rootView.findViewById(R.id.current_balance_text_view);
         lifeTimeCurrency = rootView.findViewById(R.id.total_calories_burnt_text_view);
         //TODO use singleton
-        currentBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
-        lifeTimeCurrency.setText(Integer.toString(MainActivity.user.getLifeTimeCalories()));
+        currentBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
+        lifeTimeCurrency.setText(Integer.toString(User.getInstance().getLifeTimeCredit()));
         return rootView;
     }
 
@@ -123,7 +147,7 @@ public class SettingsFragment extends Fragment {
 
         try {//todo use singleton
         MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
-         ,Util.objectToJSON(MainActivity.user)
+         ,Util.toJSON(User.getInstance())
          ,MainActivity.brokerConnection.QOS, null);
          } catch (IllegalAccessException e) {
          e.printStackTrace();
@@ -150,12 +174,12 @@ public class SettingsFragment extends Fragment {
 
 
             //TODO exception handling
-            MainActivity.user.setAge(age);
-            MainActivity.user.setHeight(height);
-            MainActivity.user.setWeight(weight);
+            User.getInstance().setAge(age);
+            User.getInstance().setHeight(height);
+            User.getInstance().setWeight(weight);
 
-            MainActivity.user.setSex(sexSpinner.getSelectedItem().toString());
-    }
+            User.getInstance().setSex(genderSpinner.getSelectedItem().toString());
+
 
             // tobe thrown if any of the Editfield is not filled
          else {
