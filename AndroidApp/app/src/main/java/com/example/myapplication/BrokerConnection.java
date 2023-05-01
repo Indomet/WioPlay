@@ -30,6 +30,8 @@ public class BrokerConnection extends AppCompatActivity {
     private MqttClient mqttClient;
     private Context context;
 
+    private static BrokerConnection brokerConnection= null; // this is for singelton for this class.
+
     //Alternatively this could be an arraylist to notify many subscribers to the message listenrs
     private MessageListener messageListener;
     //This interface is a contract between this class to notify other classes that implement it that a message has arrived
@@ -43,10 +45,16 @@ public class BrokerConnection extends AppCompatActivity {
     }
 
     //we automatically try to connect the broke in the constructor by calling the connectToMqttBroker method
-    public BrokerConnection(Context context){
+    private BrokerConnection(Context context){
         this.context = context;
         mqttClient = new MqttClient(context, MQTT_SERVER, CLIENT_ID, Ack.AUTO_ACK);
         connectToMqttBroker();
+    }
+    public static BrokerConnection getInstance(Context context){
+        if(brokerConnection ==null){
+          brokerConnection=new BrokerConnection(context);
+        }
+        return brokerConnection;
     }
 
     public void connectToMqttBroker() {
