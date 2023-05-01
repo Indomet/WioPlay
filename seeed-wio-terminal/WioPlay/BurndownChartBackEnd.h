@@ -1,22 +1,9 @@
-// #include "Arduino.h"
+#include<iostream>
+#include<algorithm>
 
-class BurndownChartBackEnd // Logic and functionality of the burndown chart
+class BurndownChartBackEnd // Has the responsibility of dealing with logic and functionality of the burndown chart
 {
   public:
-  float standard;
-  float minMovement; // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
-  float maxMovement; // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
-  float proportionalConstant;
-
-  float exerciseDuration; // 30 (Seconds)
-  float caloriesGoal; // 100 --> Put in 'ExerciseSettings'
-  byte chosenActivityIdx; // 0
-
-  float totalNumberOfSegments; // Number of update segments in graph until goal is reached
-  float currentSegments;
-  float balanceFactor;
-  float caloriesBurnt;
-
   BurndownChartBackEnd(float delayValue, float exerciseDuration, float caloriesGoal, byte chosenActivityIdx)
   {
     this->delayValue = delayValue;
@@ -26,6 +13,7 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
 
     caloriesBurnt = 0;
     currentSegments = 0;
+    timeElapsed = 0;
     balanceFactor = 0.08;
     totalNumberOfSegments = (exerciseDuration / (delayValue / 1000)) + 1;
 
@@ -38,6 +26,11 @@ class BurndownChartBackEnd // Logic and functionality of the burndown chart
   bool isExercising()
   {
     return currentSegments < totalNumberOfSegments;
+  }
+
+  float getCaloriesBurnt()
+  {
+    return caloriesBurnt;
   }
 
   float getExpectedValue()
@@ -71,7 +64,8 @@ void sufficientMovementInquiry(UserInformation userInformation, float movementVa
   }
   else
   {
-    Serial.println("You are not exercising hard enough for the selected exercise!");
+    Serial.println(" ");
+    // Serial.println("You are not exercising hard enough for the selected exercise!");
   }
 }
 
@@ -88,8 +82,61 @@ void changeAttributeValues(float newDelayValue, float newExerciseDuration, float
   chosenActivityIdx = newChosenActivityIdx;
 }
 
+bool checkIfUserAccomplishedGoal()
+{
+  return caloriesBurnt >= caloriesGoal;
+}
+
+// Returns the calories burnt per second at a given point of time. If 'timeElapsed' = 'exerciseDuration', the method gets the calories burnt across the entire workout
+float getActualCaloriesPerSecond()
+{
+  return caloriesBurnt / (timeElapsed / 1000);
+}
+
+// Expected calories to burn per second from current calories burnt to reach goal
+float getExpectedCaloriesPerSecond()
+{
+  float caloriesLeft = max(0, caloriesGoal - caloriesBurnt);
+  float secondsLeft = exerciseDuration - (timeElapsed / 1000);
+
+  return caloriesLeft / secondsLeft;
+}
+
+float getGeneralExpectedCaloriesPerSecond()
+{
+  return caloriesGoal / exerciseDuration;
+}
+
+void increaseCurrentSegments()
+{
+  currentSegments++;
+}
+
+float getTimeElapsed()
+{
+  return timeElapsed;
+}
+
+void updateTimeElapsed(float duration)
+{
+  timeElapsed += duration;
+}
+
 private:
 float delayValue;
+float standard;
+float minMovement; // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
+float maxMovement; // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
+float proportionalConstant;
+byte chosenActivityIdx; // 0
+float totalNumberOfSegments; // Number of update segments in graph until goal is reached
+float currentSegments;
+float balanceFactor;
+float timeElapsed;
+
+float exerciseDuration; // 30 (Seconds)
+float caloriesGoal; // 100 --> Put in 'ExerciseSettings'
+float caloriesBurnt;
 
 // Note: Row[i] is equivalent to the (i)th activity
 // Note: Retrieve standard-value by getting the average of min and max value
