@@ -79,24 +79,24 @@ void updateChart(char json[]) {
 
 }
 
-void printMessage(String message) {
-  int bgColor;                // declare a backgroundColor
-  int textColor = TFT_WHITE;  // initializee the text color to white
-  String displayText = "Received message:";
+// void printMessage(String message) {
+//   int bgColor;                // declare a backgroundColor
+//   int textColor = TFT_WHITE;  // initializee the text color to white
+//   String displayText = "Received message:";
 
-  bgColor = TFT_RED;
-  // Update TFT display and print input message
-  tft.fillScreen(bgColor);
-  tft.setTextColor(textColor, bgColor);  // set the text and background color
-  tft.setTextSize(2);
-  tft.setCursor((320 - tft.textWidth(displayText)) / 2, 90);  // Make sure to align the text to the center of the screen
-  tft.println(displayText);                                   // print the text
-  tft.setCursor((320 - tft.textWidth(message)) / 2, 120);
-  tft.println(message);
-}
+//   bgColor = TFT_RED;
+//   // Update TFT display and print input message
+//   tft.fillScreen(bgColor);
+//   tft.setTextColor(textColor, bgColor);  // set the text and background color
+//   tft.setTextSize(2);
+//   tft.setCursor((320 - tft.textWidth(displayText)) / 2, 90);  // Make sure to align the text to the center of the screen
+//   tft.println(displayText);                                   // print the text
+//   tft.setCursor((320 - tft.textWidth(message)) / 2, 120);
+//   tft.println(message);
+// }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  tft.fillScreen(TFT_BLACK);
+  // tft.fillScreen(TFT_BLACK);
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -110,7 +110,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   buff_p[length] = '\0';
   String message = String(buff_p);
   // end of conversion
-  printMessage(message);
+  // printMessage(message);
   char charBuf[message.length() + 1];
   message.toCharArray(charBuf, message.length() + 1);
 
