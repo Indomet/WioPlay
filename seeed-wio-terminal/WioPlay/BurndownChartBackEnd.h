@@ -19,6 +19,15 @@ public:
     maxMovement = (float)metRanges[chosenActivityIdx][1] / proportionalConstant;  // Maximal movement boundary
   }
 
+  // Returns a string comparing the actual calories burnt per second with the expected
+  std::string displayCalorieStatistics() {
+    std::string actual = std::to_string(getActualCaloriesPerSecond());
+    // std::string expected = std::to_string(burndownChartBackEnd.getExpectedCaloriesPerSecond());
+    std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
+
+    return actual + ", " + expected;
+  }
+
   bool isExercising()
   {
     return (timeElapsed / 1000) < exerciseDuration;
