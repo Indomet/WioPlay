@@ -1,0 +1,35 @@
+name: Candy Paint
+artist: Post Malone
+imageURL: https://i.scdn.co/image/ab67616d0000b273b1c4b76e23414c9f20242268
+tempo: 180.064
+notes:
+
+3|b--a--G--e-eF--G--e-----b-|
+
+3|-a--G--e-eF--G--e-----b-ba|
+
+3|-aG-Ge--F--G--e--e--b--a--|
+
+3|G--e--F--G--e-----b-ba-aG-|
+
+3|Ge--F--G--e--e--b--a--G--e|
+
+3|--F-FG--e-----b--a--G-Ge-e|
+
+3|F--G--e-----b-ba--G-Ge--F-|
+
+3|FG--e-----b--a--G--e-eF--G|
+
+3|--e-----b--a--G--e-eF--G--|
+
+3|e-----b-ba-aG-Ge--F--G--e-|
+
+3|-e--b--a--G--e--F--G--e---|
+
+3|--b-ba-aG-Ge--F--G--e--e--|
+
+3|b--a--G--e--F-FG--e-----b-|
+
+3|-a--G-Ge-eF--G--e-----b-ba|
+
+3|--G-Ge--F-FG--e-----------|
