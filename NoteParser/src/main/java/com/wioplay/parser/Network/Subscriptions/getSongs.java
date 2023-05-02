@@ -1,5 +1,7 @@
 package com.wioplay.parser.Network.Subscriptions;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wioplay.parser.Core.Song;
 import com.wioplay.parser.Network.AbstractSubscription;
 import com.wioplay.parser.Utils.Reader;
@@ -17,7 +19,16 @@ public class getSongs extends AbstractSubscription {
 
         System.out.println("User is requesting for all songs");
         ArrayList<Song> songs = Reader.loadFiles();
-        this.getClient().publish("songs", songs.toString());
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+
+            String jsonString = mapper.writeValueAsString(songs);
+            this.getClient().publish("songs", jsonString);
+
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 

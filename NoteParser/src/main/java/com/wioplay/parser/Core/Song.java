@@ -25,10 +25,10 @@ public class Song {
         this.notes = notes;
     }
 
-    public int getNoteCount() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
+//    public int getNoteCount() {
+//        // TODO
+//        throw new UnsupportedOperationException();
+//    }
 
     public String getTitle() {
         return this.title;

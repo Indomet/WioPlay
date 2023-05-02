@@ -3,16 +3,26 @@ package com.example.myapplication;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
@@ -42,6 +52,10 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         Song currentSong = songsList.get(currentPosition); //This has to be initialized here to work properly.
         holder.songTitle.setText(songsList.get(currentPosition).getTitle());
         holder.songDuration.setText((duration / 60) + ":" + String.format("%02d", duration % 60));
+
+        if(currentSong.getImageURL() != "") {
+            Picasso.get().load(currentSong.getImageURL()).into(holder.songImage);
+        }
 
         if(!currentSong.isUnlocked()){
             holder.songPrice.setText(Integer.toString(currentSong.getPrice())+" CC");
@@ -118,7 +132,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder{
     //Holds all views
-        private TextView songTitle, songPrice, songDuration, songImage, userBalance;
+        private TextView songTitle, songPrice, songDuration, userBalance;
+        private ImageView songImage;
 
         private CardView parent;
         public ViewHolder(@NonNull View itemView) {
@@ -126,6 +141,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
             parent = itemView.findViewById(R.id.parent_layout);
             songTitle = itemView.findViewById(R.id.song_title);
             songPrice = itemView.findViewById(R.id.song_price);
+            songImage = itemView.findViewById(R.id.image);
             songDuration = itemView.findViewById(R.id.song_duration);
             userBalance = itemView.findViewById(R.id.user_balance);
 
