@@ -12,9 +12,7 @@ DynamicJsonDocument doc(1024);
 #include "MqttConnection.h"
 #include "MusicPlayer.h"
 
-
 float movementValue;
-bool isExercising = true;
 
 byte caloriesPerSecondTextCoordinates[2] = { 5, 50 };
 byte exerciseResultTextCoordinates[2] = { 15, 70 };
@@ -24,8 +22,6 @@ BurndownChart burndownChart;
 
 MusicPlayer player(song, sizeof(song) / sizeof(int), 1.2);
 const char* calorie_pub = "Send/Calorie/Burn/Data";
-
-
 
 void setup() {
   Serial.begin(115200);  //Start serial communication
@@ -44,7 +40,7 @@ void loop() {
   loopMqtt();
 
   // Exercise isn't complete yet: Continually read movement-values and update chart accordingly
-  if (isExercising) {
+  if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
     buttonOnPress();
@@ -54,7 +50,6 @@ void loop() {
     //delay(burndownChart.getDelayValue());
 
     player.playChunk();
-
     burndownChart.updateTimeElapsed(player.getCurrentPauseChunkDuration());
 
     // TEMPORARY
@@ -66,7 +61,6 @@ void loop() {
 
     movementValue = motionDetection.detectMotion();  // Read current user-position
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
-    isExercising = burndownChart.isExercising();
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
 
