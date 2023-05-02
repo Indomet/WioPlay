@@ -35,6 +35,8 @@ public class SettingsFragment extends Fragment {
     private Spinner sexSpinner;
     private TextView lifeTimeCurrency;
     private TextView currentBalance;
+    private ImageButton editButton;
+
 
 
 
@@ -47,6 +49,7 @@ public class SettingsFragment extends Fragment {
         weightEditText = rootView.findViewById(R.id.kg_edittext);
         heightEditText = rootView.findViewById(R.id.height_edittext);
         ageEditText = rootView.findViewById(R.id.age_edit_text);
+        editButton=rootView.findViewById(R.id.editButton);
 
         /*
         weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
@@ -67,6 +70,8 @@ public class SettingsFragment extends Fragment {
                 }
             }
         });
+
+        editButton.setOnClickListener(v -> editUserNamePopup());
 
                 //TODO make sex take enum instead of string
                 sexSpinner = rootView.findViewById(R.id.sex_spinner);
@@ -92,6 +97,9 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+
+
+
         ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
         sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
         currentBalance = rootView.findViewById(R.id.current_balance_text_view);
@@ -100,6 +108,13 @@ public class SettingsFragment extends Fragment {
         currentBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
         lifeTimeCurrency.setText(Integer.toString(MainActivity.user.getLifeTimeCalories()));
         return rootView;
+    }
+    public void editUserNamePopup(){
+        Dialog dialog= new Dialog(getActivity());
+        dialog.setContentView(R.layout.popupeditusername);
+        TextView button=dialog.findViewById(R.id.closebtn);
+        button.setOnClickListener(view -> dialog.dismiss());
+        dialog.show();
     }
 
     private void showSexInfoPopup() {
@@ -197,6 +212,7 @@ public class SettingsFragment extends Fragment {
 
         }
     }
+
 }
 
 

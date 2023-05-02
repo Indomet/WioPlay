@@ -2,7 +2,9 @@
     <string name="app_name">Wio Play</string>
     <string name="bottomNavigationView">bottomNavigationViewID</string>
     <string name="calories_burnt_textview">Calories Burnt</string>
-    <string name="burn_down_text">View Burn-Down Chart</string>
+    <string name="editUserName">Enter your name here</string>
+    <string name="X">X</string>
+    <string name="Save">Save</string>  <string name="burn_down_text">View Burn-Down Chart</string>
     <string name="start_workout_text">Start A New Workout</string>
     <string name="hourglass_text">Time Left To Reach\n Your Calorie Goal</string>
     <string name="weight_hint"> <u>Kilograms</u></string>
