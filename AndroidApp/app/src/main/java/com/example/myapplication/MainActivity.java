@@ -36,13 +36,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
         changeFragment(musicFragment);
         bottomNavigation.setOnItemSelectedListener(this);
-        brokerConnection = new BrokerConnection(getApplicationContext());
+        brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
 
 
         String filePath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
         File userFile = new File(filePath);
 
-        user = new User(userFile);
+        user = User.getInstance(userFile);
 //        user.setCalorieCredit(9000);
 
 
