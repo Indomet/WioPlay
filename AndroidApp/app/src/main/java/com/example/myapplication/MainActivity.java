@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         String filePath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
         File userFile = new File(filePath);
 
-        user = new User(userFile);
+        user = User.getInstance(userFile);
 //        user.setCalorieCredit(9000);
 
 
