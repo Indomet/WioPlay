@@ -47,7 +47,6 @@ void loop() {
     menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
-    //delay(burndownChart.getDelayValue());
 
     player.playChunk();
     burndownChart.updateTimeElapsed(player.getCurrentPauseChunkDuration());
@@ -60,7 +59,7 @@ void loop() {
     // Serial.println("***********************");
 
     movementValue = motionDetection.detectMotion();  // Read current user-position
-    burndownChart.sufficientMovementInquiry(userInformation, movementValue);
+    burndownChart.sufficientMovementInquiry(userInformation, movementValue, player.getCurrentPauseChunkDuration());
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
 
