@@ -4,8 +4,7 @@
 class BurndownChartBackEnd  // Has the responsibility of dealing with logic and functionality of the burndown chart
 {
 public:
-  BurndownChartBackEnd(float delayValue, float exerciseDuration, float caloriesGoal, byte chosenActivityIdx) {
-    this->delayValue = delayValue;
+  BurndownChartBackEnd(float exerciseDuration, float caloriesGoal, byte chosenActivityIdx) {
     this->exerciseDuration = exerciseDuration;
     this->caloriesGoal = caloriesGoal;
     this->chosenActivityIdx = chosenActivityIdx;
@@ -35,10 +34,10 @@ public:
 
   // Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
   // Takes into consideration the inputted user characteristics and how much the user has moved since last update of the burndown chart to calculate calories burnt
-  float burnCalories(UserInformation userInformation, float movementValue)  // Burn calories based on the movement-value
+  float burnCalories(UserInformation userInformation, float movementValue, float songPauseChunkDuration)  // Burn calories based on the movement-value
   {
     movementValue = getMETValue(movementValue);
-    float moveFactor = (movementValue / delayValue) * balanceFactor;
+    float moveFactor = (movementValue / songPauseChunkDuration) * balanceFactor;
 
     if (userInformation.isMale) {
       return (66 + (6.2 * userInformation.userWeight) + (12.7 * userInformation.userHeight) - (6.76 * userInformation.userAge)) * moveFactor;
@@ -48,20 +47,15 @@ public:
   }
 
   // Only burn calories if user's movement-intensity corresponds with selected exercise
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue) {
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float songPauseChunkDuration) {
     if (userIsMovingFastEnough(movementValue)) {
-      caloriesBurnt += burnCalories(userInformation, movementValue);
+      caloriesBurnt += burnCalories(userInformation, movementValue, songPauseChunkDuration);
     } else {
       // Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
 
-  float getDelayValue() {
-    return delayValue;
-  }
-
-  void changeAttributeValues(float newDelayValue, float newExerciseDuration, float newCaloriesGoal, byte newChosenActivityIdx) {
-    delayValue = newDelayValue;
+  void changeAttributeValues(float newExerciseDuration, float newCaloriesGoal, byte newChosenActivityIdx) {
     exerciseDuration = newExerciseDuration;
     caloriesGoal = newCaloriesGoal;
     chosenActivityIdx = newChosenActivityIdx;
@@ -97,7 +91,6 @@ public:
   }
 
 private:
-  float delayValue;
   float standard;
   float minMovement;  // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
   float maxMovement;  // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)

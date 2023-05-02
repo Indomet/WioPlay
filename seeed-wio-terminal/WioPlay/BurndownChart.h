@@ -2,7 +2,7 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(1000, 10, 20, 0);  // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd(10, 20, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);             // (float graphUIXStartValue)
 
 #include <iostream>
@@ -39,12 +39,8 @@ public:
     return burndownChartBackEnd.isExercising();
   }
 
-  float getDelayValue() {
-    return burndownChartBackEnd.getDelayValue();
-  }
-
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue) {
-    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue);
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float songPauseChunkDuration) {
+    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue, songPauseChunkDuration);
   }
 
   // Constrain dynamic variables in front-end and back-end in real-time
