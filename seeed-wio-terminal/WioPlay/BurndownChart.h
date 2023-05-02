@@ -2,7 +2,7 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(1000, 55, 20, 0);  // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd(1000, 10, 20, 0);  // (delayValue, exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);             // (float graphUIXStartValue)
 
 #include <iostream>
@@ -50,7 +50,6 @@ public:
   // Constrain dynamic variables in front-end and back-end in real-time
   void controlConstraints() {
     controlNumberOfDataPointsInGraph();
-    increaseSegments();
     // updateGraphVizuals();
   }
 
@@ -73,9 +72,5 @@ public:
 private:
   void controlNumberOfDataPointsInGraph() {
     burndownChartFrontEnd.controlNumberOfDataPointsInGraph();
-  }
-
-  void increaseSegments() {
-    burndownChartBackEnd.increaseCurrentSegments();
   }
 };

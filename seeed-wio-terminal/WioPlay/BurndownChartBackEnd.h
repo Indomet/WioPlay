@@ -11,10 +11,8 @@ public:
     this->chosenActivityIdx = chosenActivityIdx;
 
     caloriesBurnt = 0;
-    currentSegments = 0;
     timeElapsed = 0;
     balanceFactor = 0.08;
-    totalNumberOfSegments = (exerciseDuration / (delayValue / 1000)) + 1;
 
     standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
     proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
@@ -22,8 +20,9 @@ public:
     maxMovement = (float)metRanges[chosenActivityIdx][1] / proportionalConstant;  // Maximal movement boundary
   }
 
-  bool isExercising() {
-    return currentSegments < totalNumberOfSegments;
+  bool isExercising()
+  {
+    return (timeElapsed / 1000) < exerciseDuration;
   }
 
   float getCaloriesBurnt() {
@@ -31,7 +30,7 @@ public:
   }
 
   float getExpectedValue() {
-    return ((currentSegments - 1) / totalNumberOfSegments) * caloriesGoal;
+    return  ((timeElapsed / 1000) / exerciseDuration) * caloriesGoal;
   }
 
   // Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
@@ -53,7 +52,6 @@ public:
     if (userIsMovingFastEnough(movementValue)) {
       caloriesBurnt += burnCalories(userInformation, movementValue);
     } else {
-      Serial.println(" ");
       // Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
@@ -90,10 +88,6 @@ public:
     return caloriesGoal / exerciseDuration;
   }
 
-  void increaseCurrentSegments() {
-    currentSegments++;
-  }
-
   float getTimeElapsed() {
     return timeElapsed;
   }
@@ -108,9 +102,7 @@ private:
   float minMovement;  // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
   float maxMovement;  // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
   float proportionalConstant;
-  byte chosenActivityIdx;       // 0
-  float totalNumberOfSegments;  // Number of update segments in graph until goal is reached
-  float currentSegments;
+  byte chosenActivityIdx;       // 0 = Walking
   float balanceFactor;
   float timeElapsed;
 
