@@ -17,7 +17,7 @@ public class User {
     private int lifeTimeCalories;
     private File userFile;
 
-    public User(File userFile) {
+    public User(File userFile) { //A file must be passed in since User class do not have access to context.
         this.defaultUser();
         this.userFile = userFile;
         load();
@@ -131,6 +131,11 @@ public class User {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void updateLifeTimeCalories(int payload){
+        this.lifeTimeCalories += payload;
+        saveUserData();
     }
 
     public String getUsername() {
