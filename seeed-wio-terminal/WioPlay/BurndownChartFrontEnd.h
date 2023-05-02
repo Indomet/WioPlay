@@ -76,12 +76,33 @@ public:
     //tft.fillScreen(TFT_BLACK);
   }
 
-  void changeAttributeValues(float newGraphUIXStartValue) {
-    graphUIXStartValue = newGraphUIXStartValue;
+  void displayExerciseResults(BurndownChartBackEnd burndownChartBackEnd) {
+  tft.setTextSize(3);
+
+  displayCalorieSecondComparison(burndownChartBackEnd);
+
+  // User completed goal
+  if (burndownChartBackEnd.checkIfUserAccomplishedGoal()) {
+    tft.fillScreen(TFT_GREEN);
+    tft.drawString("Accomplished goal!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
   }
+
+  // User didn't attain the set goal
+  else {
+    tft.fillScreen(TFT_RED);
+    tft.drawString("Menu here!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+  }
+}
+
+void displayCalorieSecondComparison(BurndownChartBackEnd burndownChartBackEnd) {
+  String caloriesPerSecondComparison = String(burndownChartBackEnd.displayCalorieStatistics().c_str());
+  tft.drawString(caloriesPerSecondComparison, caloriesPerSecondTextCoordinates[0], caloriesPerSecondTextCoordinates[1]);
+}
 
 private:
   const byte numberOfGraphValues = 2;
+  byte caloriesPerSecondTextCoordinates[2] = { 5, 50 };
+  byte exerciseResultTextCoordinates[2] = { 15, 70 };
 
   // Don't display the data-points added earliest on the graph. Delete them to sustain the memory limit
   void removeEarliestDataPoints() {

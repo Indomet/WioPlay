@@ -14,13 +14,9 @@ public:
     burndownChartFrontEnd.initializeUI();
   }
 
-  // Returns a string comparing the actual calories burnt per second with the expected
-  std::string displayCalorieStatistics() {
-    std::string actual = std::to_string(burndownChartBackEnd.getActualCaloriesPerSecond());
-    // std::string expected = std::to_string(burndownChartBackEnd.getExpectedCaloriesPerSecond());
-    std::string expected = std::to_string(burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond());
-
-    return actual + ", " + expected;
+  void displayExerciseResults()
+  {
+    burndownChartFrontEnd.displayExerciseResults(burndownChartBackEnd);
   }
 
   float getGeneralExpectedCaloriesPerSecond() {
@@ -46,7 +42,6 @@ public:
   // Constrain dynamic variables in front-end and back-end in real-time
   void controlConstraints() {
     controlNumberOfDataPointsInGraph();
-    // updateGraphVizuals();
   }
 
   bool checkIfUserAccomplishedGoal() {
