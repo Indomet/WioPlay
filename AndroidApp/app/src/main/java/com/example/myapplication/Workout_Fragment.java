@@ -34,7 +34,6 @@ import nl.dionsegijn.konfetti.core.models.Shape;
 import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
-import com.harrywhewell.scrolldatepicker.DayScrollDatePicker;
 
 import java.util.Date;
 
@@ -66,7 +65,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     private View rootView;
 
-    DayScrollDatePicker weeklyCalendar;
 
 
     @Override
@@ -121,8 +119,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     }
 
     private void widgetInit() {
-        weeklyCalendar = rootView.findViewById(R.id.day_date_picker);
-        weeklyCalendar.getSelectedDate(date -> onDateSelected(date));
 
         userBalance = rootView.findViewById(R.id.workout_tab_user_balance);
         workoutsCount = rootView.findViewById(R.id.user_total_workouts);

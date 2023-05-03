@@ -55,8 +55,7 @@ dependencies {
 
     implementation 'nl.dionsegijn:konfetti-compose:2.0.2'
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
-    implementation 'com.github.gastricspark:scrolldatepicker:0.0.1'
-
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
 
 
 

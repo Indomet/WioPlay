@@ -308,21 +308,33 @@
             app:layout_constraintStart_toStartOf="@id/monthly_progressbar"
             app:layout_constraintTop_toTopOf="@id/monthly_progressbar" />
 
-        <com.harrywhewell.scrolldatepicker.DayScrollDatePicker
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/day_date_picker"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleX="1.4"
-            android:scaleY="1.4"
-            app:baseTextColor="@color/default_base_text"
-
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/zero_workouts_this_month"
-            app:selectedColor="#B2ACEA"
-            app:selectedTextColor="@color/white"
-            app:showFullDate="false"
-            app:showTitle="true" />
+            app:layout_constraintTop_toBottomOf="@id/zero_workouts_this_month"
+            app:mcv_calendarMode="week"
+            app:mcv_selectionColor="#FFB2ACEA"
+            app:mcv_showOtherDates="all"
+            />
 
+        <TextView
+            android:id="@+id/walking_textview_BTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/purple_selected"
+            android:fontFamily="sans-serif-medium"
+            android:padding="10dp"
+            android:text="@string/walking_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/workouts_for_this_month"
+            app:layout_constraintStart_toStartOf="@+id/workouts_for_this_month"
+            app:layout_constraintTop_toBottomOf="@+id/monthly_progressbar" />
         <ProgressBar
             android:id="@+id/calories_burnt_progressbar"
             style="@style/new_progress_bar"
@@ -337,25 +349,6 @@
             app:layout_constraintEnd_toEndOf="@+id/walking_textview_BTN"
             app:layout_constraintStart_toStartOf="@+id/walking_textview_BTN"
             app:layout_constraintTop_toBottomOf="@+id/walking_textview_BTN" />
-
-        <TextView
-            android:id="@+id/walking_textview_BTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/purple_selected"
-            android:fontFamily="sans-serif-medium"
-            android:padding="10dp"
-            android:text="@string/walking_label"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-
-
-            app:layout_constraintEnd_toEndOf="@+id/add_walking_workout_btn"
-            app:layout_constraintStart_toStartOf="@+id/user_picture"
-            app:layout_constraintTop_toBottomOf="@+id/day_date_picker" />
-
         <TextView
             android:id="@+id/running_textview_BTN"
             android:layout_width="wrap_content"
@@ -370,7 +363,6 @@
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/walking_textview_BTN"
             app:layout_constraintTop_toTopOf="@+id/walking_textview_BTN" />
-
         <TextView
 
 
@@ -386,7 +378,6 @@
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/running_textview_BTN"
             app:layout_constraintTop_toTopOf="@+id/running_textview_BTN" />
-
         <TextView
             android:id="@+id/caloires_burnt_label"
             android:layout_width="wrap_content"
@@ -407,7 +398,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
-            android:text="90"
+            android:text="0"
             android:textColor="#68E0F2"
 
 
@@ -424,7 +415,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/calories_burnt_progressbar"
             app:layout_constraintTop_toTopOf="@+id/calories_burnt_progressbar" />
-
         <TextView
             android:id="@+id/time_left_whitebox"
             android:layout_width="wrap_content"
@@ -444,7 +434,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/stopwatch_whitebix"
             app:layout_constraintStart_toStartOf="@+id/stopwatch_whitebix"
             app:layout_constraintTop_toTopOf="@+id/stopwatch_whitebix" />
-
         <TextView
             android:id="@+id/stopwatch_textview"
             android:layout_width="wrap_content"
@@ -484,7 +473,6 @@
             app:layout_constraintEnd_toEndOf="@+id/time_left_whitebox"
             app:layout_constraintStart_toStartOf="@+id/time_left_whitebox"
             app:layout_constraintTop_toTopOf="@+id/time_left_whitebox" />
-
         <TextView
             android:id="@+id/time_left_textview"
             android:layout_width="wrap_content"
@@ -497,6 +485,9 @@
             app:layout_constraintEnd_toEndOf="@+id/time_left_label"
             app:layout_constraintStart_toStartOf="@+id/time_left_label"
             app:layout_constraintTop_toBottomOf="@+id/time_left_label" />
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
