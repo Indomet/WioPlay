@@ -175,7 +175,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         }
 
         //TODO update the time left gto reach goal view
-        if (workoutManager.isGoalAchieved()) {
+        if (workoutManager.isGoalAchieved()&& workoutManager.getWorkoutHasStarted()) {
             caloriesProgressbar.setProgress(0,true);
             caloriesBurnt.setText("0");
             createPopWindow();
