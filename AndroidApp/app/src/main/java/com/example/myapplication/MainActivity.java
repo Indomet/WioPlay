@@ -9,11 +9,10 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import java.io.File;
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     private BottomNavigationView bottomNavigation;
-    private WorkoutFragment workoutFragment;
+    private Workout_Fragment workoutFragment;
     private SearchFragment searchFragment;
     private MusicFragment musicFragment;
     private SettingsFragment settingsFragment;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         //initializing the variables
         bottomNavigation = findViewById(R.id.bottomNavigationView);
-        workoutFragment = new WorkoutFragment();
+        workoutFragment = new Workout_Fragment();
         searchFragment = new SearchFragment();
         musicFragment = new MusicFragment();
         settingsFragment = new SettingsFragment();

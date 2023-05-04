@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-
 import android.app.Dialog;
 
 import android.graphics.Color;
@@ -9,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,30 +34,39 @@ import nl.dionsegijn.konfetti.core.models.Shape;
 import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Date;
 
 
-public class WorkoutFragment extends Fragment implements BrokerConnection.MessageListener {
-
-    private View rootView;
-    private  WorkoutManager workoutManager;
-    private ProgressBar calorieProgressBar;
-
+public class Workout_Fragment extends Fragment implements BrokerConnection.MessageListener{
+    private TextView userBalance;
+    private TextView workoutsCount;
+    private TextView username;
+    private ImageButton addWalkingWorkout;
+    private ImageButton addRunningWorkout;
+    private ImageButton addHikingWorkout;
+    private ProgressBar monthlyWorkoutsProgressbar;
+    private ProgressBar caloriesProgressbar;
+    private TextView targetWorkoutsThisMonth;
+    private TextView currentWorkoutsThisMonth;
+    private TextView walkingClickableView;
+    private TextView runningClickableView;
+    private TextView hikingClickableView;
+    private TextView caloriesBurnt;
+    private Button stopOrPlayStopwatch;
+    private TextView timeElapsed;
+    private TextView timeLeft;
+    //TODO DELETER AFTER TEST
     private NewWorkoutFragment newWorkoutFragment;
 
-    private TextView caloriesBurntLabel;
-    private TextView caloriesBurntTextView;
-
-    private TextView timeElapsed;
     private boolean stopwatchRunning = false;
-    private final String WORKOUT_NOT_STARTED = "No ongoing workout";
+    private  WorkoutManager workoutManager;
 
-    private TextView timeLeftToReachGoal;
 
-    //required empty constructor
-    public WorkoutFragment() {
+    private View rootView;
 
-    }
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -95,51 +105,62 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
         super.onSaveInstanceState(outState);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
-        workoutManager=WorkoutManager.getInstance();
-        calorieProgressBar = rootView.findViewById(R.id.calorie_progress_bar);
-
-        calorieProgressBar.setMax(workoutManager.getCalorieGoal());
-
-        calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
-
-        timeElapsed = rootView.findViewById(R.id.time_elapsed_textview);
-        Button newWorkoutButton = rootView.findViewById(R.id.start_new_workout_button);
-        newWorkoutButton.setOnClickListener(view -> changeToNewWorkoutFragment());
-
-        //TODO make this into singleton and remove the static attributes
+        workoutManager = WorkoutManager.getInstance();
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.setMessageListener(this);
-
-        caloriesBurntLabel = rootView.findViewById(R.id.calories_burnt_label);
-        caloriesBurntTextView = rootView.findViewById(R.id.calories_burnt_text);
-
-
-
-        if (!workoutManager.getWorkoutHasStarted()) {
-            caloriesBurntLabel.setText(WORKOUT_NOT_STARTED);
-            calorieProgressBar.setProgress(0);
-        }
-
         newWorkoutFragment = new NewWorkoutFragment();
-        caloriesBurntTextView.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
-        timeLeftToReachGoal = rootView.findViewById(R.id.time_left_to_reach_goal_textview);
+        widgetInit();
 
         return rootView;
-
     }
 
-    public void changeToNewWorkoutFragment() {
+    private void widgetInit() {
+
+        userBalance = rootView.findViewById(R.id.workout_tab_user_balance);
+        workoutsCount = rootView.findViewById(R.id.user_total_workouts);
+        username = rootView.findViewById(R.id.Username_workout_tab);
+        addWalkingWorkout = rootView.findViewById(R.id.add_walking_workout_btn);
+        addRunningWorkout = rootView.findViewById(R.id.add_running_workout_btn);
+        addHikingWorkout = rootView.findViewById(R.id.add_hiking_workout_btn);
+        monthlyWorkoutsProgressbar =  rootView.findViewById(R.id.monthly_progressbar);
+        caloriesProgressbar =  rootView.findViewById(R.id.calories_burnt_progressbar);
+        targetWorkoutsThisMonth =  rootView.findViewById(R.id.max_workouts_this_month);
+        currentWorkoutsThisMonth =  rootView.findViewById(R.id.current_workouts_this_month);
+        walkingClickableView =  rootView.findViewById(R.id.walking_textview_BTN);
+        runningClickableView =  rootView.findViewById(R.id.running_textview_BTN);
+        hikingClickableView =  rootView.findViewById(R.id.hiking_textview_BTN);
+        caloriesBurnt = rootView.findViewById(R.id.calories_burnt_textview);
+        stopOrPlayStopwatch = rootView.findViewById(R.id.stop_or_start_stopwatch_btn);
+        timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
+        timeLeft = rootView.findViewById(R.id.time_left_textview);
+        //TODO ADD OTHER BTNS AND RPELACE WITH POPUP
+        addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
+        addHikingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
+        addRunningWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
+
+        caloriesProgressbar.setMax(workoutManager.getCalorieGoal());
+        caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
+        if (!workoutManager.getWorkoutHasStarted()) {
+            caloriesBurnt.setText("0");
+            caloriesProgressbar.setProgress(0,true);
+        }
+
+    }
+    public void changeToNewWorkoutFragment(View buttonPressed) {
+        newWorkoutFragment.setWorkoutType(buttonPressed.getId());
         FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
         fm.replace(R.id.frameLayout, newWorkoutFragment).setReorderingAllowed(true).commit();
     }
-
+    public void onDateSelected(@Nullable Date date) {
+        if(date != null){
+            // do something with selected date
+        }
+    }
 
     @Override
     public void onMessageArrived(String payload) {
@@ -148,24 +169,22 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
             //TODO update the calorie balance and lifetime calories, but thats a seperate issue
 
-            calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
-            caloriesBurntTextView.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
-            String timeLeft = workoutManager.calculateTimeLeft();
-            timeLeftToReachGoal.setText(timeLeft);
+            caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
+            caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
+            String calculatedTimeLeft = workoutManager.calculateTimeLeft();
+            timeLeft.setText(calculatedTimeLeft);
         }
 
         //TODO update the time left gto reach goal view
-        if (workoutManager.isGoalAchieved()) {
-            calorieProgressBar.setProgress(0,true);
-            caloriesBurntTextView.setText("0");
-            caloriesBurntLabel.setText(WORKOUT_NOT_STARTED);
+        if (workoutManager.isGoalAchieved()&& workoutManager.getWorkoutHasStarted()) {
+            caloriesProgressbar.setProgress(0,true);
+            caloriesBurnt.setText("0");
             createPopWindow();
             workoutManager.stopWorkout();
-            timeLeftToReachGoal.setText("0:00:00");
+            timeLeft.setText("0:00:00");
 
         }
     }
-
 
     public void startStopWatch() {
         final Handler handler = new Handler();
@@ -220,7 +239,7 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
     //Therefore i set the values inside the method
     private void setUpKonfetti(KonfettiView konfettiView, Shape.DrawableShape drawableShapes) {
         //this variable is 300 to note consume too many resources with the animation
-         final int DURATION_AND_AMOUNT = 300;
+        final int DURATION_AND_AMOUNT = 300;
         //sets the spread to be 360 degrees
         final int SPREAD =360;
         //here we set the 2 colors
@@ -250,6 +269,4 @@ public class WorkoutFragment extends Fragment implements BrokerConnection.Messag
 
 
     }
-
-
 }
