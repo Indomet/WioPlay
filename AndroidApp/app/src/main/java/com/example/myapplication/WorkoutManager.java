@@ -121,7 +121,6 @@ public class WorkoutManager {
     int seconds = secondsElapsed%60;
     String temp= String.format("%02d:%02d:%02d", hours, minutes,seconds);
         Log.d("tag","temp is "+temp);
-
         return temp;
     }
 

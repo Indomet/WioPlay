@@ -115,6 +115,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         broker.setMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
         widgetInit();
+
         return rootView;
     }
 
@@ -138,7 +139,10 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
         timeLeft = rootView.findViewById(R.id.time_left_textview);
         //TODO ADD OTHER BTNS AND RPELACE WITH POPUP
-        addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment());
+        addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
+        addHikingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
+        addRunningWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
+
         caloriesProgressbar.setMax(workoutManager.getCalorieGoal());
         caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
         if (!workoutManager.getWorkoutHasStarted()) {
@@ -147,7 +151,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         }
 
     }
-    public void changeToNewWorkoutFragment() {
+    public void changeToNewWorkoutFragment(View buttonPressed) {
+        newWorkoutFragment.setWorkoutType(buttonPressed.getId());
         FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
         fm.replace(R.id.frameLayout, newWorkoutFragment).setReorderingAllowed(true).commit();
     }

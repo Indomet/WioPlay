@@ -24,6 +24,27 @@ import java.util.List;
 
 
 public class NewWorkoutFragment extends Fragment {
+
+
+
+    private enum WorkoutType {
+        HIKING("Hiking"),
+        WALKING("Walking"),
+        RUNNING("Running");
+
+        private final String name;
+
+        WorkoutType(String name) {
+            this.name = name;
+        }
+
+        private String getName() {
+            return name;
+        }
+    }
+
+    private WorkoutType workoutType;
+
     private View rootView;
 
 
@@ -68,8 +89,6 @@ public class NewWorkoutFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView= inflater.inflate(R.layout.fragment_new_workout, container, false);
 
-        List<String> genders = List.of("Running","Walking","Hiking");
-        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(rootView.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,genders);
         Button startWorkoutButton = rootView.findViewById(R.id.start_button);
         startWorkoutButton.setOnClickListener(view->startWorkout());
 
@@ -111,15 +130,14 @@ public class NewWorkoutFragment extends Fragment {
             //todo fix the workout type thijng
             workoutManager.setWorkoutHasStarted(true);
             //String workoutType = exerciseTypeSpinner.getSelectedItem().toString();
-            //publish the exercise type, calorie goal and duration
-            //workoutManager.setWorkoutType(workoutType);
+            //publish the exercise type and calorie goal
+            workoutManager.setWorkoutType(workoutType.getName());
             final int SECONDS_IN_HOUR = 3600;
             final int SECONDS_IN_MINUTE = 60;
             int durationInSeconds = (timePicker.getHour()*SECONDS_IN_HOUR)+(timePicker.getMinute()*SECONDS_IN_MINUTE);
             workoutManager.setDurationInSeconds(durationInSeconds);
             try {
                 String json = Util.objectToJSON(workoutManager);
-                Toast.makeText(rootView.getContext(), "Your working out for " + durationInSeconds + "secs", Toast.LENGTH_SHORT).show();
                 MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager),MainActivity.brokerConnection.QOS,null);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -127,6 +145,21 @@ public class NewWorkoutFragment extends Fragment {
 
         }
 
+    }
+
+    public void setWorkoutType(int buttonPressedID){
+        switch (buttonPressedID){
+            case R.id.add_hiking_workout_btn:
+                workoutType = WorkoutType.HIKING;
+                break;
+            case R.id.add_walking_workout_btn:
+                workoutType = WorkoutType.WALKING;
+                break;
+            case R.id.add_running_workout_btn:
+                workoutType = WorkoutType.RUNNING;
+
+            default:
+        }
     }
 
 
