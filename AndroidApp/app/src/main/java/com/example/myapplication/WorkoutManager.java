@@ -50,11 +50,7 @@ public class WorkoutManager {
         return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
 
-    //validates the time using the LocalTime import
-    public boolean validateDuration(String time) {
-         String pattern = "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$";
-            return time.matches(pattern);
-    }
+
 
     public void setDurationInSeconds(int seconds){
         durationInSeconds=seconds;
@@ -114,23 +110,7 @@ public class WorkoutManager {
         return durationInSeconds;
     }
 
-    public static int timeToSeconds(String time) {
-        String hours = "";
-        String mins = "";
-        boolean hasReachedMins = false;
-        for (int i = 0; i < time.length(); i++) {
-            Character c = time.charAt(i);
-            if (c == ':') {
-                hasReachedMins = true;
-            } else if (!hasReachedMins) {
-                hours += c;
-            } else {
-                mins += c;
-            }
-        }
-        int result = (Integer.parseInt(hours) * 3600) + (Integer.parseInt(mins) * 60);
-        return result;
-    }
+
 
     public String calculateTimeLeft(){
         //formula is  (timeTakenSoFar / caloriesBurntSoFar) * caloriesLeftToBurn= time left
@@ -141,7 +121,6 @@ public class WorkoutManager {
     int seconds = secondsElapsed%60;
     String temp= String.format("%02d:%02d:%02d", hours, minutes,seconds);
         Log.d("tag","temp is "+temp);
-
         return temp;
     }
 
