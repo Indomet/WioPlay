@@ -4,28 +4,54 @@ TFT_eSPI tft;
 #include "RawImage.h"  // image processing library
 
 
-#define RIGHT_BUTTON WIO_5S_RIGHT  // Right joystick
+#define RIGHT_BUTTON WIO_5S_RIGHT  // Right joystick  WIO_5S_PRESS press is probably using same pins as the burndown chart
 #define BUTTON_NEXT WIO_KEY_A
 #define BUTTON_PAUSE WIO_KEY_B
 #define BUTTON_PREVIOUS WIO_KEY_C
 
 bool isOnMusicScene = true;
+bool messageReceived = false;
 const char* ali = "/photos/ali.bmp";
 const char* prevButton = "/photos/prev.bmp";
 const char* pauseButton = "/photos/pause.bmp";
 const char* nextButton = "/photos/next.bmp";
+String songName;
 
+void updateSongName(const char* newSongName) {
+  songName = newSongName;
+  messageReceived = true;
+}
 
 void showPlayerScene() {
+
   if (isOnMusicScene) {
-    tft.fillScreen(TFT_WHITE);
-    drawImage<uint16_t>(ali, 95, 35);
+
+    tft.fillScreen(TFT_WHITE);    // declare a backgroundColor
+    tft.setTextColor(TFT_BLACK);  // initializee the text color to white
+    // songName = "Song Name here";
+    drawImage<uint16_t>(ali, 95, 25);
+
+    // Update TFT display and print input message
+    // tft.setTextColor(textColor, bgColor);  // set the text and background color
+
+    tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);  // Make sure to align the text to the center of the screen
+    tft.println(songName);                                   // print the text
+
     drawImage<uint16_t>(prevButton, 100, 200);
     drawImage<uint16_t>(pauseButton, 150, 200);
     drawImage<uint16_t>(nextButton, 200, 200);
+
     isOnMusicScene = false;
   }
+
+  if (messageReceived) {
+    tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 4, TFT_WHITE);
+    tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);  // Make sure to align the text to the center of the screen
+    tft.println(songName);                                   // print the text
+    messageReceived = false;
+  }
 }
+
 
 void setupButton() {
   pinMode(RIGHT_BUTTON, INPUT_PULLUP);
