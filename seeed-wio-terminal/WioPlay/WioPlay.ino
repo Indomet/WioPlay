@@ -32,7 +32,7 @@ void setup() {
 
   burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
 
-  menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
+  // menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 }
 
 void loop() {
