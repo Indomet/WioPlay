@@ -17,6 +17,9 @@ public class User {
     private int lifeTimeCalories;
     private File userFile;
     private static User user=null;
+    private int currentMonthlyWorkouts;
+
+    private int totalWorkouts;
 
     private User(File userFile) {
         this.defaultUser();
@@ -33,12 +36,14 @@ public class User {
     //todo make the user start in settings to input stuff and cant leave if they don't do it
     //and the values to not be 0
     private void defaultUser() {
+        currentMonthlyWorkouts=0;
         this.age = 0;
         this.height = 0;
         this.weight = 0;
         this.username = "username";
         this.calorieCredit = 727; //A new user starts with 0 CalorieCurrency
         this.lifeTimeCalories = 0;
+        totalWorkouts=0;
     }
 
     public void setUsername(String username) {
@@ -151,5 +156,23 @@ public class User {
     public float getWeight() {
         return weight;
     }
+    public int getTotalWorkouts() {
+        return totalWorkouts;
+    }
+    public int getCurrentMonthlyWorkouts() {
+        return currentMonthlyWorkouts;
+    }
+    public void setCurrentMonthlyWorkouts(int addedWorkouts) {
+         currentMonthlyWorkouts = addedWorkouts;
+    }
+    public void incrementTotalWorkouts() {
+         totalWorkouts++;
+    }
+    public void incrementMonthlyWorkouts() {
+        currentMonthlyWorkouts++;
+    }
+
+
+
 
 }
