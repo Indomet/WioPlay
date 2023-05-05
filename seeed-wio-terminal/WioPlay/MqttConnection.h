@@ -16,6 +16,7 @@ const char* password = PASSWORD;  // WiFi Password
 const char* server = my_IPv4;     // MQTT Broker URL
 
 
+const char* Music_sub = "Music/Data/Change";
 const char* TOPIC_sub = "User/Data/Change";
 const char* Workout_sub = "User/Workout/Start";
 const char* TOPIC_pub_connection = "Send/Calorie/Burn/Data";
@@ -78,6 +79,13 @@ void updateChart(char json[]) {
   burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
 }
 
+void updateSongName (char json[]) {
+  deserializeJson(doc, json);
+  const char* songName = doc["songName"];
+  
+  updateSongName(songName);
+}
+
 // void printMessage(String message) {
 //   int bgColor;                // declare a backgroundColor
 //   int textColor = TFT_WHITE;  // initializee the text color to white
@@ -117,6 +125,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     updateSettings(charBuf);
   } else if (strcmp(Workout_sub, topic) == 0) {
     updateChart(charBuf);
+  } else if (strcmp(Music_sub, topic) == 0) {
+    updateSongName(charBuf);
   }
 }
 
@@ -127,7 +137,7 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Create a random client ID
-    String clientId = "WioTerminal";
+    String clientId = "wioClient";
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
@@ -142,6 +152,10 @@ void reconnect() {
       client.subscribe(Workout_sub);
       Serial.print("Subcribed to: ");
       Serial.println(Workout_sub);
+
+      client.subscribe(Music_sub);
+      Serial.print("Subcribed to: ");
+      Serial.println(Music_sub);
 
     } else {
       Serial.print("failed, rc=");
