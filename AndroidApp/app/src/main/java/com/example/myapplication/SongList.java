@@ -89,5 +89,10 @@ public class SongList {
         }
     }
 
+    public void unlockSong(Song song){
+        this.songList.get(this.songList.indexOf(song)).setUnlocked(true);
+        saveSongList();
+    }
+
     //TODO: implement changing of unlock status of a specific song
 }
