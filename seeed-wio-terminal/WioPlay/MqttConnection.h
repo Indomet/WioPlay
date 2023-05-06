@@ -82,7 +82,7 @@ void updateChart(char json[]) {
 void updateSongName (char json[]) {
   deserializeJson(doc, json);
   const char* songName = doc["songName"];
-  
+  // int song = doc ["song"];
   updateSongName(songName);
 }
 

@@ -7,17 +7,20 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 
 DynamicJsonDocument doc(1024);
 #include "MotionDetection.h"
+#include "MusicPlayer.h"
+
+
+MusicPlayer player(song, sizeof(song) / sizeof(int), 2);
+
 #include "Scenes.h"
 #include "BurndownChart.h"
 #include "MqttConnection.h"
-#include "MusicPlayer.h"
 
 float movementValue;
 
 MotionDetection motionDetection;
 BurndownChart burndownChart;
 
-MusicPlayer player(song, sizeof(song) / sizeof(int), 1.2);
 const char* calorie_pub = "Send/Calorie/Burn/Data";
 
 void setup() {
