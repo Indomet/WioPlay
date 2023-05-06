@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     public static User user;
 
+    public static SongList songList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +41,31 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
 
 
-        String filePath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-        File userFile = new File(filePath);
+        String userPath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+        File userFile = new File(userPath);
+
+        String songPath = this.getFilesDir().getPath() + "/songList.json";
+        File songFile = new File(songPath);
 
         user = User.getInstance(userFile);
 //        user.setCalorieCredit(9000);
 
+        songList = new SongList(songFile);
+        //addSong();
 
 
 
+
+
+    }
+    //Testing purposes
+    public void addSong(){
+        songList.add(new Song("Song 1", 185, 200, "", true));
+        songList.add(new Song("Song 2", 200, 250, "", true));
+        songList.add(new Song("Song 3", 170, 300, "", false));
+        songList.add(new Song("Song 4", 180, 200, "", false));
+        songList.add(new Song("Song 5", 200, 250, "", false));
+        songList.add(new Song("Song 6", 173, 300, "", false));
     }
 
     @Override   //This method checks which fragment was selected by the user
