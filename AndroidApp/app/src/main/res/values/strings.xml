@@ -2,7 +2,9 @@
     <string name="app_name">Wio Play</string>
     <string name="bottomNavigationView">bottomNavigationViewID</string>
     <string name="calories_burnt_textview">Calories Burnt</string>
-    <string name="burn_down_text">View Burn-Down Chart</string>
+    <string name="editUserName">Enter your name here</string>
+    <string name="X">X</string>
+    <string name="Save">Save</string>  <string name="burn_down_text">View Burn-Down Chart</string>
     <string name="start_workout_text">Start A New Workout</string>
     <string name="hourglass_text">Time Left To Reach\n Your Calorie Goal</string>
     <string name="weight_hint"> <u>Kilograms</u></string>
@@ -26,4 +28,16 @@
     <string name="sex_info_pt1">We are asking for your sex to help personalize your workout experience. The formula to calculate calories can differ between sexes due to biological differences.</string>
     <string name="by_knowing_your_sex_we_can_provide_you_with_the_most_accurate_calculateion_based_on_your_biological_compositon_that_are_better_suited_to_your_needs_and_goals">By knowing your sex, we can provide you with the most accurate calculateion based on your biological compositon that are better suited to your needs and goals.</string>
     <string name="rest_assured_that_we_value_diversity_and_inclusivity_and_your_response_will_not_impact_the_caluclations_in_any_major_way">Rest assured that we value diversity and inclusivity, and your response will not impact the caluclations in any major way.</string>
+    <string name="workouts_label">Workouts</string>
+    <string name="workouts_count">42</string>
+    <string name="walking_label">Walking</string>
+    <string name="running_label">Running</string>
+    <string name="hiking_label">Hiking</string>
+    <string name="goal_label">Goal</string>
+    <string name="workouts_this_month_label">Workouts for this month</string>
+    <string name="min_workouts">0</string>
+    <string name="default_time_left">00:00</string>
+    <string name="time_left_label">Time left to achieve\n goal calorie goal</string>
+    <string name="stopwatch_default_value">0:00:00</string>
+    <string name="balance_label">Balance</string>
 </resources>
