@@ -140,6 +140,11 @@ public class User {
         }
     }
 
+    public void updateLifeTimeCalories(int payload){
+        this.lifeTimeCalories += payload;
+        saveUserData();
+    }
+
     public String getUsername() {
         return username;
     }

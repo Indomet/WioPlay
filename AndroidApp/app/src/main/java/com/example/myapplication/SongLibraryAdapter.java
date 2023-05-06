@@ -12,7 +12,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
@@ -68,7 +74,14 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     @Override
     public int getItemCount() {
-        return songsList.size();
+        int size;
+        try{
+            size = songsList.size();
+        } catch (Exception e){
+            size = 0;
+        }
+        return size;
+
     }
 
     public void setSongsList(ArrayList<Song> songsList){
@@ -83,9 +96,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     }
 
     private void unlockSong(@NonNull Song currentSong){
-        String filePath = context.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-        File userFile = new File(filePath);
         MainActivity.user.updateCredit(-currentSong.getPrice());
+        MainActivity.songList.unlockSong(currentSong);
         currentSong.setUnlocked(true);
         updateData();
         Toast.makeText(context, "Unlocked " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
@@ -97,6 +109,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
         // TODO: Implement the logic to play the song
     }
+
     public void confirmationDialog(Song currentSong) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Unlock song?");
@@ -115,6 +128,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         AlertDialog alert = builder.create();
         alert.show();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
     //Holds all views
