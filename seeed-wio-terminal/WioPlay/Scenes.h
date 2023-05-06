@@ -20,6 +20,8 @@ String songName;
 void updateSongName(const char* newSongName) {
   songName = newSongName;
   messageReceived = true;
+
+
 }
 
 void showPlayerScene() {
@@ -28,6 +30,7 @@ void showPlayerScene() {
 
     tft.fillScreen(TFT_WHITE);    // declare a backgroundColor
     tft.setTextColor(TFT_BLACK);  // initializee the text color to white
+    tft.setTextSize(2);
     // songName = "Song Name here";
     drawImage<uint16_t>(ali, 95, 25);
 
@@ -35,8 +38,8 @@ void showPlayerScene() {
     // tft.setTextColor(textColor, bgColor);  // set the text and background color
 
     tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);  // Make sure to align the text to the center of the screen
-    tft.println(songName);                                   // print the text
-
+    tft.println(songName);                                    // print the text
+   // display the buttons
     drawImage<uint16_t>(prevButton, 100, 200);
     drawImage<uint16_t>(pauseButton, 150, 200);
     drawImage<uint16_t>(nextButton, 200, 200);
@@ -45,9 +48,10 @@ void showPlayerScene() {
   }
 
   if (messageReceived) {
-    tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 4, TFT_WHITE);
+    // this is to fill the previous song name with white so that we dont write it on top of the previous text
+    tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 2, TFT_WHITE);
     tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);  // Make sure to align the text to the center of the screen
-    tft.println(songName);                                   // print the text
+    tft.println(songName);                                 // display the new song name
     messageReceived = false;
   }
 }
@@ -74,7 +78,7 @@ void buttonOnPress() {
     } while (digitalRead(BUTTON_NEXT) == LOW);
 
     // play music when button A is pressed
-    Serial.println("a");
+    // player.next();
   }
 
   // Check if button B is pressed
@@ -85,7 +89,7 @@ void buttonOnPress() {
     } while (digitalRead(BUTTON_PAUSE) == LOW);
 
     // play music when button B is pressed
-    Serial.println("b");
+    player.toggle();
   }
 
   // Check if button C is pressed
@@ -109,5 +113,4 @@ void menuNavigationOnPress(void (*firstScene)(), void (*secondScene)()) {
     // Button is not held down
     firstScene();
   }
-  delay(100);
 }

@@ -13,6 +13,7 @@ private:
   int position;
   int pauseDuration;
   int currentPauseChunkDuration;
+  bool isPaused;
 
 public:
   MusicPlayer(int* song, int size, float tempo) {
@@ -20,9 +21,10 @@ public:
     this->size = size;
     this->tempo = tempo;
     this->position = 0;
+    this->isPaused = false;
 
     // this is the approximate duration between notes calculated based on the provided tempo
-    pauseDuration = GENERIC_DURATION * (1 / tempo);
+    pauseDuration = GENERIC_DURATION  / tempo;
   }
 
 private:
@@ -36,7 +38,7 @@ private:
 
 private:
   void play(int position) {
-    if (song[position] != 0) {
+    if (song[position] != 0 && !this->isPaused) {
       tone(1, song[position], GENERIC_DURATION);
     }
 
@@ -69,4 +71,20 @@ public:
   float getCurrentPauseChunkDuration() {
     return currentPauseChunkDuration;
   }
+
+public:
+  void toggle() {
+    this->isPaused ? this->resume() : this->pause();
+  }
+
+private:
+  void pause() {
+    this->isPaused = true;
+  }
+
+private:
+void resume(){
+  this->isPaused = false;
+}
+
 };
