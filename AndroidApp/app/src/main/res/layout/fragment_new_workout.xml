@@ -1,162 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".NewWorkoutFragment"
-    android:background="@color/light_grey">
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    android:background="@drawable/runners_background"
+    >
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="60dp"
-            >
+    <TextView
+        android:id="@+id/set_workout_goal_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="Set Your Workout Goals!"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/run_for_ur_life_logo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/run_for_life_txt"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/calorie_goal_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="Calorie Goal"
+        android:textColor="@color/white"
+        android:textSize="23sp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="@+id/set_workout_goal_label"
+        app:layout_constraintStart_toStartOf="@+id/set_workout_goal_label"
+        app:layout_constraintTop_toBottomOf="@+id/set_workout_goal_label" />
 
-            <TextView
-                android:id="@+id/select_type_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/duration_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="Duration"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:layout_marginTop="150dp"
+        app:layout_constraintEnd_toEndOf="@+id/calorie_goal_label"
+        app:layout_constraintStart_toStartOf="@+id/calorie_goal_label"
+        app:layout_constraintTop_toBottomOf="@+id/calorie_goal_label" />
 
-                android:background="@drawable/new_workout_box"
-                android:gravity="center"
+    <ImageButton
+        android:id="@+id/plus_calories_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="65dp"
+        android:background="@android:color/transparent"
+        android:scaleX="0.17"
+        android:scaleY="0.17"
+        android:src="@drawable/plus_btn"
+        android:layout_marginTop="80dp"
+        app:layout_constraintBottom_toBottomOf="@+id/duration_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/calorie_goal_label"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/minus_calories_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="5dp"
+        android:scaleX="0.35"
+        android:scaleY="0.35"
+        android:src="@drawable/minus_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/duration_label"
+        app:layout_constraintEnd_toStartOf="@+id/calorie_goal_label"
+        app:layout_constraintStart_toStartOf="@+id/set_workout_goal_label"
+        app:layout_constraintTop_toTopOf="@+id/set_workout_goal_label" />
 
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/run_for_ur_life_logo"
-                android:layout_marginTop="15dp"
-                />
+    <TextView
+        android:id="@+id/current_calorie_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="@+id/calorie_goal_label"
+        app:layout_constraintStart_toStartOf="@+id/calorie_goal_label"
+        app:layout_constraintTop_toBottomOf="@+id/calorie_goal_label" />
 
-            <Spinner
-                android:id="@+id/exercise_type_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:spinnerMode="dropdown"
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@android:style/Theme.DeviceDefault"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="@+id/set_workout_goal_label"
+        app:layout_constraintStart_toStartOf="@+id/set_workout_goal_label"
+        app:layout_constraintTop_toBottomOf="@+id/minus_calories_btn" />
 
-                app:layout_constraintBottom_toBottomOf="@id/select_type_textview"
-                app:layout_constraintRight_toRightOf="@id/select_type_textview" />
-
-            <ImageView
-                android:id="@+id/new_workout_clock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="40dp"
-                android:src="@drawable/clock_duration"
-                app:layout_constraintEnd_toStartOf="@+id/select_type_textview"
-                app:layout_constraintStart_toStartOf="@+id/select_type_textview"
-                app:layout_constraintTop_toBottomOf="@+id/select_type_textview" />
-
-            <EditText
-                android:id="@+id/duration_edit_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/new_workout_box"
-                android:gravity="center"
-
-                android:hint="00:00"
-                android:textColorHint="@color/white"
-                android:textSize="20sp"
-
-                app:layout_constraintBottom_toBottomOf="@+id/new_workout_clock"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/new_workout_clock"
-                app:layout_constraintTop_toTopOf="@+id/new_workout_clock"
-                android:inputType="time"
-                android:importantForAutofill="no" />
-
-            <TextView
-                android:id="@+id/target_calories_textview"
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="@string/target_calories_label"
-
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/duration_edit_text" />
-
-            <ImageButton
-                android:id="@+id/plus_calories_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:src="@drawable/plus_btn"
-
-                app:layout_constraintEnd_toEndOf="@+id/target_calories_textview"
-                app:layout_constraintStart_toEndOf="@+id/target_calories_textview"
-                app:layout_constraintTop_toBottomOf="@+id/target_calories_textview"
-                android:layout_marginTop="10dp"
-                />
-
-            <ImageButton
-                android:id="@+id/minus_calories_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-
-                android:src="@drawable/minus_btn"
-
-
-                app:layout_constraintEnd_toStartOf="@+id/target_calories_textview"
-                app:layout_constraintStart_toStartOf="@+id/target_calories_textview"
-                app:layout_constraintTop_toBottomOf="@+id/target_calories_textview" />
-
-            <TextView
-                android:id="@+id/user_calorie_goal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:textColor="@color/white"
-                android:textSize="20sp"
-
-                app:layout_constraintBottom_toBottomOf="@+id/plus_calories_btn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/plus_calories_btn" />
-
-            <Button
-                android:id="@+id/start_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/new_workout_box"
-                android:gravity="center"
-                android:text="@string/start_btn_text"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/plus_calories_btn"
-                android:layout_marginTop="35dp"
-                />
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:background="@drawable/round_button"
+        app:layout_constraintEnd_toEndOf="@+id/duration_label"
+        app:layout_constraintStart_toStartOf="@+id/duration_label"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker"
+        android:layout_marginTop="50dp"
+        />
 
 
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </HorizontalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

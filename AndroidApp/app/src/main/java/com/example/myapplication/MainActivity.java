@@ -9,12 +9,10 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     private BottomNavigationView bottomNavigation;
-    private WorkoutFragment workoutFragment;
+    private Workout_Fragment workoutFragment;
     private SearchFragment searchFragment;
     private MusicFragment musicFragment;
     private SettingsFragment settingsFragment;
@@ -33,14 +31,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         //initializing the variables
         bottomNavigation = findViewById(R.id.bottomNavigationView);
-        workoutFragment = new WorkoutFragment();
+        workoutFragment = new Workout_Fragment();
         searchFragment = new SearchFragment();
         musicFragment = new MusicFragment();
         settingsFragment = new SettingsFragment();
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
         changeFragment(musicFragment);
         bottomNavigation.setOnItemSelectedListener(this);
-        brokerConnection = new BrokerConnection(getApplicationContext());
+        brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
 
 
         String userPath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         String songPath = this.getFilesDir().getPath() + "/songList.json";
         File songFile = new File(songPath);
 
-        user = new User(userFile);
+        user = User.getInstance(userFile);
 //        user.setCalorieCredit(9000);
 
         songList = new SongList(songFile);
