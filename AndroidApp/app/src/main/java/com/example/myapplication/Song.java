@@ -11,6 +11,9 @@ public class Song {
     private String imageURL;
     private boolean isUnlocked; //false by default, except the starting songs
 
+    //Needs dummy constructor
+    public Song(){} //Caused by: com.fasterxml.jackson.databind.JsonMappingException: No suitable constructor found for type [simple type, class com.example.myapplication.Song]: can not instantiate from JSON object (need to add/enable type information?)
+
     public Song(String title, int duration, int price, String imageURL, boolean isUnlocked) {
         this.title = title;
         this.duration = duration;

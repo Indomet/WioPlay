@@ -1,15 +1,19 @@
 package com.example.myapplication;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class SongList {
     private ArrayList<Song> songList;
-
     private int id = 1;
     private File songFile;
 
@@ -22,6 +26,7 @@ public class SongList {
         saveSongList();
     }
 
+    public SongList(){}
 
     public SongList(File songFile){
         this.songFile = songFile;
@@ -32,6 +37,7 @@ public class SongList {
 
     private void defaultList(){
         this.songList = new ArrayList<>();
+
     }
 
     public ArrayList<Song> getSongList(){
@@ -49,35 +55,32 @@ public class SongList {
 
     public void add(Song song){
         this.songList.add(song);
+        saveSongList();
     }
 
-    private void loadData(){
-        try {
+    public void loadData(){
+        try{
             ObjectMapper mapper = new ObjectMapper();
-/*
-            ArrayList<Song> jsonObject = mapper.readValue(
-                    this.songFile,
-                    new TypeReference<ArrayList<Song>>(){}
-            );
-            this.setList(jsonObject);
-
- */
 
             JsonNode node = mapper.readTree(this.songFile);
-            this.setId(node.get("id").asInt());
-            this.setList(mapper.convertValue(node.get("songList"), ArrayList.class));
-
-
-
-        } catch (IOException e) {
-            saveSongList(); //TODO PROBLEM: OVERRIDES TO NULL
+            List<LinkedHashMap<String, Object>> songList = mapper.convertValue(node.get("songList"), ArrayList.class);
+            ArrayList<Song> songs = new ArrayList<>();
+            for (LinkedHashMap<String, Object> songMap : songList) {
+                Song song = mapper.readValue(mapper.writeValueAsString(songMap), Song.class);
+                songs.add(song);
+            }
+            this.setList(songs);
+        }catch (IOException e){
+            saveSongList();
             loadData();
         }
+
+
     }
 
     public void saveSongList() {
         ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writer();
+        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         JsonNode node = mapper.valueToTree(this);
         try {
             writer.writeValue(this.songFile, node);
