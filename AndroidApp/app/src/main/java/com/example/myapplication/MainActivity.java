@@ -53,15 +53,21 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 //        user.setCalorieCredit(9000);
 
         songList = new SongList(songFile);
+        //addSong();
 
+
+
+
+
+    }
+    //Testing purposes
+    public void addSong(){
         songList.add(new Song("Song 1", 185, 200, "", true));
         songList.add(new Song("Song 2", 200, 250, "", true));
         songList.add(new Song("Song 3", 170, 300, "", false));
-
-
-
-
-
+        songList.add(new Song("Song 4", 180, 200, "", false));
+        songList.add(new Song("Song 5", 200, 250, "", false));
+        songList.add(new Song("Song 6", 173, 300, "", false));
     }
 
     @Override   //This method checks which fragment was selected by the user
