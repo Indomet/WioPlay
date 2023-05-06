@@ -34,6 +34,8 @@ import nl.dionsegijn.konfetti.core.models.Shape;
 import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.util.Date;
 
@@ -60,13 +62,18 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private NewWorkoutFragment newWorkoutFragment;
 
     private boolean stopwatchRunning = false;
-    private  WorkoutManager workoutManager;
-
+    private final String WORKOUT_NOT_STARTED = "No ongoing workout";
 
     private View rootView;
+    private WorkoutManager workoutManager;
+    private ProgressBar calorieProgressBar;
 
+    int currentCalorie = 0;
 
+    //required empty constructor
+    public Workout_Fragment() {
 
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -169,10 +176,16 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
             //TODO update the calorie balance and lifetime calories, but thats a seperate issue
 
-            caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
+            calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
             String calculatedTimeLeft = workoutManager.calculateTimeLeft();
             timeLeft.setText(calculatedTimeLeft);
+
+            int cumulativeCalorie = Integer.parseInt(payload);
+            int changeInCalories = Math.abs(cumulativeCalorie - currentCalorie);
+            currentCalorie = changeInCalories;
+            MainActivity.user.updateLifeTimeCalories(changeInCalories);
+            MainActivity.user.updateCredit(changeInCalories);
         }
 
         //TODO update the time left gto reach goal view
@@ -182,6 +195,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             createPopWindow();
             workoutManager.stopWorkout();
             timeLeft.setText("0:00:00");
+            currentCalorie = 0;
 
         }
     }

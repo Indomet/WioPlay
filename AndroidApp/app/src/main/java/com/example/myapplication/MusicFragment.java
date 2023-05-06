@@ -46,7 +46,7 @@ public class MusicFragment extends Fragment{
         }
 
         SongLibraryAdapter adapter = new SongLibraryAdapter(recyclerView.getContext());
-        adapter.setSongsList(songsList);
+        adapter.setSongsList(MainActivity.songList.getSongList());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false));
         //Linear displays a single line of items vertically
