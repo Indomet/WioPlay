@@ -62,9 +62,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private ProgressBar caloriesProgressbar;
     private TextView targetWorkoutsThisMonth;
     private TextView currentWorkoutsThisMonth;
-    private TextView walkingClickableView;
-    private TextView runningClickableView;
-    private TextView hikingClickableView;
+
     private TextView caloriesBurnt;
     private Button stopOrPlayStopwatch;
     private TextView timeElapsed;
@@ -73,7 +71,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private NewWorkoutFragment newWorkoutFragment;
 
     private boolean stopwatchRunning = false;
-    private  WorkoutManager workoutManager;
+    WorkoutManager workoutManager;
     private User user;
 
     private View rootView;
@@ -163,6 +161,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesProgressbar.setMax(workoutManager.getCalorieGoal());
         caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
         if (!workoutManager.getWorkoutHasStarted()) {
+            stopOrPlayStopwatch.setVisibility(View.INVISIBLE);
             caloriesBurnt.setText("0");
             caloriesProgressbar.setProgress(0,true);
         }
@@ -193,7 +192,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         fm.replace(R.id.frameLayout, newWorkoutFragment).setReorderingAllowed(true).commit();
     }
     public void onDateSelected(CalendarDay date) {
-        FinishedWorkoutData data = workoutManager.workoutDataHashMap.get(date);
+        FinishedWorkoutData data = workoutManager.getWorkoutDataHashMap().get(date);
         //check if its before
         if(CalendarDay.today().equals(date)){
             showToday();
@@ -250,7 +249,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             user.incrementMonthlyWorkouts();
             monthlyWorkoutsProgressbar.setProgress(user.getCurrentMonthlyWorkouts());
             workoutsCount.setText(Integer.toString(user.getTotalWorkouts()));
-
+            stopOrPlayStopwatch.setVisibility(View.INVISIBLE);
 
         }
     }

@@ -18,8 +18,8 @@ public class WorkoutManager {
     //this is to communciate with the terminal such that it knows the workout type
     private int workoutTypeTerminalInt;
     private int durationInSeconds;
-    HashMap<String,Integer> workoutsMap;
-    HashMap<CalendarDay,FinishedWorkoutData> workoutDataHashMap;
+    private HashMap<String,Integer> workoutsMap;
+    private HashMap<CalendarDay,FinishedWorkoutData> workoutDataHashMap;
 
     WorkoutType type;
 
@@ -152,4 +152,18 @@ public class WorkoutManager {
         workoutDataHashMap.put(date,workout);
     }
     }
+
+    public HashMap<CalendarDay, FinishedWorkoutData> getWorkoutDataHashMap() {
+        return workoutDataHashMap;
+    }
+
+    public int getSecondsElapsed() {
+        return secondsElapsed;
+    }
+
+    public void setSecondsElapsed(int secondsElapsed) {
+        this.secondsElapsed = secondsElapsed;
+    }
+
+
 }
