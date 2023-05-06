@@ -10,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     private BottomNavigationView bottomNavigation;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public static BrokerConnection brokerConnection;
 
     public static User user;
+
+    public static SongList songList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +43,21 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         brokerConnection = new BrokerConnection(getApplicationContext());
 
 
-        String filePath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-        File userFile = new File(filePath);
+        String userPath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+        File userFile = new File(userPath);
+
+        String songPath = this.getFilesDir().getPath() + "/songList.json";
+        File songFile = new File(songPath);
 
         user = new User(userFile);
 //        user.setCalorieCredit(9000);
+
+        songList = new SongList(songFile);
+
+        songList.add(new Song("Song 1", 185, 200, "", true));
+        songList.add(new Song("Song 2", 200, 250, "", true));
+        songList.add(new Song("Song 3", 170, 300, "", false));
+
 
 
 
