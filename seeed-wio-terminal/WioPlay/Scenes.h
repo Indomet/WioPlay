@@ -77,8 +77,7 @@ void buttonOnPress() {
       delay(10);  // Wait for a short time
     } while (digitalRead(BUTTON_NEXT) == LOW);
 
-    // play music when button A is pressed
-    // player.next();
+    player.nextSong();
   }
 
   // Check if button B is pressed
@@ -100,7 +99,7 @@ void buttonOnPress() {
     } while (digitalRead(BUTTON_PREVIOUS) == LOW);
 
     //play music when button C is pressed
-    Serial.println("c");
+    player.previousSong();
   }
 }
 
