@@ -16,11 +16,18 @@ public class User {
     private int calorieCredit;
     private int lifeTimeCalories;
     private File userFile;
+    private static User user=null;
 
-    public User(File userFile) { //A file must be passed in since User class do not have access to context.
+    private User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
         load();
+    }
+    public static User getInstance(File userFile){
+        if(user==null){
+            user=new User(userFile);
+        }
+        return user;
     }
 
     //todo make the user start in settings to input stuff and cant leave if they don't do it
