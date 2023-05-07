@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    android:id="@+id/settingsFragment">
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".SettingsFragment">
+
+            <ImageView
+                android:id="@+id/usercircle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:layout_marginTop="16dp"
+                android:src="@drawable/user_circle"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            <ImageView
+                android:id="@+id/userIcon"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:src="@drawable/user_icon"
+
+                app:layout_constraintBottom_toBottomOf="@+id/usercircle"
+                app:layout_constraintEnd_toEndOf="@+id/usercircle"
+                app:layout_constraintStart_toStartOf="@+id/usercircle"
+                app:layout_constraintTop_toTopOf="@+id/usercircle" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/userIcon"
+                app:layout_constraintTop_toBottomOf="@+id/usercircle" />
+
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="50dp"
+
+                android:layout_height="50dp"
+                android:layout_marginTop="170dp"
+                android:background="@drawable/edit_icon"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="@+id/username"
+                app:layout_constraintStart_toStartOf="@+id/username"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/weight_textview"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="@color/button_light_grey"
+                android:drawablePadding="-60dp"
+                android:gravity="center"
+                android:paddingStart="40dp"
+                android:text="Weight"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:drawableLeftCompat="@drawable/scale_icon"
+
+                app:layout_constraintEnd_toEndOf="@+id/editButton"
+
+                app:layout_constraintTop_toBottomOf="@+id/editButton"
+                app:layout_constraintVertical_chainStyle="spread" />
+
+            <TextView
+                android:id="@+id/height_textview"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/light_grey"
+                android:drawablePadding="-60dp"
+                android:gravity="center"
+                android:paddingStart="40dp"
+                android:text="@string/height_label"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:drawableLeftCompat="@drawable/height_icon"
+                app:layout_constraintEnd_toEndOf="@+id/weight_textview"
+                app:layout_constraintTop_toBottomOf="@+id/weight_textview" />
+
+            <TextView
+                android:id="@+id/sex_textview"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/light_grey"
+                android:drawablePadding="-60dp"
+                android:gravity="center"
+                android:paddingStart="40dp"
+                android:text="Sex"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:drawableLeftCompat="@drawable/sharp_female_24"
+                app:layout_constraintEnd_toEndOf="@+id/height_textview"
+                app:layout_constraintTop_toBottomOf="@+id/height_textview" />
+
+            <TextView
+                android:id="@+id/age_textview"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="24dp"
+                android:drawablePadding="-60dp"
+                android:gravity="center"
+                android:paddingStart="40dp"
+                android:text="Age"
+                android:textColor="@color/white"
+
+                android:textSize="20sp"
+                app:drawableLeftCompat="@drawable/twotone_elderly_24"
+                app:layout_constraintEnd_toEndOf="@+id/sex_textview"
+                app:layout_constraintTop_toBottomOf="@+id/sex_textview" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:layout_marginBottom="50dp"
+
+
+                android:background="@drawable/rating_bar_background"
+                android:progressTint="@color/gold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Save_Button" />
+
+            <TextView
+                android:id="@+id/rate_us"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/rate_us_label"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+                app:layout_constraintEnd_toEndOf="@+id/ratingBar"
+
+                app:layout_constraintStart_toStartOf="@+id/ratingBar" />
+
+            <EditText
+                android:id="@+id/kg_edittext"
+                android:layout_width="117dp"
+                android:layout_height="48dp"
+                android:background="@drawable/edit_text_background"
+                android:backgroundTint="@color/ButtonTint"
+                android:hint="Kilograms"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:textColorHint="@color/button_light_grey"
+                app:layout_constraintBottom_toBottomOf="@+id/weight_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/weight_textview"
+                app:layout_constraintTop_toTopOf="@+id/weight_textview" />
+
+            <EditText
+                android:id="@+id/height_edittext"
+                android:layout_width="117dp"
+                android:layout_height="48dp"
+                android:background="@drawable/edit_text_background"
+                android:backgroundTint="@color/ButtonTint"
+                android:hint="Centimeters"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:textColorHint="@color/button_light_grey"
+                app:layout_constraintBottom_toBottomOf="@+id/height_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/height_textview"
+                app:layout_constraintTop_toTopOf="@+id/height_textview" />
+
+            <EditText
+                android:id="@+id/age_edit_text"
+                android:layout_width="117dp"
+                android:layout_height="48dp"
+                android:background="@drawable/edit_text_background"
+                android:backgroundTint="@color/ButtonTint"
+                android:hint="Age"
+                android:inputType="number"
+                android:textAlignment="center"
+                android:textColorHint="@color/button_light_grey"
+                app:layout_constraintBottom_toBottomOf="@+id/age_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/age_textview"
+                app:layout_constraintTop_toTopOf="@+id/age_textview" />
+
+            <Spinner
+                android:id="@+id/sex_spinner"
+                android:layout_width="117dp"
+                android:layout_height="48dp"
+                android:background="@drawable/sex_textview_border"
+                android:backgroundTint="@color/light_purple"
+                android:spinnerMode="dropdown"
+                android:gravity="center"
+                app:flow_horizontalAlign="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/sex_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/sex_textview"
+                app:layout_constraintTop_toTopOf="@id/sex_textview" />
+
+            <Button
+                android:id="@+id/Save_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/age_textview"
+                />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_local_fire_department_24"
+                app:layout_constraintEnd_toEndOf="@+id/balance_label"
+                app:layout_constraintStart_toStartOf="@+id/balance_label"
+                app:layout_constraintTop_toTopOf="@+id/balance_label" />
+
+            <TextView
+                android:id="@+id/balance_label"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/calorie_icon_box"
+                android:elevation="-1dp"
+                android:gravity="center"
+                android:text="Balance"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/editButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/usercircle"
+                app:layout_constraintTop_toBottomOf="@+id/userIcon" />
+
+            <TextView
+                android:id="@+id/life_time_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/calorie_icon_box"
+                android:elevation="-1dp"
+                android:gravity="center"
+                android:text="Total Calories Burnt"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/editButton"
+                app:layout_constraintEnd_toStartOf="@+id/usercircle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userIcon" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_star_rate_24"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                app:layout_constraintEnd_toEndOf="@+id/life_time_label"
+                app:layout_constraintStart_toStartOf="@+id/life_time_label"
+                app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+            <TextView
+                android:id="@+id/total_calories_burnt_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/life_time_label"
+                app:layout_constraintEnd_toEndOf="@+id/life_time_label"
+                app:layout_constraintStart_toStartOf="@+id/life_time_label"
+                app:layout_constraintTop_toTopOf="@+id/editButton" />
+
+            <TextView
+                android:id="@+id/current_balance_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/black"
+
+                app:layout_constraintBottom_toBottomOf="@+id/balance_label"
+                app:layout_constraintEnd_toEndOf="@+id/balance_label"
+                app:layout_constraintStart_toStartOf="@+id/balance_label"
+                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+            <ImageButton
+                android:id="@+id/sex_info_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_info_24"
+                app:layout_constraintBottom_toBottomOf="@+id/sex_spinner"
+                app:layout_constraintEnd_toStartOf="@+id/sex_spinner"
+                app:layout_constraintStart_toStartOf="@+id/editButton"
+                app:layout_constraintTop_toTopOf="@+id/sex_spinner" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
