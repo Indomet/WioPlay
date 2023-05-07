@@ -27,7 +27,7 @@ void setup() {
   Serial.begin(115200);  //Start serial communication
   setupMqtt();
   setupButton();
-    while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) { // setup ssd
+  while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) { // setup sd
     Serial.print("ERROR sd card not recognized");
   }
   motionDetection.startAccelerator();
