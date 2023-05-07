@@ -11,7 +11,7 @@ TFT_eSPI tft;
 
 bool isOnMusicScene = true;
 bool messageReceived = false;
-const char* ali = "/photos/ali.bmp";
+const char* artwork = "/photos/ali.bmp";
 const char* prevButton = "/photos/prev.bmp";
 const char* pauseButton = "/photos/pause.bmp";
 const char* nextButton = "/photos/next.bmp";
@@ -32,7 +32,7 @@ void showPlayerScene() {
     tft.setTextColor(TFT_BLACK);  // initializee the text color to white
     tft.setTextSize(2);
     // songName = "Song Name here";
-    drawImage<uint16_t>(ali, 95, 25);
+    drawImage<uint16_t>(artwork, 95, 25);
 
     // Update TFT display and print input message
     // tft.setTextColor(textColor, bgColor);  // set the text and background color
@@ -64,9 +64,9 @@ void setupButton() {
     // Wait for button to be released
   }
 
-  pinMode(BUTTON_NEXT, INPUT_PULLUP);
-  pinMode(BUTTON_PAUSE, INPUT_PULLUP);
-  pinMode(BUTTON_PREVIOUS, INPUT_PULLUP);
+  pinMode(BUTTON_NEXT, INPUT);
+  pinMode(BUTTON_PAUSE, INPUT);
+  pinMode(BUTTON_PREVIOUS, INPUT);
 }
 
 void buttonOnPress() {
@@ -74,7 +74,7 @@ void buttonOnPress() {
   if (digitalRead(BUTTON_NEXT) == LOW) {
     // Wait for button to be released
     do {
-      delay(10);  // Wait for a short time
+      // delay(10);  // Wait for a short time
     } while (digitalRead(BUTTON_NEXT) == LOW);
 
     player.nextSong();
@@ -84,7 +84,7 @@ void buttonOnPress() {
   if (digitalRead(BUTTON_PAUSE) == LOW) {
     // Wait for button to be released
     do {
-      delay(10);  // Wait for a short time
+      // delay(10);  // Wait for a short time
     } while (digitalRead(BUTTON_PAUSE) == LOW);
 
     // play music when button B is pressed
@@ -95,13 +95,14 @@ void buttonOnPress() {
   if (digitalRead(BUTTON_PREVIOUS) == LOW) {
     // Wait for button to be released
     do {
-      delay(10);  // Wait for a short time
+      // delay(10);  // Wait for a short time
     } while (digitalRead(BUTTON_PREVIOUS) == LOW);
 
     //play music when button C is pressed
     player.previousSong();
   }
 }
+ 
 
 void menuNavigationOnPress(void (*firstScene)(), void (*secondScene)()) {
   if (digitalRead(RIGHT_BUTTON) == LOW) {
