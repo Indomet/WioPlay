@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Workout_Fragment"
+    android:background="#DFDFDF"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/purple_user_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/workout_puple_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/user_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/dashed_circle"
+            android:padding="10dp"
+            android:src="@drawable/pngegg"
+            app:layout_constraintBottom_toBottomOf="@+id/purple_user_box"
+            app:layout_constraintHeight_max="100dp"
+            app:layout_constraintStart_toStartOf="@+id/purple_user_box"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="100dp" />
+
+        <TextView
+            android:id="@+id/Username_workout_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Username"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="@+id/user_picture"
+            app:layout_constraintEnd_toEndOf="@+id/purple_user_box"
+            app:layout_constraintStart_toEndOf="@+id/user_picture"
+            app:layout_constraintTop_toTopOf="@+id/user_picture" />
+
+        <TextView
+            android:id="@+id/workout_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/workouts_label"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/user_total_workouts"
+            app:layout_constraintStart_toStartOf="@+id/user_total_workouts"
+            app:layout_constraintTop_toBottomOf="@+id/user_total_workouts" />
+
+        <TextView
+            android:id="@+id/user_total_workouts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/workouts_count"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@+id/user_picture"
+            app:layout_constraintEnd_toStartOf="@+id/Username_workout_tab"
+            app:layout_constraintTop_toBottomOf="@+id/Username_workout_tab" />
+
+        <TextView
+            android:id="@+id/workout_tab_user_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="876"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@+id/user_picture"
+            app:layout_constraintStart_toEndOf="@+id/Username_workout_tab"
+            app:layout_constraintTop_toBottomOf="@+id/Username_workout_tab" />
+
+        <TextView
+            android:id="@+id/balance_label_workout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/balance_label"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/workout_tab_user_balance"
+            app:layout_constraintStart_toStartOf="@+id/workout_tab_user_balance"
+            app:layout_constraintTop_toBottomOf="@+id/workout_tab_user_balance" />
+
+        <TextView
+            android:id="@+id/workouts_types_whitebox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/workout_puple_card"
+
+            android:backgroundTint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/purple_user_box" />
+
+        <ImageView
+            android:id="@+id/walking_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/footsteps_icon"
+            app:layout_constraintEnd_toEndOf="@+id/workout_label_whitebox"
+            app:layout_constraintHeight_max="70dp"
+            app:layout_constraintStart_toStartOf="@+id/workout_label_whitebox"
+            app:layout_constraintTop_toBottomOf="@+id/workout_label_whitebox"
+            app:layout_constraintWidth_max="70dp" />
+
+        <TextView
+            android:id="@+id/workout_label_whitebox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/workouts_label"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="@+id/user_picture"
+            app:layout_constraintStart_toStartOf="@+id/workouts_types_whitebox"
+            app:layout_constraintTop_toTopOf="@+id/workouts_types_whitebox" />
+
+        <TextView
+            android:id="@+id/walking_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/walking_label"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/walking_image"
+            app:layout_constraintStart_toStartOf="@+id/walking_image"
+            app:layout_constraintTop_toBottomOf="@+id/walking_image" />
+
+        <ImageView
+            android:id="@+id/running_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:src="@drawable/shoe"
+            app:layout_constraintBottom_toBottomOf="@+id/walking_image"
+            app:layout_constraintEnd_toEndOf="@+id/workouts_types_whitebox"
+            app:layout_constraintStart_toStartOf="@+id/workouts_types_whitebox"
+            app:layout_constraintTop_toTopOf="@+id/walking_image" />
+
+        <ImageView
+            android:id="@+id/hiking_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:src="@drawable/hikinh"
+            app:layout_constraintBottom_toBottomOf="@+id/running_image"
+            app:layout_constraintEnd_toEndOf="@+id/workouts_types_whitebox"
+            app:layout_constraintStart_toEndOf="@+id/running_image"
+            app:layout_constraintTop_toTopOf="@+id/running_image" />
+
+        <TextView
+            android:id="@+id/running_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/running_label"
+            android:textColor="@color/black"
+
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/walking_txt"
+            app:layout_constraintEnd_toEndOf="@+id/running_image"
+            app:layout_constraintStart_toStartOf="@+id/running_image"
+            app:layout_constraintTop_toBottomOf="@+id/walking_image" />
+
+        <TextView
+            android:id="@+id/hiking_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/hiking_label"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/walking_txt"
+            app:layout_constraintEnd_toEndOf="@+id/hiking_image"
+            app:layout_constraintStart_toStartOf="@+id/hiking_image"
+            app:layout_constraintTop_toBottomOf="@+id/walking_image" />
+
+        <ImageButton
+            android:id="@+id/add_walking_workout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/purple_plus"
+            android:src="@drawable/purple_circle"
+            app:layout_constraintBottom_toBottomOf="@+id/workouts_types_whitebox"
+            app:layout_constraintEnd_toEndOf="@+id/walking_txt"
+            app:layout_constraintStart_toStartOf="@+id/walking_txt"
+            app:layout_constraintTop_toBottomOf="@+id/walking_txt" />
+
+        <ImageButton
+            android:id="@+id/add_running_workout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cyan_plus"
+            android:src="@drawable/cyan_circle"
+            app:layout_constraintBottom_toBottomOf="@+id/add_walking_workout_btn"
+            app:layout_constraintEnd_toEndOf="@+id/running_txt"
+            app:layout_constraintStart_toStartOf="@+id/running_txt"
+            app:layout_constraintTop_toTopOf="@+id/add_walking_workout_btn" />
+
+        <ImageButton
+            android:id="@+id/add_hiking_workout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pink_plus"
+            android:src="@drawable/pink_circle"
+            app:layout_constraintBottom_toBottomOf="@+id/add_running_workout_btn"
+            app:layout_constraintEnd_toEndOf="@+id/hiking_txt"
+            app:layout_constraintStart_toStartOf="@+id/hiking_txt"
+            app:layout_constraintTop_toTopOf="@+id/add_running_workout_btn" />
+
+        <TextView
+            android:id="@+id/goal_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/goal_label"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="@+id/workout_label_whitebox"
+            app:layout_constraintTop_toBottomOf="@+id/workouts_types_whitebox" />
+
+        <TextView
+            android:id="@+id/workouts_for_this_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/workouts_this_month_label"
+            android:textColor="#A6A6A6"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@+id/goal_label"
+            app:layout_constraintTop_toBottomOf="@+id/goal_label" />
+
+        <ProgressBar
+            android:id="@+id/monthly_progressbar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:progress="20"
+            android:progressTint="#68E0F2"
+            app:layout_constraintEnd_toEndOf="@+id/workouts_for_this_month"
+            app:layout_constraintTop_toBottomOf="@+id/workouts_for_this_month" />
+
+        <TextView
+            android:id="@+id/zero_workouts_this_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/min_workouts"
+            android:textColor="#A6A6A6"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@+id/workouts_for_this_month"
+            app:layout_constraintTop_toBottomOf="@+id/monthly_progressbar" />
+
+        <TextView
+            android:id="@+id/max_workouts_this_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="50"
+            android:textColor="#A6A6A6"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/workouts_types_whitebox"
+            app:layout_constraintTop_toBottomOf="@+id/monthly_progressbar" />
+        <!--The following text views position and number is set in the code-->
+        <TextView
+            android:id="@+id/current_workouts_this_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="0"
+            android:textColor="#A6A6A6"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/monthly_progressbar"
+            app:layout_constraintEnd_toEndOf="@id/monthly_progressbar"
+            app:layout_constraintStart_toStartOf="@id/monthly_progressbar"
+            app:layout_constraintTop_toTopOf="@id/monthly_progressbar" />
+
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/day_date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/zero_workouts_this_month"
+            app:mcv_calendarMode="week"
+            app:mcv_selectionColor="#FFB2ACEA"
+            app:mcv_showOtherDates="all"
+            />
+
+        <TextView
+            android:id="@+id/walking_textview_BTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/purple_selected"
+            android:fontFamily="sans-serif-medium"
+            android:padding="10dp"
+            android:text="@string/walking_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/workouts_for_this_month"
+            app:layout_constraintStart_toStartOf="@+id/workouts_for_this_month"
+            app:layout_constraintTop_toBottomOf="@+id/monthly_progressbar" />
+        <ProgressBar
+            android:id="@+id/calories_burnt_progressbar"
+            style="@style/new_progress_bar"
+            android:layout_width="150dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/progres_bar_whitebox"
+
+            android:progress="0"
+
+            android:scaleX="-1"
+            app:layout_constraintEnd_toEndOf="@+id/walking_textview_BTN"
+            app:layout_constraintStart_toStartOf="@+id/walking_textview_BTN"
+            app:layout_constraintTop_toBottomOf="@+id/walking_textview_BTN" />
+        <TextView
+            android:id="@+id/running_textview_BTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:fontFamily="sans-serif-medium"
+            android:padding="10dp"
+            android:text="@string/running_label"
+            android:textColor="@color/black"
+
+
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/walking_textview_BTN"
+            app:layout_constraintTop_toTopOf="@+id/walking_textview_BTN" />
+        <TextView
+
+
+            android:id="@+id/hiking_textview_BTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:fontFamily="sans-serif-medium"
+            android:padding="10dp"
+            android:text="@string/hiking_label"
+            android:textColor="@color/black"
+
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/running_textview_BTN"
+            app:layout_constraintTop_toTopOf="@+id/running_textview_BTN" />
+        <TextView
+            android:id="@+id/caloires_burnt_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/calories_burnt_textview"
+            android:textColor="#A6A6A6"
+            android:textSize="14sp"
+
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/calories_burnt_progressbar"
+            app:layout_constraintStart_toStartOf="@+id/calories_burnt_progressbar"
+            app:layout_constraintTop_toTopOf="@+id/calories_burnt_progressbar" />
+
+        <TextView
+            android:id="@+id/calories_burnt_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="0"
+            android:textColor="#68E0F2"
+
+
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/caloires_burnt_label"
+            app:layout_constraintEnd_toEndOf="@+id/caloires_burnt_label"
+            app:layout_constraintStart_toStartOf="@+id/caloires_burnt_label" />
+
+        <TextView
+            android:id="@+id/stopwatch_whitebix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/smaller_whitebox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/calories_burnt_progressbar"
+            app:layout_constraintTop_toTopOf="@+id/calories_burnt_progressbar" />
+        <TextView
+            android:id="@+id/time_left_whitebox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/smaller_whitebox"
+            app:layout_constraintBottom_toBottomOf="@id/calories_burnt_progressbar"
+            app:layout_constraintEnd_toEndOf="@+id/stopwatch_whitebix"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/caloires_burnt_label" />
+
+        <ImageView
+            android:id="@+id/stopwatch_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/timer_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/stopwatch_whitebix"
+            app:layout_constraintStart_toStartOf="@+id/stopwatch_whitebix"
+            app:layout_constraintTop_toTopOf="@+id/stopwatch_whitebix" />
+        <TextView
+            android:id="@+id/stopwatch_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/stopwatch_default_value"
+            android:textColor="#8C85CE"
+
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/stopwatch_whitebix"
+            app:layout_constraintStart_toEndOf="@+id/stopwatch_icon"
+            app:layout_constraintTop_toTopOf="@+id/stopwatch_icon" />
+
+        <Button
+            android:id="@+id/stop_or_start_stopwatch_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pause_or_play_button"
+            android:minHeight="30dp"
+            android:layout_marginTop="5dp"
+            android:text="Pause"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="@+id/stopwatch_textview"
+            app:layout_constraintStart_toStartOf="@+id/stopwatch_textview"
+            app:layout_constraintTop_toBottomOf="@+id/stopwatch_textview" />
+
+        <TextView
+            android:id="@+id/time_left_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/time_left_label"
+            android:textColor="#A6A6A6"
+
+
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="@+id/time_left_whitebox"
+            app:layout_constraintStart_toStartOf="@+id/time_left_whitebox"
+            app:layout_constraintTop_toTopOf="@+id/time_left_whitebox" />
+        <TextView
+            android:id="@+id/time_left_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/default_time_left"
+            android:textColor="#D18DEA"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/time_left_label"
+            app:layout_constraintStart_toStartOf="@+id/time_left_label"
+            app:layout_constraintTop_toBottomOf="@+id/time_left_label" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
