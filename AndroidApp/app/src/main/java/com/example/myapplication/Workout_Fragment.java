@@ -150,6 +150,12 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         addHikingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addRunningWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
 
+        monthlyWorkoutsProgressbar.setMax(MainActivity.user.getMonthlyWorkouts());
+        targetWorkoutsThisMonth.setText(Integer.toString(MainActivity.user.getMonthlyWorkouts()));
+        username.setText(MainActivity.user.getUsername());
+        userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+        //TODO USE WORKOUT MANAGER TO GET HTE TOTAL WORKOUTS COUNT
+        //workoutsCount.setText(Integer.toString(MainActivity.user.getWorkoutsCount()));
         caloriesProgressbar.setMax(workoutManager.getCalorieGoal());
         caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
         int calories = workoutManager.getCaloriesBurnt();
@@ -197,6 +203,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutManager.stopWorkout();
             timeLeft.setText("0:00:00");
             currentCalorie = 0;
+            //TODO USE WOKROUT MANAGER TO INCREMENT THE STUFF
+            //MainActivity.user.incrementWorkoutsCounts();
 
         }
     }
