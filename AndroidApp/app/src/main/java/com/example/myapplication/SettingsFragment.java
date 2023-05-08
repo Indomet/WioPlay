@@ -31,13 +31,12 @@ public class SettingsFragment extends Fragment {
     private EditText weightEditText;
     private EditText heightEditText;
     private EditText ageEditText;
-
+    private EditText monthlyWorkouts;
     private Spinner sexSpinner;
-    private TextView lifeTimeCurrency;
-    private TextView currentBalance;
-    private ImageButton editButton;
 
-
+    private Button editButton;
+    private TextView usernameTextView;
+    private User user;
 
 
     @Override
@@ -49,8 +48,14 @@ public class SettingsFragment extends Fragment {
         weightEditText = rootView.findViewById(R.id.kg_edittext);
         heightEditText = rootView.findViewById(R.id.height_edittext);
         ageEditText = rootView.findViewById(R.id.age_edit_text);
-        editButton=rootView.findViewById(R.id.editButton);
+        editButton=rootView.findViewById(R.id.edit_username_btn);
+        usernameTextView = rootView.findViewById(R.id.settings_username_textview);
+        monthlyWorkouts = rootView.findViewById(R.id.monthly_workouts_edittxt);
+        String userPath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+        File userFile = new File(userPath);
 
+        user = User.getInstance(userFile);
+        usernameTextView.setText(user.getUsername());
         /*
         weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
         heightEditText.setText(Integer.toString(MainActivity.user.getAge()));
@@ -102,11 +107,8 @@ public class SettingsFragment extends Fragment {
 
         ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
         sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
-        currentBalance = rootView.findViewById(R.id.current_balance_text_view);
-        lifeTimeCurrency = rootView.findViewById(R.id.total_calories_burnt_text_view);
-        //TODO use singleton
-        currentBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
-        lifeTimeCurrency.setText(Integer.toString(MainActivity.user.getLifeTimeCalories()));
+
+
         return rootView;
     }
     public void editUserNamePopup(){
@@ -114,8 +116,19 @@ public class SettingsFragment extends Fragment {
         dialog.setContentView(R.layout.popupeditusername);
         TextView button=dialog.findViewById(R.id.closebtn);
         button.setOnClickListener(view -> dialog.dismiss());
+        EditText editfield = dialog.findViewById(R.id.Editusername);
+        Button save_btn = dialog.findViewById(R.id.popup_save_btn);
+        save_btn.setOnClickListener(view -> updateUsername(editfield.getText().toString(),dialog));
         dialog.show();
     }
+
+    private void updateUsername(String name, Dialog dialog) {
+
+        user.setUsername(name);
+        usernameTextView.setText(name);
+        dialog.dismiss();
+    }
+
 
     private void showSexInfoPopup() {
 
@@ -152,23 +165,24 @@ public class SettingsFragment extends Fragment {
         // checking all editfields on the screens are filled
         if (!ageEditText.getText().toString().isEmpty() &
                 !heightEditText.getText().toString().isEmpty() &
-                !weightEditText.getText().toString().isEmpty()) {
+                !weightEditText.getText().toString().isEmpty() &
+                !monthlyWorkouts.getText().toString().isEmpty()) {
 
 
             int age = Integer.parseInt(ageEditText.getText().toString());
             float height = Float.parseFloat(heightEditText.getText().toString());
             float weight = Float.parseFloat((weightEditText.getText().toString()));
+            int monthylWorkoutsCount = Integer.parseInt((monthlyWorkouts.getText().toString()));
 // checking if all entered numbers are within specific ranges
             checkTheRange(0, 450, weight);
             checkTheRange(0, 120, height);
             checkTheRange(0,150,age);
+            checkTheRange(0,100,monthylWorkoutsCount);
 
-
-            //TODO exception handling
             MainActivity.user.setAge(age);
             MainActivity.user.setHeight(height);
             MainActivity.user.setWeight(weight);
-
+            MainActivity.user.setMonthlyWorkouts(monthylWorkoutsCount);
             MainActivity.user.setSex(sexSpinner.getSelectedItem().toString());
     }
 
