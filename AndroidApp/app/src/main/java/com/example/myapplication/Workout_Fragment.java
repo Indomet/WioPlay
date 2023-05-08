@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     private View rootView;
     private WorkoutManager workoutManager;
-    private ProgressBar calorieProgressBar;
 
     int currentCalorie = 0;
 
@@ -152,10 +152,9 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
         caloriesProgressbar.setMax(workoutManager.getCalorieGoal());
         caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
-        if (!workoutManager.getWorkoutHasStarted()) {
-            caloriesBurnt.setText("0");
-            caloriesProgressbar.setProgress(0,true);
-        }
+        int calories = workoutManager.getCaloriesBurnt();
+        caloriesBurnt.setText(Integer.toString(calories));
+        caloriesProgressbar.setProgress(calories,true);
 
     }
     public void changeToNewWorkoutFragment(View buttonPressed) {
@@ -175,8 +174,10 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         if (workoutManager.getWorkoutHasStarted()) {
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
             //TODO update the calorie balance and lifetime calories, but thats a seperate issue
-
-            calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
+            if(caloriesProgressbar==null){
+                Log.d("tag","the shit is null");
+            }
+            caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
             String calculatedTimeLeft = workoutManager.calculateTimeLeft();
             timeLeft.setText(calculatedTimeLeft);
