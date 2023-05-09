@@ -105,6 +105,11 @@ public:
     this->isPaused ? this->resume() : this->pause();
   }
 
+public:
+  void changeSong(int* newSong) {
+    this->song = newSong;
+  }
+
 private:
   void pause() {
     this->isPaused = true;
