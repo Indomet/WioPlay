@@ -17,7 +17,7 @@ public class User {
     private int lifeTimeCalories;
     private File userFile;
     private static User user=null;
-
+    private int monthlyWorkouts;
     private User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
@@ -31,7 +31,6 @@ public class User {
     }
 
     //todo make the user start in settings to input stuff and cant leave if they don't do it
-    //and the values to not be 0
     private void defaultUser() {
         this.age = 0;
         this.height = 0;
@@ -39,6 +38,7 @@ public class User {
         this.username = "username";
         this.calorieCredit = 727; //A new user starts with 0 CalorieCurrency
         this.lifeTimeCalories = 0;
+        monthlyWorkouts=30;//30 is the default number, so a workout per day per month
     }
 
     public void setUsername(String username) {
@@ -119,7 +119,7 @@ public class User {
             this.setWeight(node.get("weight").asLong());
             this.setCalorieCredit(node.get("calorieCredit").asInt());
             this.setLifeTimeCalories(node.get("lifeTimeCalories").asInt());
-
+            this.setMonthlyWorkouts(node.get("monthlyWorkouts").asInt());
         } catch (IOException e) {
 
             saveUserData();
@@ -156,5 +156,18 @@ public class User {
     public float getWeight() {
         return weight;
     }
+
+    public void setMonthlyWorkouts(int monthylWorkoutsCount) {
+        this.monthlyWorkouts=monthylWorkoutsCount;
+        saveUserData();
+
+    }
+
+    public int getMonthlyWorkouts() {
+        return monthlyWorkouts;
+
+    }
+
+
 
 }

@@ -2,35 +2,50 @@ package com.example.myapplication;
 
 import android.util.Log;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.io.File;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 //This class manages the workout. Updates the target goal, the calories they burn and keeps track of the time
 public class WorkoutManager {
-    private final int CHANGE_TARGET_CALORIES_AMOUNT;
+    private final int CHANGE_TARGET_CALORIES_AMOUNT=20;
     private boolean workoutHasStarted;
     private int caloriesBurnt;
     private int calorieGoal;
     private int secondsElapsed;
     private static WorkoutManager singleton;
-    private int workoutType;
+    //this is to communciate with the terminal such that it knows the workout type
+    private int workoutTypeTerminalInt;
     private int durationInSeconds;
-    HashMap<String,Integer> workoutsMap;
+    File workoutManagerFile;
 
-    private WorkoutManager(){
-        //The constructor sets the default values then they are changed according to the user input from the UI
+    private HashMap<String,Integer> workoutsMap;
+    private HashMap<CalendarDay,FinishedWorkoutData> workoutDataHashMap;
+    private int currentMonthlyWorkoutsProgress;
+    private int totalWorkoutsCount;
+    WorkoutType type;
+
+
+
+    private WorkoutManager() {
         secondsElapsed =0;
-        CHANGE_TARGET_CALORIES_AMOUNT=20;
+        currentMonthlyWorkoutsProgress=0;
+        totalWorkoutsCount=0;
         calorieGoal=0;
         caloriesBurnt=0;
         workoutHasStarted = false;
-        workoutType=0;
+        workoutTypeTerminalInt=0;
         durationInSeconds=0;
         workoutsMap = new HashMap<>();
+        workoutDataHashMap  = new HashMap<>();
         workoutsMap.put("Walking",0);
         workoutsMap.put("Running",1);
         workoutsMap.put("Hiking",2);
-
     }
+
+
     //singleton design pattern as the user only needs 1 workout manager to manage the backend logic
     public static WorkoutManager getInstance() {
         if (singleton == null) {
@@ -99,12 +114,12 @@ public class WorkoutManager {
     public void setCaloriesBurnt(int caloriesBurnt){
         this.caloriesBurnt=caloriesBurnt;
     }
-    public int getWorkoutType(){
-        return workoutType;
+    public int getWorkoutTypeTerminalInt(){
+        return workoutTypeTerminalInt;
     }
 
-    public void setWorkoutType(String workoutType){
-        this.workoutType=workoutsMap.get(workoutType);
+    public void setWorkoutTypeTerminalInt(String workoutType){
+        this.workoutTypeTerminalInt=workoutsMap.get(workoutType);
     }
     public int getDurationInSeconds(){
         return durationInSeconds;
@@ -124,4 +139,64 @@ public class WorkoutManager {
         return temp;
     }
 
+    public void setType(WorkoutType type) {
+        this.type = type;
     }
+    public WorkoutType getType() {
+        return type;
+    }
+
+    public void addWorkoutData(FinishedWorkoutData workout,CalendarDay date){
+        if(workoutDataHashMap.containsKey(date)){
+            FinishedWorkoutData data = workoutDataHashMap.get(date);
+            //add the previous calories and time
+            data.setGoalCalories(workout.getGoalCalories()+data.getGoalCalories());
+            data.setCaloriesBurntWithExercise(workout.getCaloriesBurntWithExercise()+data.getCaloriesBurntWithExercise());
+            data.setDurationInSeconds(workout.getDurationInSeconds()+data.getDurationInSeconds());
+            workoutDataHashMap.put(date,data);
+        }
+        else{
+        workoutDataHashMap.put(date,workout);
+    }
+    }
+
+    public HashMap<CalendarDay, FinishedWorkoutData> getWorkoutDataHashMap() {
+        return workoutDataHashMap;
+    }
+
+    public int getSecondsElapsed() {
+        return secondsElapsed;
+    }
+
+    public void setSecondsElapsed(int secondsElapsed) {
+        this.secondsElapsed = secondsElapsed;
+    }
+    // Getter for currentMonthlyWorkoutsProgress
+    public int getCurrentMonthlyWorkoutsProgress() {
+        return currentMonthlyWorkoutsProgress;
+    }
+
+    // Setter for currentMonthlyWorkoutsProgress
+    public void setCurrentMonthlyWorkoutsProgress(int progress) {
+        this.currentMonthlyWorkoutsProgress = progress;
+    }
+
+    // Getter for totalWorkoutsCount
+    public int getTotalWorkoutsCount() {
+        return totalWorkoutsCount;
+    }
+
+    // Setter for totalWorkoutsCount
+    public void setTotalWorkoutsCount(int count) {
+        this.totalWorkoutsCount = count;
+    }
+
+
+    public void incrementTotalWorkouts() {
+        totalWorkoutsCount++;
+    }
+
+    public void incrementMonthlyWorkouts() {
+        currentMonthlyWorkoutsProgress++;
+    }
+}
