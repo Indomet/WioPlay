@@ -11,6 +11,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/workout_fragment_constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -271,7 +272,10 @@
             android:progress="20"
             android:progressTint="#68E0F2"
             app:layout_constraintEnd_toEndOf="@+id/workouts_for_this_month"
-            app:layout_constraintTop_toBottomOf="@+id/workouts_for_this_month" />
+            app:layout_constraintTop_toBottomOf="@+id/workouts_for_this_month"
+
+
+            />
 
         <TextView
             android:id="@+id/zero_workouts_this_month"
@@ -321,63 +325,20 @@
             app:mcv_showOtherDates="all"
             />
 
-        <TextView
-            android:id="@+id/walking_textview_BTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/purple_selected"
-            android:fontFamily="sans-serif-medium"
-            android:padding="10dp"
-            android:text="@string/walking_label"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/workouts_for_this_month"
-            app:layout_constraintStart_toStartOf="@+id/workouts_for_this_month"
-            app:layout_constraintTop_toBottomOf="@+id/monthly_progressbar" />
         <ProgressBar
+            android:layout_marginLeft="25dp"
             android:id="@+id/calories_burnt_progressbar"
             style="@style/new_progress_bar"
             android:layout_width="150dp"
             android:layout_height="180dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="200dp"
+
             android:background="@drawable/progres_bar_whitebox"
-
             android:progress="0"
-
             android:scaleX="-1"
-            app:layout_constraintEnd_toEndOf="@+id/walking_textview_BTN"
-            app:layout_constraintStart_toStartOf="@+id/walking_textview_BTN"
-            app:layout_constraintTop_toBottomOf="@+id/walking_textview_BTN" />
-        <TextView
-            android:id="@+id/running_textview_BTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:fontFamily="sans-serif-medium"
-            android:padding="10dp"
-            android:text="@string/running_label"
-            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/zero_workouts_this_month" />
 
-
-            android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/walking_textview_BTN"
-            app:layout_constraintTop_toTopOf="@+id/walking_textview_BTN" />
-        <TextView
-
-
-            android:id="@+id/hiking_textview_BTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:fontFamily="sans-serif-medium"
-            android:padding="10dp"
-            android:text="@string/hiking_label"
-            android:textColor="@color/black"
-
-            android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/running_textview_BTN"
-            app:layout_constraintTop_toTopOf="@+id/running_textview_BTN" />
         <TextView
             android:id="@+id/caloires_burnt_label"
             android:layout_width="wrap_content"
@@ -487,7 +448,39 @@
             app:layout_constraintTop_toBottomOf="@+id/time_left_label" />
 
 
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/total_exercise_time_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/progres_bar_whitebox"
+            android:fontFamily="sans-serif-black"
+            android:gravity="center_horizontal|top"
+            android:text="Total Exercise\nTime"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:paddingTop="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/calories_burnt_progressbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/calories_burnt_progressbar"
+            app:layout_constraintTop_toTopOf="@+id/calories_burnt_progressbar" />
 
+        <TextView
+            android:id="@+id/total_past_exercise_time"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/stopwatch_default_value"
+            android:textColor="#8C85CE"
+
+            android:textSize="28sp"
+
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/total_exercise_time_box"
+            app:layout_constraintStart_toStartOf="@+id/total_exercise_time_box"
+            app:layout_constraintTop_toTopOf="@+id/stopwatch_whitebix" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

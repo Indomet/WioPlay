@@ -65,14 +65,14 @@
             android:id="@+id/edit_username_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="100dp"
             android:background="@drawable/edit_username_rectangle"
             android:text="Edit Username"
             android:textAllCaps="false"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/settings_username_textview"
-            app:layout_constraintStart_toStartOf="@+id/settings_username_textview"
-            app:layout_constraintTop_toBottomOf="@+id/settings_username_textview" />
+            app:layout_constraintEnd_toEndOf="@+id/user_profile_pic_settings"
+            app:layout_constraintStart_toStartOf="@+id/user_profile_pic_settings"
+            app:layout_constraintTop_toBottomOf="@+id/user_profile_pic_settings" />
 
         <TextView
             android:id="@+id/textView3"
@@ -94,7 +94,8 @@
             android:scaleX="0.8"
             android:src="@drawable/height_rework"
             android:scaleY="0.8"
-            app:layout_constraintEnd_toStartOf="@+id/settings_username_textview"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/edit_username_btn"
             app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toTopOf="@+id/textView3" />
 
