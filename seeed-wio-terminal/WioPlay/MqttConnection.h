@@ -16,6 +16,7 @@ const char* password = PASSWORD;  // WiFi Password
 const char* server = my_IPv4;     // MQTT Broker URL
 
 
+const char* Music_sub = "Music/Data/Change";
 const char* TOPIC_sub = "User/Data/Change";
 const char* Workout_sub = "User/Workout/Start";
 const char* TOPIC_pub_connection = "Send/Calorie/Burn/Data";
@@ -75,28 +76,34 @@ void updateChart(char json[]) {
   float duration = doc["durationInSeconds"];
   byte workoutType = doc["workoutType"];
 
-  burndownChartBackEnd.changeAttributeValues(1000, duration, calorieGoal, workoutType);
-
+  burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
 }
 
-void printMessage(String message) {
-  int bgColor;                // declare a backgroundColor
-  int textColor = TFT_WHITE;  // initializee the text color to white
-  String displayText = "Received message:";
-
-  bgColor = TFT_RED;
-  // Update TFT display and print input message
-  tft.fillScreen(bgColor);
-  tft.setTextColor(textColor, bgColor);  // set the text and background color
-  tft.setTextSize(2);
-  tft.setCursor((320 - tft.textWidth(displayText)) / 2, 90);  // Make sure to align the text to the center of the screen
-  tft.println(displayText);                                   // print the text
-  tft.setCursor((320 - tft.textWidth(message)) / 2, 120);
-  tft.println(message);
+void updateSongName (char json[]) {
+  deserializeJson(doc, json);
+  const char* songName = doc["songName"];
+  // int song = doc ["song"];
+  updateSongName(songName);
 }
+
+// void printMessage(String message) {
+//   int bgColor;                // declare a backgroundColor
+//   int textColor = TFT_WHITE;  // initializee the text color to white
+//   String displayText = "Received message:";
+
+//   bgColor = TFT_RED;
+//   // Update TFT display and print input message
+//   tft.fillScreen(bgColor);
+//   tft.setTextColor(textColor, bgColor);  // set the text and background color
+//   tft.setTextSize(2);
+//   tft.setCursor((320 - tft.textWidth(displayText)) / 2, 90);  // Make sure to align the text to the center of the screen
+//   tft.println(displayText);                                   // print the text
+//   tft.setCursor((320 - tft.textWidth(message)) / 2, 120);
+//   tft.println(message);
+// }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  tft.fillScreen(TFT_BLACK);
+  // tft.fillScreen(TFT_BLACK);
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -110,7 +117,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   buff_p[length] = '\0';
   String message = String(buff_p);
   // end of conversion
-  printMessage(message);
+  // printMessage(message);
   char charBuf[message.length() + 1];
   message.toCharArray(charBuf, message.length() + 1);
 
@@ -118,6 +125,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     updateSettings(charBuf);
   } else if (strcmp(Workout_sub, topic) == 0) {
     updateChart(charBuf);
+  } else if (strcmp(Music_sub, topic) == 0) {
+    updateSongName(charBuf);
   }
 }
 
@@ -128,7 +137,7 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Create a random client ID
-    String clientId = "WioTerminal";
+    String clientId = "wioClient";
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
@@ -143,6 +152,10 @@ void reconnect() {
       client.subscribe(Workout_sub);
       Serial.print("Subcribed to: ");
       Serial.println(Workout_sub);
+
+      client.subscribe(Music_sub);
+      Serial.print("Subcribed to: ");
+      Serial.println(Music_sub);
 
     } else {
       Serial.print("failed, rc=");
