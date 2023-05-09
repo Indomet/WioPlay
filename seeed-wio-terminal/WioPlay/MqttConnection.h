@@ -20,6 +20,7 @@ const char* Music_sub = "Music/Data/Change";
 const char* TOPIC_sub = "User/Data/Change";
 const char* Workout_sub = "User/Workout/Start";
 const char* TOPIC_pub_connection = "Send/Calorie/Burn/Data";
+const char* Music_notes_sub = "Music/Song/Notes";
 
 WiFiClient wioClient;
 PubSubClient client(wioClient);
@@ -86,6 +87,12 @@ void updateSongName (char json[]) {
   updateSongName(songName);
 }
 
+void updateSong(char json[]) {
+  deserializeJson(doc, json);
+  int* newSong = doc["newSong"];
+  player.changeSong(newSong);  
+}
+
 // void printMessage(String message) {
 //   int bgColor;                // declare a backgroundColor
 //   int textColor = TFT_WHITE;  // initializee the text color to white
@@ -128,6 +135,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   } else if (strcmp(Music_sub, topic) == 0) {
     updateSongName(charBuf);
   }
+  else if (strcmp(Music_notes_sub, topic) == 0) {
+
+  }
 }
 
 
@@ -156,6 +166,10 @@ void reconnect() {
       client.subscribe(Music_sub);
       Serial.print("Subcribed to: ");
       Serial.println(Music_sub);
+
+      client.subscribe(Music_notes_sub);
+      Serial.print("Subcribed to: ");
+      Serial.println(Music_notes_sub);
 
     } else {
       Serial.print("failed, rc=");
