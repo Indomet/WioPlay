@@ -1,11 +1,17 @@
 package com.example.myapplication;
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.sax.RootElement;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +43,11 @@ public class SettingsFragment extends Fragment {
     private TextView lifeTimeCurrency;
     private TextView currentBalance;
     private ImageButton editButton;
+    private ImageView userIcon;
+    private ImageView usercircle;
+    private Dialog dialog;
+    int PICK_IMAGE_REQUEST = 1;
+    int TAKE_PICTURE_REQUEST =2;
 
 
 
@@ -50,6 +62,9 @@ public class SettingsFragment extends Fragment {
         heightEditText = rootView.findViewById(R.id.height_edittext);
         ageEditText = rootView.findViewById(R.id.age_edit_text);
         editButton=rootView.findViewById(R.id.editButton);
+        userIcon= rootView.findViewById(R.id.userIcon);
+        usercircle=rootView.findViewById(R.id.usercircle);
+
 
         /*
         weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
@@ -72,6 +87,7 @@ public class SettingsFragment extends Fragment {
         });
 
         editButton.setOnClickListener(v -> editUserNamePopup());
+        userIcon.setOnClickListener(v -> addPictureToTheBackground());
 
                 //TODO make sex take enum instead of string
                 sexSpinner = rootView.findViewById(R.id.sex_spinner);
@@ -209,6 +225,54 @@ public class SettingsFragment extends Fragment {
                 View innerView= viewGroup.getChildAt(i);
                 AllEditView(innerView,listOfEditViews);// recursive call
             }
+
+        }
+    }
+    public void addPictureToTheBackground(){
+        dialog = new Dialog(getActivity()); // creating a dialog
+        dialog.setContentView(R.layout.editpicture); // set context to a dialog
+        ImageView galleryImageview =dialog.findViewById(R.id.galleryImageview);
+        ImageView cameraImageView= dialog.findViewById(R.id.cameraImageView);
+        TextView pictureClosebtn = dialog.findViewById(R.id.pictureClosebtn);
+        galleryImageview.setOnClickListener(v->Galleryscource());
+        cameraImageView.setOnClickListener(v->cameracource());
+        pictureClosebtn.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
+
+    public void Galleryscource(){
+        // getting an image from gallery
+        Intent galleryPicture = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryPicture,PICK_IMAGE_REQUEST);
+
+
+    }
+    public void cameracource(){
+        // getting an image from camera
+        Intent cameraPicture= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraPicture,TAKE_PICTURE_REQUEST);
+    }
+
+
+    // result of the request is recieved here
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            userIcon.setImageURI(imageUri);// adding the image from gallery to the imageview
+            usercircle.setImageURI(imageUri);
+            dialog.dismiss();// close the dialod
+
+        }else if(requestCode==TAKE_PICTURE_REQUEST && resultCode== RESULT_OK ){
+            assert data != null;
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");// creating a bitmap from the image from camera
+            userIcon.setImageBitmap(imageBitmap); //adding the camera from gallery to the imageview
+            usercircle.setImageBitmap(imageBitmap);
+            dialog.dismiss();// close the dialod
+
 
         }
     }
