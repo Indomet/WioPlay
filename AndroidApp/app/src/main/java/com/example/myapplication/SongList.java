@@ -14,17 +14,7 @@ import java.util.List;
 
 public class SongList {
     private ArrayList<Song> songList;
-    private int id = 1;
     private File songFile;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-        saveSongList();
-    }
 
     public SongList(){}
 
@@ -61,15 +51,11 @@ public class SongList {
     public void loadData(){
         try{
             ObjectMapper mapper = new ObjectMapper();
-
             JsonNode node = mapper.readTree(this.songFile);
-            List<LinkedHashMap<String, Object>> songList = mapper.convertValue(node.get("songList"), ArrayList.class);
-            ArrayList<Song> songs = new ArrayList<>();
-            for (LinkedHashMap<String, Object> songMap : songList) {
-                Song song = mapper.readValue(mapper.writeValueAsString(songMap), Song.class);
-                songs.add(song);
-            }
-            this.setList(songs);
+
+            //Must specify the deserialization class type
+            ArrayList<Song> loadedList = mapper.convertValue(node.get("songList"), new TypeReference<ArrayList<Song>>(){});
+            this.setList(loadedList);
         }catch (IOException e){
             saveSongList();
             loadData();
