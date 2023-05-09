@@ -20,6 +20,23 @@ public class Song {
         this.price = price;
         this.imageURL = imageURL;
         this.isUnlocked = isUnlocked;
+
+        // Ideas of approaches to present to group 10th May:
+
+        // 1.
+        // Add 'String artist' to constructor which allows us to find
+        // artistPackage and then title.txt to retrieve notes, using multikey-quicksort or binary search.
+        // These notes are then parsed using Parser.parse().
+        // Lastly, we retrieve the parsed string and publish it in 'BrokerConnection'
+        // (If approved: Get help with making sure the imports of packages are correct due to auto-correction-issues)
+
+        // 2.
+        // Add 'parsedNotes' to constructor
+        // 'parsedNotes' contains a string already parsed in 'NotesParser'
+        // Pass this string in the publish-message in 'BrokerConnection'
+
+        // Note: The simple solution is to add an additional attribute in the constructor 'parsedNotes' containing
+        // a string of already parsed notes in 'NoteParser'
     }
 
     public String getTitle() {
