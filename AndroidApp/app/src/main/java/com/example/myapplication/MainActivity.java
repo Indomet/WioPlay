@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         musicFragment = new MusicFragment();
         settingsFragment = new SettingsFragment();
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
-        changeFragment(musicFragment);
+        changeFragment(workoutFragment);
         bottomNavigation.setOnItemSelectedListener(this);
         brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
 
