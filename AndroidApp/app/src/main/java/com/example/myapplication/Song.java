@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 public class Song {
     private String title;
+    private String artist;
     private int duration; //in seconds
     private int price; //price in Calorie credits
     private String imageURL;
@@ -14,8 +15,9 @@ public class Song {
     //Needs dummy constructor
     public Song(){} //Caused by: com.fasterxml.jackson.databind.JsonMappingException: No suitable constructor found for type [simple type, class com.example.myapplication.Song]: can not instantiate from JSON object (need to add/enable type information?)
 
-    public Song(String title, int duration, int price, String imageURL, boolean isUnlocked) {
+    public Song(String title, String artist, int duration, int price, String imageURL, boolean isUnlocked) {
         this.title = title;
+        this.artist = artist;
         this.duration = duration;
         this.price = price;
         this.imageURL = imageURL;
@@ -62,20 +64,12 @@ public class Song {
         isUnlocked = unlocked;
     }
 
-    //TODO
-    /*
-    public void temp(){
-        Iterator<JsonNode> it = node.get("song").elements();
-
-        for (; it.hasNext(); it.next()) {
-        }
-
-        while(it.hasNext()){
-            //save to object
-            it.next();
-        }
-    }
+    public String getArtist() {
+        return artist;
     }
 
-     */
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
 }
