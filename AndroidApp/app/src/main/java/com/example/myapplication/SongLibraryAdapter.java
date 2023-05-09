@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,12 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
@@ -44,9 +41,12 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //position is the index of the items in the recycler view
         int currentPosition = holder.getBindingAdapterPosition();
-        int duration = songsList.get(currentPosition).getDuration();
+
         Song currentSong = songsList.get(currentPosition); //This has to be initialized here to work properly.
-        holder.songTitle.setText(songsList.get(currentPosition).getTitle());
+        Picasso.get().load(currentSong.getImageURL()).into(holder.songImage);//Loads image from url
+        holder.artistName.setText(currentSong.getArtist());
+        holder.songTitle.setText(currentSong.getTitle());
+        int duration = currentSong.getDuration();
         holder.songDuration.setText((duration / 60) + ":" + String.format("%02d", duration % 60));
 
         if(!currentSong.isUnlocked()){
@@ -129,10 +129,11 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         alert.show();
     }
 
-
+//TODO Display artist name
     public class ViewHolder extends RecyclerView.ViewHolder{
     //Holds all views
-        private TextView songTitle, songPrice, songDuration, songImage, userBalance;
+        private TextView songTitle, songPrice, songDuration, artistName, userBalance;
+        private ImageView songImage;
 
         private CardView parent;
         public ViewHolder(@NonNull View itemView) {
@@ -142,6 +143,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
             songPrice = itemView.findViewById(R.id.song_price);
             songDuration = itemView.findViewById(R.id.song_duration);
             userBalance = itemView.findViewById(R.id.user_balance);
+            songImage = itemView.findViewById(R.id.image);
+            artistName = itemView.findViewById(R.id.artist_name);
 
 
         }
