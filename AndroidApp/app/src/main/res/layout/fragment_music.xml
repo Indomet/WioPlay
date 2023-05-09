@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Music Library"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:id="@+id/musicText"
         android:layout_marginTop="15dp"
         android:textSize="20dp"
@@ -51,7 +51,7 @@
             android:shadowRadius="3"
             android:text="Coins"
             android:textAlignment="center"
-            android:textColor="@color/gold"
+            android:textColor="@color/orange"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintHorizontal_bias="1.0"
@@ -60,13 +60,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/currency_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/baseline_local_fire_department_24"
             app:layout_constraintBottom_toBottomOf="@+id/user_balance"
             app:layout_constraintRight_toLeftOf="@+id/user_balance"
-            app:layout_constraintTop_toTopOf="@+id/user_balance" />
+            app:layout_constraintTop_toTopOf="@+id/user_balance"
+            android:elevation="5dp"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
