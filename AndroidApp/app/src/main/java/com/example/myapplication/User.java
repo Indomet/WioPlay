@@ -31,7 +31,6 @@ public class User {
     }
 
     //todo make the user start in settings to input stuff and cant leave if they don't do it
-    //and the values to not be 0
     private void defaultUser() {
         this.age = 0;
         this.height = 0;

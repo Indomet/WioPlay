@@ -4,12 +4,13 @@ import android.util.Log;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
 
 //This class manages the workout. Updates the target goal, the calories they burn and keeps track of the time
 public class WorkoutManager {
-    private final int CHANGE_TARGET_CALORIES_AMOUNT;
+    private final int CHANGE_TARGET_CALORIES_AMOUNT=20;
     private boolean workoutHasStarted;
     private int caloriesBurnt;
     private int calorieGoal;
@@ -18,15 +19,20 @@ public class WorkoutManager {
     //this is to communciate with the terminal such that it knows the workout type
     private int workoutTypeTerminalInt;
     private int durationInSeconds;
+    File workoutManagerFile;
+
     private HashMap<String,Integer> workoutsMap;
     private HashMap<CalendarDay,FinishedWorkoutData> workoutDataHashMap;
-
+    private int currentMonthlyWorkoutsProgress;
+    private int totalWorkoutsCount;
     WorkoutType type;
 
-    private WorkoutManager(){
-        //The constructor sets the default values then they are changed according to the user input from the UI
+
+
+    private WorkoutManager() {
         secondsElapsed =0;
-        CHANGE_TARGET_CALORIES_AMOUNT=20;
+        currentMonthlyWorkoutsProgress=0;
+        totalWorkoutsCount=0;
         calorieGoal=0;
         caloriesBurnt=0;
         workoutHasStarted = false;
@@ -37,8 +43,9 @@ public class WorkoutManager {
         workoutsMap.put("Walking",0);
         workoutsMap.put("Running",1);
         workoutsMap.put("Hiking",2);
-
     }
+
+
     //singleton design pattern as the user only needs 1 workout manager to manage the backend logic
     public static WorkoutManager getInstance() {
         if (singleton == null) {
@@ -164,6 +171,32 @@ public class WorkoutManager {
     public void setSecondsElapsed(int secondsElapsed) {
         this.secondsElapsed = secondsElapsed;
     }
+    // Getter for currentMonthlyWorkoutsProgress
+    public int getCurrentMonthlyWorkoutsProgress() {
+        return currentMonthlyWorkoutsProgress;
+    }
+
+    // Setter for currentMonthlyWorkoutsProgress
+    public void setCurrentMonthlyWorkoutsProgress(int progress) {
+        this.currentMonthlyWorkoutsProgress = progress;
+    }
+
+    // Getter for totalWorkoutsCount
+    public int getTotalWorkoutsCount() {
+        return totalWorkoutsCount;
+    }
+
+    // Setter for totalWorkoutsCount
+    public void setTotalWorkoutsCount(int count) {
+        this.totalWorkoutsCount = count;
+    }
 
 
+    public void incrementTotalWorkouts() {
+        totalWorkoutsCount++;
+    }
+
+    public void incrementMonthlyWorkouts() {
+        currentMonthlyWorkoutsProgress++;
+    }
 }
