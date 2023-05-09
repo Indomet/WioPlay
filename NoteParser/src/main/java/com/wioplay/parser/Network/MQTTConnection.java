@@ -15,14 +15,16 @@ public class MQTTConnection extends MqttClient {
 
     private static final String SUB_PKG = "com.wioplay.parser.Network.Subscriptions";
     private static final String SERVER_IP = "tcp://broker.hivemq.com";
+    private static MQTTConnection client;
 
-    public MQTTConnection(String clientID) throws MqttException {
+    private MQTTConnection(String clientID) throws MqttException {
+
         super(SERVER_IP, clientID);
         this.connect();
-        this.loadSubscriptions();
+
     }
 
-    private void loadSubscriptions() {
+    public void loadSubscriptions() {
 
         ClassLoader loader = getClass().getClassLoader();
         try {
@@ -40,14 +42,37 @@ public class MQTTConnection extends MqttClient {
 
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | MqttException |
                          NoSuchMethodException e) {
-                    throw new RuntimeException(e);
+                    System.out.println(e.getMessage());
                 }
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
 
+    }
+
+    public void publish(String topic, String message) {
+
+        MqttMessage payload = new MqttMessage(message.getBytes());
+        try {
+            this.publish(topic, payload);
+        } catch (MqttException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static MQTTConnection getInstance()  {
+        if(client == null) {
+            try {
+                client = new MQTTConnection("Parser");
+                client.loadSubscriptions();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return client;
     }
 
 }
