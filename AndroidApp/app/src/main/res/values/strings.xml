@@ -40,4 +40,8 @@
     <string name="time_left_label">Time left to achieve\n goal calorie goal</string>
     <string name="stopwatch_default_value">0:00:00</string>
     <string name="balance_label">Balance</string>
+    <string name="cancer">Cancer</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+
 </resources>
