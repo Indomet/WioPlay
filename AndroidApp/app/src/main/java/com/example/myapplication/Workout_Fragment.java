@@ -122,6 +122,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
+
         workoutManager = WorkoutManager.getInstance();
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.setMessageListener(this);
@@ -166,10 +167,12 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             caloriesProgressbar.setProgress(0,true);
         }
 
-        workoutsCount.setText(Integer.toString(user.getTotalWorkouts()));
+
+        workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
         userBalance.setText(Integer.toString(user.getCalorieCredit()));
 
-        monthlyWorkoutsProgressbar.setProgress(user.getCurrentMonthlyWorkouts());
+        monthlyWorkoutsProgressbar.setMax(user.getMonthlyWorkouts());
+        monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress());
 
         username.setText(user.getUsername());
 
@@ -177,11 +180,12 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
         CalendarDay today = CalendarDay.today();
         calendarView.setDateSelected(today,true);
-        Calendar calendar = Calendar.getInstance();
         calendarView.state().edit().setMaximumDate(today).commit();
         //reset monthly progress bar if the today is first day of the month
         if(today.getDay()==1){
-            monthlyWorkoutsProgressbar.setProgress(0);
+            final int resetVal = 0;
+            monthlyWorkoutsProgressbar.setProgress(resetVal);
+            workoutManager.setCurrentMonthlyWorkoutsProgress(resetVal);
         }
 
     }
@@ -199,7 +203,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         }
         else if(date.isBefore(CalendarDay.today())) {
             if(data==null || date.isAfter(CalendarDay.today())){
-                //just showing that the progress is 0 since that date is the future
+                //just showing that the progress is 0 since no workouts done that day
                 showPastWorkoutStats("00:00",0,100);
             }
             else{
@@ -221,7 +225,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
         if (workoutManager.getWorkoutHasStarted()) {
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
-            //TODO update the calorie balance and lifetime calories, but thats a seperate issue
+            //TODO update the calorie balance
 
             caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
@@ -245,10 +249,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             createPopWindow();
             workoutManager.stopWorkout();
             timeLeft.setText("0:00:00");
-            user.incrementTotalWorkouts();
-            user.incrementMonthlyWorkouts();
-            monthlyWorkoutsProgressbar.setProgress(user.getCurrentMonthlyWorkouts());
-            workoutsCount.setText(Integer.toString(user.getTotalWorkouts()));
+            //todo use manager
+            workoutManager.incrementTotalWorkouts();
+            workoutManager.incrementMonthlyWorkouts();
+            monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress());
+            workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
             stopOrPlayStopwatch.setVisibility(View.INVISIBLE);
 
         }
