@@ -5,21 +5,30 @@ import java.util.Objects;
 public class Song {
 
     private final String title;
+    private final String artist;
     private final String imageURL;
     private final double tempo;
     private final int cost;
+    private String notes;
 
-    public Song(String title, String imageURL, double tempo, int cost) {
+    public Song(String title, String artist, String imageURL, double tempo, int cost) {
         this.title = title;
+        this.artist = artist;
         this.imageURL = imageURL;
         this.tempo = tempo;
         this.cost = cost;
+        this.notes = "";
     }
 
-    public int getNoteCount() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public Song(String title, String artist, String imageURL, double tempo, int cost, String notes) {
+        this(title, artist, imageURL, tempo, cost);
+        this.notes = notes;
     }
+
+//    public int getNoteCount() {
+//        // TODO
+//        throw new UnsupportedOperationException();
+//    }
 
     public String getTitle() {
         return this.title;
@@ -31,6 +40,14 @@ public class Song {
 
     public int getCost() {
         return this.cost;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public double getTempo() {
+        return tempo;
     }
 
     @Override
@@ -49,9 +66,12 @@ public class Song {
     @Override
     public String toString() {
         return "Song{" +
-                "name='" + title + '\'' +
+                "title='" + title + '\'' +
+                ", artist='" + artist + '\'' +
                 ", imageURL='" + imageURL + '\'' +
+                ", tempo=" + tempo +
                 ", cost=" + cost +
+                ", notes='" + notes + '\'' +
                 '}';
     }
 
