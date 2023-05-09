@@ -1,4 +1,6 @@
 package com.example.myapplication;
+import com.NoteParser.src.main.java.com.wioplay.parser.Core;
+import com.NoteParser.src.main.resources.Songs;
 
 import android.app.AlertDialog;
 import android.content.Context;
