@@ -6,8 +6,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public abstract class AbstractSubscription implements IMqttMessageListener {
 
     private final String topic;
+    private final MQTTConnection client;
 
     public AbstractSubscription(String topic) {
+        this.client = MQTTConnection.getInstance();
         this.topic = topic;
         this.startMessage();
     }
@@ -28,6 +30,10 @@ public abstract class AbstractSubscription implements IMqttMessageListener {
 
     public String getTopic() {
         return this.topic;
+    }
+
+    public MQTTConnection getClient() {
+        return this.client;
     }
 
 }
