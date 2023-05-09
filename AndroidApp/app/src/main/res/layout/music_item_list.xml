@@ -53,6 +53,26 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/song_title"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@id/image"
+            android:paddingBottom="10dp"
+            android:text="Artist"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:shadowColor="@color/black"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="3"/>
+
+        <TextView
             android:id="@+id/song_price"
             android:layout_width="80dp"
             android:layout_height="40dp"
@@ -75,11 +95,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/song_title"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@id/image"
-            android:paddingBottom="15dp"
+            android:layout_alignBottom="@id/artist_name"
+            android:layout_toEndOf="@id/artist_name"
+            android:textAlignment="center"
+            android:paddingBottom="10dp"
             android:text="Duration"
             android:textColor="@color/button_light_grey"
             android:textSize="15dp" />
