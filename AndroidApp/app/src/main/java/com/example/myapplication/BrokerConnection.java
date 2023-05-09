@@ -19,6 +19,7 @@ public class BrokerConnection extends AppCompatActivity {
     public static final String WORKOUT_STARTED_TOPIC = "User/Workout/Start";
     public static final String SUB_TOPIC = "Send/Calorie/Burn/Data";
 
+    public static final String MUSIC_NOTE_TOPIC = "Music/Song/Notes";
     public static  final String SONG_LIST_TOPIC = "Send/Song";
     public static final String LOCALHOST = "broker.emqx.io"; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
@@ -71,7 +72,7 @@ public class BrokerConnection extends AppCompatActivity {
 
                     mqttClient.subscribe(SUB_TOPIC,0, null);
                     mqttClient.subscribe(SONG_LIST_TOPIC,0, null);
-
+                    mqttClient.publish(MUSIC_NOTE_TOPIC, "convertedNotesHere", 0, null);
                 }
 
                 @Override
