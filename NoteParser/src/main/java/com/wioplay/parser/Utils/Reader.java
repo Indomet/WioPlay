@@ -41,7 +41,7 @@ public class Reader {
                     .filter(Files::isRegularFile)
                     .forEach(file -> songs.add(Reader.loadFile(file)));
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
