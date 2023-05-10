@@ -123,7 +123,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
 
-        workoutManager = WorkoutManager.getInstance();
+
+        String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json"; //data/user/0/myapplication/files
+        File managerFile = new File(managerPath);
+
+        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.setMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
@@ -172,7 +176,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         userBalance.setText(Integer.toString(user.getCalorieCredit()));
 
         monthlyWorkoutsProgressbar.setMax(user.getMonthlyWorkouts());
-        monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress());
+        monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
 
         username.setText(user.getUsername());
 
@@ -184,7 +188,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         //reset monthly progress bar if the today is first day of the month
         if(today.getDay()==1){
             final int resetVal = 0;
-            monthlyWorkoutsProgressbar.setProgress(resetVal);
+            monthlyWorkoutsProgressbar.setProgress(resetVal,true);
             workoutManager.setCurrentMonthlyWorkoutsProgress(resetVal);
         }
 
@@ -196,7 +200,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         fm.replace(R.id.frameLayout, newWorkoutFragment).setReorderingAllowed(true).commit();
     }
     public void onDateSelected(CalendarDay date) {
-        FinishedWorkoutData data = workoutManager.getWorkoutDataHashMap().get(date);
+        FinishedWorkoutData data = workoutManager.getWorkoutDataHashMap().get(date.toString());
         //check if its before
         if(CalendarDay.today().equals(date)){
             showToday();
@@ -252,7 +256,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             //todo use manager
             workoutManager.incrementTotalWorkouts();
             workoutManager.incrementMonthlyWorkouts();
-            monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress());
+            monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
             workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
             stopOrPlayStopwatch.setVisibility(View.INVISIBLE);
 
@@ -366,8 +370,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         adjustVisibility(View.INVISIBLE,View.VISIBLE);
         TextView totalTime = rootView.findViewById(R.id.total_past_exercise_time);
         totalTime.setText(time);
-        caloriesProgressbar.setProgress(caloriesBurntData);
         caloriesProgressbar.setMax(GoalCalories);
+        caloriesProgressbar.setProgress(caloriesBurntData,true);
         caloriesBurnt.setText(Integer.toString(caloriesBurntData));
     }
 
