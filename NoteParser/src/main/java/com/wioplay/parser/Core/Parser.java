@@ -5,15 +5,23 @@ This class handles all processing of musical notes to an array of frequencies
 which can then be used in arduino
 */
 
+import com.wioplay.parser.Core.Strategies.Strategy;
+
 import java.util.HashSet;
 
 public class Parser {
 
-    public static String[] splitBars(String content) {
+    private Strategy strategy;
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public String[] splitBars(String content) {
         return content.trim().split("\n\n");
     }
 
-    public static String[] parse(String[] sequences) {
+    public String[] parse(String[] sequences) {
 
         StringBuilder result = new StringBuilder();
 
