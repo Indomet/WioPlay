@@ -74,4 +74,7 @@ public class Song {
                 '}';
     }
 
+    public int[] getNotes() {
+        return notes;
+    }
 }
