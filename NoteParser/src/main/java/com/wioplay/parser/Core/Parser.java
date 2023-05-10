@@ -81,7 +81,10 @@ public class Parser {
 
         for (int i = 0; i != notes.length; i++) {
 
-            Note note = Note.valueOf(notes[i]);
+            Note note = Note.NOTE_0;
+            if(!notes[i].equals("0")) {
+                note =  Note.valueOf(notes[i]);
+            }
             frequencies[i] = note.getFrequency();
 
         }

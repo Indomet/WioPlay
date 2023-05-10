@@ -1,6 +1,8 @@
 package com.wioplay.parser.Core;
 
 public enum Note {
+
+    NOTE_0(0),
     NOTE_B0(31),
     NOTE_C1(33),
     NOTE_CS1(35),
