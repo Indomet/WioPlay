@@ -71,7 +71,6 @@ public class Song {
                 ", imageURL='" + imageURL + '\'' +
                 ", tempo=" + tempo +
                 ", cost=" + cost +
-                ", notes='" + notes + '\'' +
                 '}';
     }
 
