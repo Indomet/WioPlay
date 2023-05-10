@@ -13,6 +13,8 @@ public class FinishedWorkoutData {
             this.durationInSeconds=durationInSeconds;
             this.goalCalories=goalCalories;
     }
+    public FinishedWorkoutData() {}
+
     public int getDurationInSeconds() {
         return durationInSeconds;
     }
