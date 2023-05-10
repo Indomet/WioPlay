@@ -21,8 +21,9 @@ public class Parser {
         return content.trim().split("\n\n");
     }
 
-    public String[] parse(String[] sequences) {
+    public String[] parse(String notes) {
 
+        String[] sequences = splitBars(notes);
         StringBuilder result = new StringBuilder();
 
         for (String sequence : sequences) {
@@ -62,9 +63,10 @@ public class Parser {
 
         String content = result.toString();
         return content.substring(0, content.length() - 1).split(",");
+
     }
 
-    private static String parseNote(char x) {
+    private String parseNote(char x) {
         StringBuilder y = new StringBuilder();
         y.append(Character.toUpperCase(x));
         if(Character.isUpperCase(x)) {
@@ -72,5 +74,20 @@ public class Parser {
         }
         return y.toString();
     }
+
+    public int[] getFrequencies(String[] notes) {
+
+        int[] frequencies = new int[notes.length];
+
+        for (int i = 0; i != notes.length; i++) {
+
+            Note note = Note.valueOf(notes[i]);
+            frequencies[i] = note.getFrequency();
+
+        }
+
+        return frequencies;
+
+    };
 
 }
