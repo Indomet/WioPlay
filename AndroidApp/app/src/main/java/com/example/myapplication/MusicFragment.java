@@ -41,7 +41,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
 
         MainActivity.brokerConnection = BrokerConnection.getInstance(rootView.getContext());
-        MainActivity.brokerConnection.setMessageListener(this);
+        MainActivity.brokerConnection.addMessageListener(this);
 
 
         SongLibraryAdapter adapter = new SongLibraryAdapter(recyclerView.getContext());
@@ -83,6 +83,14 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
             parsedSongs.add(song);
         });
         MainActivity.songList.setList(parsedSongs);
+    }
+
+
+        @Override
+        public String getSubbedTopic() {
+            String SONG_TOPIC = "songs";
+            return SONG_TOPIC;
+
     }
 
 

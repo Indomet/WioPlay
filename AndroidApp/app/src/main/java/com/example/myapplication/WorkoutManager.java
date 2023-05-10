@@ -216,7 +216,7 @@ public class WorkoutManager {
         return temp;
     }
     public void setCaloriesBurnt(int caloriesBurnt){
-        this.caloriesBurnt+=caloriesBurnt;
+        this.caloriesBurnt=caloriesBurnt;
         saveManagerData();
     }
 
