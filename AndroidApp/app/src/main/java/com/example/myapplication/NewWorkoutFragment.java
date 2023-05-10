@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.File;
+
 
 public class NewWorkoutFragment extends Fragment {
 
@@ -74,7 +76,9 @@ public class NewWorkoutFragment extends Fragment {
 
         targetCaloriesTextView = rootView.findViewById(R.id.current_calorie_goal);
 
-        workoutManager = WorkoutManager.getInstance();
+        String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json"; //data/user/0/myapplication/files
+        File managerFile = new File(managerPath);
+        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
 
         targetCaloriesTextView.setText(Integer.toString(workoutManager.getCalorieGoal()));
         ImageButton incrementButton = rootView.findViewById(R.id.plus_calories_btn);
