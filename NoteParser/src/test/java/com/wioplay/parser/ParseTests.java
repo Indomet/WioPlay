@@ -39,8 +39,7 @@ public class ParseTests {
 
         Parser parser = new Parser();
         String bar = "5|e--D--e|";
-        String[] bars = parser.splitBars(bar);
-        String[] result = parser.parse(bars);
+        String[] result = parser.parse(bar);
         assertEquals("[NOTE_E5, 0, 0, NOTE_DS5, 0, 0, NOTE_E5]", Arrays.toString(result));
 
     }
