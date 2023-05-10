@@ -66,7 +66,7 @@ public class WorkoutManager {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(this.managerFile);
             //mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-           // MapType hashMapType = mapper.getTypeFactory().constructMapType(HashMap.class, CalendarDay.class, FinishedWorkoutData.class);
+            //MapType hashMapType = mapper.getTypeFactory().constructMapType(HashMap.class, CalendarDay.class, FinishedWorkoutData.class);
 
 
             for(Field field : this.getClass().getDeclaredFields()){
@@ -139,12 +139,8 @@ public class WorkoutManager {
 
         return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
-
-
-
     public void setDurationInSeconds(int seconds){
         durationInSeconds=seconds;
-
     }
 
 
@@ -190,10 +186,7 @@ public class WorkoutManager {
     public int getCaloriesBurnt(){
         return caloriesBurnt;
     }
-    public void setCaloriesBurnt(int caloriesBurnt){
-        this.caloriesBurnt=caloriesBurnt;
-        saveManagerData();
-    }
+
     public int getWorkoutTypeTerminalInt(){
         return workoutTypeTerminalInt;
     }
@@ -208,16 +201,23 @@ public class WorkoutManager {
 
 
 
-    public String calculateTimeLeft(){
-        //formula is  (timeTakenSoFar / caloriesBurntSoFar) * caloriesLeftToBurn= time left
-        //first we get it into seconds then convert it into a string
-        int secondsLeftToAchieveGoal = (secondsElapsed/caloriesBurnt) * (calorieGoal-caloriesBurnt);
+    public String calculateTimeLeft() {
+        // calculate remaining calories to burn
+        int caloriesLeftToBurn = calorieGoal - caloriesBurnt;
+        // estimate current rate of calorie burn
+        double caloriesBurntPerSecond = caloriesBurnt / (double)secondsElapsed;
+        // estimate time needed to burn remaining calories based on current rate of calorie burn
+        int secondsLeftToAchieveGoal = (int) (caloriesLeftToBurn / caloriesBurntPerSecond);
+        // convert time to hours, minutes, seconds
         int hours = secondsLeftToAchieveGoal / 3600;
         int minutes = (secondsLeftToAchieveGoal % 3600) / 60;
-        int seconds = secondsElapsed%60;
-        String temp= String.format("%02d:%02d:%02d", hours, minutes,seconds);
-        Log.d("tag","temp is "+temp);
+        int seconds = secondsLeftToAchieveGoal % 60;
+        String temp= String.format("%02d:%02d:%02d", hours, minutes, seconds);
         return temp;
+    }
+    public void setCaloriesBurnt(int caloriesBurnt){
+        this.caloriesBurnt=caloriesBurnt;
+        saveManagerData();
     }
 
     public void setType(WorkoutType type) {
