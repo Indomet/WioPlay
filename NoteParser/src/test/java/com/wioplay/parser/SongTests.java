@@ -21,7 +21,7 @@ public class SongTests {
         assertEquals("MEGALOVANIA", song.getTitle());
         assertEquals("https://i.scdn.co/image/ab67616d0000b27324edb22d068eb245a924b7f2", song.getImageURL());
         assertEquals(200, song.getCost());
-        assertEquals("Song{title='MEGALOVANIA', artist='Toby Fox', imageURL='https://i.scdn.co/image/ab67616d0000b27324edb22d068eb245a924b7f2', tempo=119.987, cost=200, notes=''}", song.toString());
+        assertEquals("Song{title='MEGALOVANIA', artist='Toby Fox', imageURL='https://i.scdn.co/image/ab67616d0000b27324edb22d068eb245a924b7f2', tempo=119.987, cost=200}", song.toString());
 
     }
 
