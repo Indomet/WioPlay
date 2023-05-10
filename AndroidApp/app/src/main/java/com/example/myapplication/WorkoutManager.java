@@ -1,15 +1,37 @@
+
 package com.example.myapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 //This class manages the workout. Updates the target goal, the calories they burn and keeps track of the time
 public class WorkoutManager {
+
+    Context context;
     private final int CHANGE_TARGET_CALORIES_AMOUNT=20;
     private boolean workoutHasStarted;
     private int caloriesBurnt;
@@ -19,17 +41,70 @@ public class WorkoutManager {
     //this is to communciate with the terminal such that it knows the workout type
     private int workoutTypeTerminalInt;
     private int durationInSeconds;
-    File workoutManagerFile;
 
     private HashMap<String,Integer> workoutsMap;
-    private HashMap<CalendarDay,FinishedWorkoutData> workoutDataHashMap;
+    private HashMap<String,FinishedWorkoutData> workoutDataHashMap;
     private int currentMonthlyWorkoutsProgress;
     private int totalWorkoutsCount;
     WorkoutType type;
+    private File managerFile;
 
 
+    private WorkoutManager(File managerFile,Context context) {
+        this.defaultWorkoutManager();
+        this.managerFile = managerFile;
+        this.context=context;
+        try {
+            load();
+        } catch (IllegalAccessException e) {
+        }
+    }
 
-    private WorkoutManager() {
+    private void load() throws IllegalAccessException{
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode node = mapper.readTree(this.managerFile);
+            //mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
+           // MapType hashMapType = mapper.getTypeFactory().constructMapType(HashMap.class, CalendarDay.class, FinishedWorkoutData.class);
+
+
+            for(Field field : this.getClass().getDeclaredFields()){
+                String name = field.getName();
+                field.setAccessible(true);
+                JsonNode jsonValue = node.get(name);
+                if (jsonValue != null) {
+                    Object value = mapper.convertValue(jsonValue, field.getType());
+                    field.set(this, value);
+                }
+            }
+
+            String jsonInput = node.get("workoutDataHashMap").toString();
+            TypeReference<HashMap<String, FinishedWorkoutData>> typeRef
+                    = new TypeReference<HashMap<String, FinishedWorkoutData>>() {};
+            HashMap<String, FinishedWorkoutData> map = mapper.readValue(jsonInput, typeRef);
+            workoutDataHashMap=map;
+        } catch (IOException e) {
+            Log.e("tag",e.getMessage());
+            saveManagerData();
+            load();
+
+        }
+
+    }
+
+    private void saveManagerData() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer();
+        JsonNode node = mapper.valueToTree(this);
+        try {
+            writer.writeValue(this.managerFile, node);//works
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void defaultWorkoutManager() {
         secondsElapsed =0;
         currentMonthlyWorkoutsProgress=0;
         totalWorkoutsCount=0;
@@ -47,15 +122,15 @@ public class WorkoutManager {
 
 
     //singleton design pattern as the user only needs 1 workout manager to manage the backend logic
-    public static WorkoutManager getInstance() {
-        if (singleton == null) {
-            singleton = new WorkoutManager();
+    public static WorkoutManager getInstance(File managerFile,Context c){
+        if(singleton==null){
+            singleton=new WorkoutManager(managerFile,c);
         }
         return singleton;
     }
 
- // Calculates the elapsed time in hours, minutes, and seconds
- // returns a formatted string of the elapsed time in the format HH:MM:SS
+    // Calculates the elapsed time in hours, minutes, and seconds
+    // returns a formatted string of the elapsed time in the format HH:MM:SS
     public String calculateTimeElapsed(){
 
         int hours = secondsElapsed / 3600;
@@ -69,6 +144,7 @@ public class WorkoutManager {
 
     public void setDurationInSeconds(int seconds){
         durationInSeconds=seconds;
+
     }
 
 
@@ -79,6 +155,7 @@ public class WorkoutManager {
 
     public void setWorkoutHasStarted(boolean workoutHasStarted) {
         this.workoutHasStarted = workoutHasStarted;
+        saveManagerData();
     }
 
 
@@ -88,6 +165,7 @@ public class WorkoutManager {
 
     public void setCalorieGoal(int calorieGoal) {
         this.calorieGoal = calorieGoal;
+        saveManagerData();
     }
 
     public void stopWorkout() {
@@ -95,6 +173,7 @@ public class WorkoutManager {
         workoutHasStarted = false;
         secondsElapsed = 0;
         calorieGoal=0;
+        saveManagerData();
     }
 
     public void incrementSecondsElapsed() {
@@ -113,6 +192,7 @@ public class WorkoutManager {
     }
     public void setCaloriesBurnt(int caloriesBurnt){
         this.caloriesBurnt=caloriesBurnt;
+        saveManagerData();
     }
     public int getWorkoutTypeTerminalInt(){
         return workoutTypeTerminalInt;
@@ -120,6 +200,7 @@ public class WorkoutManager {
 
     public void setWorkoutTypeTerminalInt(String workoutType){
         this.workoutTypeTerminalInt=workoutsMap.get(workoutType);
+        saveManagerData();
     }
     public int getDurationInSeconds(){
         return durationInSeconds;
@@ -130,17 +211,18 @@ public class WorkoutManager {
     public String calculateTimeLeft(){
         //formula is  (timeTakenSoFar / caloriesBurntSoFar) * caloriesLeftToBurn= time left
         //first we get it into seconds then convert it into a string
-    int secondsLeftToAchieveGoal = (secondsElapsed/caloriesBurnt) * (calorieGoal-caloriesBurnt);
-    int hours = secondsLeftToAchieveGoal / 3600;
-    int minutes = (secondsLeftToAchieveGoal % 3600) / 60;
-    int seconds = secondsElapsed%60;
-    String temp= String.format("%02d:%02d:%02d", hours, minutes,seconds);
+        int secondsLeftToAchieveGoal = (secondsElapsed/caloriesBurnt) * (calorieGoal-caloriesBurnt);
+        int hours = secondsLeftToAchieveGoal / 3600;
+        int minutes = (secondsLeftToAchieveGoal % 3600) / 60;
+        int seconds = secondsElapsed%60;
+        String temp= String.format("%02d:%02d:%02d", hours, minutes,seconds);
         Log.d("tag","temp is "+temp);
         return temp;
     }
 
     public void setType(WorkoutType type) {
         this.type = type;
+        saveManagerData();
     }
     public WorkoutType getType() {
         return type;
@@ -153,14 +235,15 @@ public class WorkoutManager {
             data.setGoalCalories(workout.getGoalCalories()+data.getGoalCalories());
             data.setCaloriesBurntWithExercise(workout.getCaloriesBurntWithExercise()+data.getCaloriesBurntWithExercise());
             data.setDurationInSeconds(workout.getDurationInSeconds()+data.getDurationInSeconds());
-            workoutDataHashMap.put(date,data);
+            workoutDataHashMap.put(date.toString(),data);
         }
         else{
-        workoutDataHashMap.put(date,workout);
-    }
+            workoutDataHashMap.put(date.toString(),workout);
+        }
+        saveManagerData();
     }
 
-    public HashMap<CalendarDay, FinishedWorkoutData> getWorkoutDataHashMap() {
+    public HashMap<String, FinishedWorkoutData> getWorkoutDataHashMap() {
         return workoutDataHashMap;
     }
 
@@ -170,6 +253,7 @@ public class WorkoutManager {
 
     public void setSecondsElapsed(int secondsElapsed) {
         this.secondsElapsed = secondsElapsed;
+        saveManagerData();
     }
     // Getter for currentMonthlyWorkoutsProgress
     public int getCurrentMonthlyWorkoutsProgress() {
@@ -179,6 +263,7 @@ public class WorkoutManager {
     // Setter for currentMonthlyWorkoutsProgress
     public void setCurrentMonthlyWorkoutsProgress(int progress) {
         this.currentMonthlyWorkoutsProgress = progress;
+        saveManagerData();
     }
 
     // Getter for totalWorkoutsCount
@@ -189,14 +274,24 @@ public class WorkoutManager {
     // Setter for totalWorkoutsCount
     public void setTotalWorkoutsCount(int count) {
         this.totalWorkoutsCount = count;
+        saveManagerData();
     }
 
 
     public void incrementTotalWorkouts() {
         totalWorkoutsCount++;
+        saveManagerData();
     }
 
     public void incrementMonthlyWorkouts() {
         currentMonthlyWorkoutsProgress++;
+        saveManagerData();
     }
+
+
+
+
+
+
+
 }
