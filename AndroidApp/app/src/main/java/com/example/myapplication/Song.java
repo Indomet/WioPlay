@@ -14,6 +14,8 @@ public class Song {
     private double tempo;
     private int[] notes;
 
+    private static int currentChunkIdx = 0; // every song starts from the beginning and is not dependent on objects
+
     //Needs dummy constructor
     public Song(){} //Caused by: com.fasterxml.jackson.databind.JsonMappingException: No suitable constructor found for type [simple type, class com.example.myapplication.Song]: can not instantiate from JSON object (need to add/enable type information?)
 
@@ -91,4 +93,10 @@ public class Song {
     public void setTempo(double tempo) {
         this.tempo = tempo;
     }
+
+    public int getCurrentChunkIdx() { return currentChunkIdx;}
+
+    public void resetCurrentChunkIdx() { currentChunkIdx = 0;}
+
+    public void incrementCurrentChunkIdx() { currentChunkIdx++;}
 }
