@@ -133,16 +133,20 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
             // BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, songSegmentNotes[Song.getCurrentChunkIdx()], 0, null); // CURRENT
 
 
-
             // Future-Scheduling-Invoking of publish-methods solution
-            ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
-            // TODO: Code method: 'getDurationOfChunk()'
-            // scheduledExecutorService.schedule(()->PUBLISH-METHOD-HERE, 2, TimeUnit.SECONDS);
+            MainActivity.scheduledExecutorService.shutdownNow(); // Interrupt future-scheduled publishes of the previously played song's chunks
+            int currentScheduleDelay = 0;
 
-            scheduledExecutorService.shutdown();
+            for (int i = 0; i < songSegmentNotes.length; i++)
+            {
+                MainActivity.scheduledExecutorService.schedule(()->BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, songSegmentNotes[i], 0, null), currentScheduleDelay, TimeUnit.SECONDS);
+                currentScheduleDelay += currentSong.calculateChunkDuration(songSegmentNotes[i].length());
+            }
 
-            // Song.incrementCurrentChunkIdx(); // Do this elsewhere (This is only needed for MQTT solution)
+            scheduledExecutorService.shutdown(); // Shutdown when song is done for the sake of performance
+
+            // Song.incrementCurrentChunkIdx(); // (This is only needed for MQTT solution)
 
         } catch (IOException e) {
             throw new RuntimeException(e);
