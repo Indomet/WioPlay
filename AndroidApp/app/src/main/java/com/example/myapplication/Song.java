@@ -19,10 +19,9 @@ public class Song {
     //Needs dummy constructor
     public Song(){} //Caused by: com.fasterxml.jackson.databind.JsonMappingException: No suitable constructor found for type [simple type, class com.example.myapplication.Song]: can not instantiate from JSON object (need to add/enable type information?)
 
-    public Song(String title, String artist, int duration, int price, String imageURL, boolean isUnlocked, int[] notes, double tempo) {
+    public Song(String title, String artist, int price, String imageURL, boolean isUnlocked, int[] notes, double tempo) {
         this.title = title;
         this.artist = artist;
-        this.duration = duration;
         this.price = price;
         this.imageURL = imageURL;
         this.isUnlocked = isUnlocked;
@@ -99,4 +98,9 @@ public class Song {
     public void resetCurrentChunkIdx() { currentChunkIdx = 0;}
 
     public void incrementCurrentChunkIdx() { currentChunkIdx++;}
+
+    public int calculateChunkDuration(int numOfNotes)
+    {
+        return duration = (int) Math.round(numOfNotes/tempo) * 60/ 6; //divide by 6 since every 6 notes in the array corresponds to about 1 second.
+    }
 }

@@ -84,9 +84,9 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
             int[] notes = mapper.convertValue(node.get("notes"), new TypeReference<int[]>(){});
             int numOfNotes = notes.length;
-            int duration = (int) Math.round(numOfNotes/tempo) * 60/ 6; //divide by 6 since every 6 notes in the array corresponds to about 1 second.
+            // int duration = (int) Math.round(numOfNotes/tempo) * 60/ 6; //divide by 6 since every 6 notes in the array corresponds to about 1 second.
 
-            Song song = new Song(title, artist, duration, cost, imageURL, false, notes, tempo);
+            Song song = new Song(title, artist, cost, imageURL, false, notes, tempo);
             parsedSongs.add(song);
         });
         MainActivity.songList.setList(parsedSongs);
