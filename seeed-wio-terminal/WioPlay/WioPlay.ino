@@ -8,7 +8,7 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 DynamicJsonDocument doc(1024);
 #include "MotionDetection.h"
 #include "MusicPlayer.h"
-#include "themes.h"
+
 
 MusicPlayer player(song, sizeof(song) / sizeof(int), 2);
 
