@@ -1,10 +1,10 @@
 #include "pitches.h"
-// #include "themes.h"
+#include "themes.h"
 
 class MusicPlayer {
 
   static const int GENERIC_DURATION = 1000 / 5;
-  static const int CHUNK_SIZE = 12;
+  static const int CHUNK_SIZE = 5;
 
 private:
   int* song;
@@ -38,11 +38,6 @@ private:
 
 private:
   void play(int position) {
-
-    if(position < 0 || position >= this->size) {
-      this->position = 0;
-      return noTone(1);
-    }
     if (song[position] != 0 && !this->isPaused) {
       tone(1, song[position], GENERIC_DURATION);
     }
@@ -53,15 +48,13 @@ private:
 
 public:
   void playChunk() {
-
     currentPauseChunkDuration = 0;
 
     for (int i = this->position; i < this->position + CHUNK_SIZE; i++) {
       play(i);
-      // registerIncreasedChunkDuration();
+      registerIncreasedChunkDuration();
     }
     this->bumpPosition();
-
   }
 
 public:
@@ -71,30 +64,34 @@ public:
 
 public:
   void nextSong() {
-    // this->position = 0;
+    /*
+    this->position = 0;
 
-    // songIdx++;
+    songIdx++;
 
-    // if (songIdx == sizeof(allSongs)/sizeof(int))
-    // {
-    //   songIdx = 0;
-    // }
+    if (songIdx == sizeof(allSongs)/sizeof(int))
+    {
+      songIdx = 0;
+    }
 
-    // this->song = allSongs[songIdx];
+    this->song = allSongs[songIdx];
+    */
   }
 
 public:
 void previousSong() {
-  // this->position = 0;
+  /*
+  this->position = 0;
 
-  // songIdx--;
+  songIdx--;
 
-  // if (songIdx < 0)
-  // {
-  //   songIdx = sizeof(allSongs)/sizeof(int) - 1;
-  // }
+  if (songIdx < 0)
+  {
+    songIdx = sizeof(allSongs)/sizeof(int) - 1;
+  }
 
-  // this->song = allSongs[songIdx];
+  this->song = allSongs[songIdx];
+  */
 }
 
 public:
