@@ -1,6 +1,4 @@
 package com.example.myapplication;
-import com.NoteParser.src.main.java.com.wioplay.parser.Core;
-import com.NoteParser.src.main.resources.Songs;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,8 +18,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.squareup.picasso.Picasso;
 
+import org.graalvm.compiler.core.common.util.Util;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ScheduledExecutorService;
+
+import javax.swing.text.Utilities;
 
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
 
@@ -115,7 +118,32 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         try {
             String notes = writer.writeValueAsString(currentSong.getNotes());
-            BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, notes, 0, null);
+            String[] songSegmentNotes = Util.splitStringInSegments(notes, 8); // TODO: Code general formula: Parameter: MaxCharBoundary Calculation: Length of string, Return: n-value
+
+            Song.resetCurrentChunkIdx(); //
+
+            // Two possible solutions: MQQT & Future-Scheduling-Invoking of publish-methods
+
+            // MQTT Solution:
+            // 1. Publish array: [currentSongChunkSegment, durationOfSegment] --> "currentSongChunkSegment+durationOfSegmentInSeconds"
+            // 2. In Arduino: Recieve array, set timer of 'durationOfSegment'
+            // 3. When timer is up, send signal to Android Studio and publish next array
+
+            // BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, notes, 0, null); // PREVIOUS
+            // BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, songSegmentNotes[Song.getCurrentChunkIdx()], 0, null); // CURRENT
+
+
+
+            // Future-Scheduling-Invoking of publish-methods solution
+            ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
+            // TODO: Code method: 'getDurationOfChunk()'
+            // scheduledExecutorService.schedule(()->PUBLISH-METHOD-HERE, 2, TimeUnit.SECONDS);
+
+            scheduledExecutorService.shutdown();
+
+            // Song.incrementCurrentChunkIdx(); // Do this elsewhere (This is only needed for MQTT solution)
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
