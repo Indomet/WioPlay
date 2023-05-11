@@ -11,17 +11,21 @@ public class Song {
     private int price; //price in Calorie credits
     private String imageURL;
     private boolean isUnlocked; //false by default, except the starting songs
+    private double tempo;
+    private int[] notes;
 
     //Needs dummy constructor
     public Song(){} //Caused by: com.fasterxml.jackson.databind.JsonMappingException: No suitable constructor found for type [simple type, class com.example.myapplication.Song]: can not instantiate from JSON object (need to add/enable type information?)
 
-    public Song(String title, String artist, int duration, int price, String imageURL, boolean isUnlocked) {
+    public Song(String title, String artist, int duration, int price, String imageURL, boolean isUnlocked, int[] notes, double tempo) {
         this.title = title;
         this.artist = artist;
         this.duration = duration;
         this.price = price;
         this.imageURL = imageURL;
         this.isUnlocked = isUnlocked;
+        this.notes = notes;
+        this.tempo = tempo;
     }
 
     public String getTitle() {
@@ -33,6 +37,7 @@ public class Song {
     }
 
     public int getDuration() {
+
         return duration;
     }
 
@@ -72,4 +77,19 @@ public class Song {
         this.artist = artist;
     }
 
+    public int[] getNotes() {
+        return notes;
+    }
+
+    public void setNotes(int[] notes) {
+        this.notes = notes;
+    }
+
+    public double getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(double tempo) {
+        this.tempo = tempo;
+    }
 }
