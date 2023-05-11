@@ -2,25 +2,22 @@
 #include <PubSubClient.h>
 // This should be created by the user to enter wifi name password and the broker for mqtt
 /*
-  #define SSID "Wifi-name-here" 
-  #define PASSWORD "Password-here" 
+  #define SSID "Wifi-name-here"
+  #define PASSWORD "Password-here"
   #define my_IPv4 "Broker-adress-here"
   */
 #include "WifiInformation.h"
 
-
-
 // Update these with values suitable for your network.
-const char* ssid = SSID;          // WiFi Name
-const char* password = PASSWORD;  // WiFi Password
-const char* server = my_IPv4;     // MQTT Broker URL
+const char *ssid = SSID;         // WiFi Name
+const char *password = PASSWORD; // WiFi Password
+const char *server = my_IPv4;    // MQTT Broker URL
 
-
-const char* Music_sub = "Music/Data/Change";
-const char* TOPIC_sub = "User/Data/Change";
-const char* Workout_sub = "User/Workout/Start";
-const char* TOPIC_pub_connection = "Send/Calorie/Burn/Data";
-const char* Music_notes_sub = "Music/Song/Notes";
+const char *Music_sub = "Music/Data/Change";
+const char *TOPIC_sub = "User/Data/Change";
+const char *Workout_sub = "User/Workout/Start";
+const char *TOPIC_pub_connection = "Send/Calorie/Burn/Data";
+const char *Music_notes_sub = "Music/Song/Notes";
 
 WiFiClient wioClient;
 PubSubClient client(wioClient);
@@ -28,8 +25,8 @@ long lastMsg = 0;
 char msg[50];
 int value = 0;
 
-
-void setup_wifi() {
+void setup_wifi()
+{
 
   delay(10);
 
@@ -40,9 +37,10 @@ void setup_wifi() {
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  WiFi.begin(ssid, password);  // Connecting WiFi
+  WiFi.begin(ssid, password); // Connecting WiFi
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
   }
@@ -55,23 +53,27 @@ void setup_wifi() {
   tft.print("Connected!");
 
   Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());  // Display Local IP Address
+  Serial.println(WiFi.localIP()); // Display Local IP Address
 }
 
-void updateSettings(char json[]) {
+void updateSettings(char json[])
+{
 
+  DynamicJsonDocument doc(1024);
   deserializeJson(doc, json);
   int age = doc["age"];
-  const char* name = doc["username"];
-  const char* sex = doc["sex"];
+  const char *name = doc["username"];
+  const char *sex = doc["sex"];
   float weight = doc["weight"];
   float height = doc["height"];
   float calorieCredit = doc["calorieCredit"];
   userInformation.setInformation(weight, height, age, strcmp("Female", sex) == 0 ? false : true);
 }
 
-void updateChart(char json[]) {
+void updateChart(char json[])
+{
 
+  DynamicJsonDocument doc(1024);
   deserializeJson(doc, json);
   float calorieGoal = doc["calorieGoal"];
   float duration = doc["durationInSeconds"];
@@ -80,34 +82,32 @@ void updateChart(char json[]) {
   burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
 }
 
-void updateSongName(char json[]) {
+void updateSongName(char json[])
+{
+  DynamicJsonDocument doc(1024);
   deserializeJson(doc, json);
-  const char* songName = doc["songName"];
+  const char *songName = doc["songName"];
   // int song = doc ["song"];
   updateSongName(songName);
 }
 
-void updateSong(char json[]) {
+void updateSong(char json[])
+{
 
   Serial.println("user requested to change song");
 
-  DynamicJsonDocument doc(JSON_ARRAY_SIZE(2048)) PROGMEM;
+  DynamicJsonDocument doc(JSON_ARRAY_SIZE(2300));
   DeserializationError error = deserializeJson(doc, json);
 
-  if (error) {
-    Serial.print("deserializeJson() failed: ");
-    Serial.println(error.c_str());
+  if (error)
+  {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
     return;
   }
 
-  JsonArray jsonArray PROGMEM = doc.as<JsonArray>();
-  int newSong[jsonArray.size()] PROGMEM;
-  for (int i = 0; i < jsonArray.size(); i++) {
-    newSong[i] = jsonArray[i];
-  }
-
-  player.changeSong(newSong, jsonArray.size());
-
+  doc.shrinkToFit();
+  player.changeSong(doc);
 }
 
 // void printMessage(String message) {
@@ -126,47 +126,49 @@ void updateSong(char json[]) {
 //   tft.println(message);
 // }
 
-void callback(char* topic, byte* payload, unsigned int length) {
+void callback(char *topic, byte *payload, unsigned int length)
+{
   // tft.fillScreen(TFT_BLACK);
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
-  // process payload and convert it to a string
-  char buff_p[length];
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-    buff_p[i] = (char)payload[i];
-  }
-  Serial.println();
-  buff_p[length] = '\0';
-  String message = String(buff_p);
-  // end of conversion
-  // printMessage(message);
-  char charBuf[message.length() + 1];
-  message.toCharArray(charBuf, message.length() + 1);
 
-  if (strcmp(TOPIC_sub, topic) == 0) {
+  char charBuf[length] PROGMEM;
+  for (int i = 0; i < length; i++)
+  {
+    charBuf[i] = (char)payload[i];
+  }
+
+  if (strcmp(TOPIC_sub, topic) == 0)
+  {
     updateSettings(charBuf);
-  } else if (strcmp(Workout_sub, topic) == 0) {
+  }
+  else if (strcmp(Workout_sub, topic) == 0)
+  {
     updateChart(charBuf);
-  } else if (strcmp(Music_sub, topic) == 0) {
+  }
+  else if (strcmp(Music_sub, topic) == 0)
+  {
     updateSongName(charBuf);
-  } else if (strcmp(Music_notes_sub, topic) == 0) {
+  }
+  else if (strcmp(Music_notes_sub, topic) == 0)
+  {
 
     updateSong(charBuf);
   }
 }
 
-
-
-void reconnect() {
+void reconnect()
+{
   // Loop until we're reconnected
-  while (!client.connected()) {
+  while (!client.connected())
+  {
     Serial.print("Attempting MQTT connection...");
     // Create a random client ID
     String clientId = "wioClient";
     // Attempt to connect
-    if (client.connect(clientId.c_str())) {
+    if (client.connect(clientId.c_str()))
+    {
       Serial.println("connected");
       // Once connected, publish an announcement...
       client.publish(TOPIC_pub_connection, "hello world");
@@ -176,7 +178,7 @@ void reconnect() {
       client.subscribe(TOPIC_sub);
       Serial.print("Subcribed to: ");
       Serial.println(TOPIC_sub);
-      //subscribe to start
+      // subscribe to start
       client.subscribe(Workout_sub);
       Serial.print("Subcribed to: ");
       Serial.println(Workout_sub);
@@ -188,8 +190,9 @@ void reconnect() {
       client.subscribe(Music_notes_sub);
       Serial.print("Subcribed to: ");
       Serial.println(Music_notes_sub);
-
-    } else {
+    }
+    else
+    {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
@@ -199,20 +202,22 @@ void reconnect() {
   }
 }
 
-void setupMqtt() {
+void setupMqtt()
+{
   tft.begin();
   tft.fillScreen(TFT_BLACK);
   tft.setRotation(3);
 
   setup_wifi();
-  client.setServer(server, 1883);  // Connect the MQTT Server   hive_mqtt_server
+  client.setServer(server, 1883); // Connect the MQTT Server   hive_mqtt_server
   client.setCallback(callback);
 }
 
-void loopMqtt() {
+void loopMqtt()
+{
 
-
-  if (!client.connected()) {
+  if (!client.connected())
+  {
     reconnect();
   }
   client.loop();
