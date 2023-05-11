@@ -7,41 +7,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.util.List;
+import java.io.File;
 
 
 public class NewWorkoutFragment extends Fragment {
 
 
 
-    private enum WorkoutType {
-        HIKING("Hiking"),
-        WALKING("Walking"),
-        RUNNING("Running");
 
-        private final String name;
-
-        WorkoutType(String name) {
-            this.name = name;
-        }
-
-        private String getName() {
-            return name;
-        }
-    }
 
     private WorkoutType workoutType;
 
@@ -94,7 +76,9 @@ public class NewWorkoutFragment extends Fragment {
 
         targetCaloriesTextView = rootView.findViewById(R.id.current_calorie_goal);
 
-        workoutManager = WorkoutManager.getInstance();
+        String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json"; //data/user/0/myapplication/files
+        File managerFile = new File(managerPath);
+        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
 
         targetCaloriesTextView.setText(Integer.toString(workoutManager.getCalorieGoal()));
         ImageButton incrementButton = rootView.findViewById(R.id.plus_calories_btn);
@@ -121,21 +105,31 @@ public class NewWorkoutFragment extends Fragment {
     public void startWorkout(){
         //validate that time written is valid and the calorie goal are above 0
         boolean calorieGoalIsValid = workoutManager.getCalorieGoal()>0;
-        if(!calorieGoalIsValid){
+        boolean durationIsValid = timePicker.getHour()>0 || timePicker.getMinute()>0;
+        if(workoutManager.getWorkoutHasStarted()){
+            Toast.makeText(rootView.getContext(), "Please finish your ongoing workout before starting a new one", Toast.LENGTH_SHORT).show();
+
+        }
+
+        else if(!calorieGoalIsValid){
             Toast.makeText(rootView.getContext(), "Please set a calorie goal above 0", Toast.LENGTH_SHORT).show();
+        }
+        else if(!durationIsValid){
+            Toast.makeText(rootView.getContext(), "Please set a valid time", Toast.LENGTH_SHORT).show();
+
         }
 
         else {
             //TODO use singleton
-            //todo fix the workout type thijng
             workoutManager.setWorkoutHasStarted(true);
-            //String workoutType = exerciseTypeSpinner.getSelectedItem().toString();
             //publish the exercise type and calorie goal
-            workoutManager.setWorkoutType(workoutType.getName());
+            workoutManager.setWorkoutTypeTerminalInt(workoutType.getName());
             final int SECONDS_IN_HOUR = 3600;
             final int SECONDS_IN_MINUTE = 60;
             int durationInSeconds = (timePicker.getHour()*SECONDS_IN_HOUR)+(timePicker.getMinute()*SECONDS_IN_MINUTE);
             workoutManager.setDurationInSeconds(durationInSeconds);
+            workoutManager.setType(workoutType);
+
             try {
                 String json = Util.objectToJSON(workoutManager);
                 MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager),MainActivity.brokerConnection.QOS,null);
