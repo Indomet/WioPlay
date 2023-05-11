@@ -14,8 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
@@ -106,7 +109,16 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
 
     private void playSong(@NonNull Song currentSong) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+        try {
+            String notes = writer.writeValueAsString(currentSong.getNotes());
+            BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, notes, 0, null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+
         // TODO: Implement the logic to play the song
     }
 

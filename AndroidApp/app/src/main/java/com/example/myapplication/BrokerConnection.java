@@ -19,7 +19,9 @@ public class BrokerConnection extends AppCompatActivity {
     public static final String WORKOUT_STARTED_TOPIC = "User/Workout/Start";
     public static final String SUB_TOPIC = "Send/Calorie/Burn/Data";
 
-    public static  final String SONG_LIST_TOPIC = "songs";
+    public static  final String SONG_LIST_TOPIC = "Send/SongList";
+
+    public static final String SONG_NOTES_TOPIC = "Music/Song/Notes";
     public static final String LOCALHOST = "broker.hivemq.com"; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
     public static final String CLIENT_ID = "Android Phone";   // the app client ID name
@@ -71,7 +73,6 @@ public class BrokerConnection extends AppCompatActivity {
 
                     mqttClient.subscribe(SUB_TOPIC,0, null);
                     mqttClient.subscribe(SONG_LIST_TOPIC,0, null);
-                    mqttClient.subscribe(SONG_LIST_TOPIC,0, null);
 
                 }
 
@@ -101,7 +102,7 @@ public class BrokerConnection extends AppCompatActivity {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     //check if the topic of the message is the subscribed topic
-                    if(isConnected && topic.equals(SUB_TOPIC)){ //TODO: Make separate messageListeners for each fragment
+                    if(isConnected && topic.equals("songs")){ //TODO: Make separate messageListeners for each fragment
                         Toast.makeText(context, "The message is "+ message.toString(), Toast.LENGTH_SHORT).show();
                         String messageMQTT = message.toString();
                         Log.i(CLIENT_ID, "Message" + messageMQTT);  // prints in the console
