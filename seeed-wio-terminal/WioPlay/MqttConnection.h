@@ -2,10 +2,10 @@
 #include <PubSubClient.h>
 // This should be created by the user to enter wifi name password and the broker for mqtt
 /*
-#define SSID "Wifi-name-here" 
-#define PASSWORD "Password-here" 
-#define my_IPv4 "Broker-adress-here"
-*/
+  #define SSID "Wifi-name-here" 
+  #define PASSWORD "Password-here" 
+  #define my_IPv4 "Broker-adress-here"
+  */
 #include "WifiInformation.h"
 
 
@@ -80,7 +80,7 @@ void updateChart(char json[]) {
   burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
 }
 
-void updateSongName (char json[]) {
+void updateSongName(char json[]) {
   deserializeJson(doc, json);
   const char* songName = doc["songName"];
   // int song = doc ["song"];
@@ -88,9 +88,26 @@ void updateSongName (char json[]) {
 }
 
 void updateSong(char json[]) {
-  deserializeJson(doc, json);
-  int* newSong = doc["newSong"];
-  player.changeSong(newSong);  
+
+  Serial.println("user requested to change song");
+
+  DynamicJsonDocument doc(JSON_ARRAY_SIZE(2048)) PROGMEM;
+  DeserializationError error = deserializeJson(doc, json);
+
+  if (error) {
+    Serial.print("deserializeJson() failed: ");
+    Serial.println(error.c_str());
+    return;
+  }
+
+  JsonArray jsonArray PROGMEM = doc.as<JsonArray>();
+  int newSong[jsonArray.size()] PROGMEM;
+  for (int i = 0; i < jsonArray.size(); i++) {
+    newSong[i] = jsonArray[i];
+  }
+
+  player.changeSong(newSong, jsonArray.size());
+
 }
 
 // void printMessage(String message) {
@@ -134,9 +151,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
     updateChart(charBuf);
   } else if (strcmp(Music_sub, topic) == 0) {
     updateSongName(charBuf);
-  }
-  else if (strcmp(Music_notes_sub, topic) == 0) {
+  } else if (strcmp(Music_notes_sub, topic) == 0) {
 
+    updateSong(charBuf);
   }
 }
 
@@ -153,6 +170,7 @@ void reconnect() {
       Serial.println("connected");
       // Once connected, publish an announcement...
       client.publish(TOPIC_pub_connection, "hello world");
+      client.setBufferSize(10024);
       Serial.println("Published connection message ");
       // ... and resubscribe
       client.subscribe(TOPIC_sub);
