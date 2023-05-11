@@ -2,7 +2,7 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(400, 20, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd(400, 260, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);             // (float graphUIXStartValue)
 
 #include <iostream>

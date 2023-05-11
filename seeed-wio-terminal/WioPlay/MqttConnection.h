@@ -78,12 +78,31 @@ void updateChart(char json[]) {
 
   burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
 }
+unsigned char songImage[2448];
 
-void updateSongName (char json[]) {
+void updateSongData(char json[]) {
   deserializeJson(doc, json);
   const char* songName = doc["songName"];
-  // int song = doc ["song"];
-  updateSongName(songName);
+  changeSongName(songName);
+
+  // rename second doc object to avoid conflict
+  DynamicJsonDocument jsonDoc(JSON_ARRAY_SIZE(2448));
+  DeserializationError error = deserializeJson(jsonDoc, json);
+
+  if (error) {
+    Serial.print("deserializeJson failed: ");
+    Serial.println(error.c_str());
+    return;
+  }
+  JsonArray jsonArray = jsonDoc.as<JsonArray>();
+
+  // copy contents of jsonArray to songImage
+  for (int i = 0; i < jsonArray.size(); i++) {
+    songImage[i] = jsonArray[i];
+  }
+  jsonArray.clear();
+
+  changeArtwork(songImage);
 }
 
 // void printMessage(String message) {
@@ -126,7 +145,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   } else if (strcmp(Workout_sub, topic) == 0) {
     updateChart(charBuf);
   } else if (strcmp(Music_sub, topic) == 0) {
-    updateSongName(charBuf);
+    updateSongData(charBuf);
   }
 }
 

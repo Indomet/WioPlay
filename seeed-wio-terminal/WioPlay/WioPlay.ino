@@ -30,6 +30,8 @@ void setup() {
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) { // setup sd
     Serial.print("ERROR sd card not recognized");
   }
+   
+
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
 
