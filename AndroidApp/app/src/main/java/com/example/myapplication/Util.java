@@ -58,4 +58,53 @@ public class Util {
 
         return segments;
     }
+
+    public static String[] splitStringInSegments(String initialString, int targetN, int maxCharBoundary)
+    {
+        String[] segments = new String[0];
+        int subStringLength = 0;
+
+        try
+        {
+            subStringLength = (int)Math.ceil((double)initialString.length() / targetN);
+
+            if (subStringLength > maxCharBoundary)
+            {
+                targetN = findMaxN(maxCharBoundary, initialString.length());
+                subStringLength = maxCharBoundary;
+            }
+
+            segments = new String[targetN];
+        }
+        catch (NegativeArraySizeException exception)
+        {
+            System.out.println(exception.getMessage());
+        }
+
+        for (int i = 0; i < targetN; i++)
+        {
+            int startIdx = i * subStringLength;
+            int endIdx = Math.min((i + 1) * subStringLength, initialString.length());
+
+            segments[i] = initialString.substring(startIdx, endIdx);
+        }
+
+        return segments;
+    }
+
+    // n * segmentLength = initialStirng <=> n * maxCharBoundary = initialString
+    // Find the number of segments/elements to return of the intitial string where each string is bounded by the predefined max-length
+    private static int findMaxN(int maxCharBoundary, int initialStringLength)
+    {
+        try
+        {
+            return initialStringLength / maxCharBoundary;
+        }
+        catch (ArithmeticException exception)
+        {
+            System.out.println(exception.getMessage());
+        }
+
+        return -1;
+    }
 }
