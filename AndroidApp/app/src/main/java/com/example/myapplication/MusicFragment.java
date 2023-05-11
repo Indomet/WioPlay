@@ -29,6 +29,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private TextView userBalance;
     private View rootView;
 
+    private SongLibraryAdapter adapter;
+
 
 
     private ArrayList<Song> songsList = new ArrayList<>();
@@ -43,7 +45,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         userBalance = rootView.findViewById(R.id.user_balance);
 
         userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
-        SongLibraryAdapter adapter = new SongLibraryAdapter(recyclerView.getContext());
+        adapter = new SongLibraryAdapter(recyclerView.getContext());
 
         MainActivity.brokerConnection = BrokerConnection.getInstance(rootView.getContext());
         MainActivity.brokerConnection.setMessageListener(this);
@@ -89,8 +91,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
             Song song = new Song(title, artist, duration, cost, imageURL, false, notes, tempo);
             parsedSongs.add(song);
         });
-        MainActivity.songList.setList(parsedSongs);
-        //adapter.notifyDataSetChanged();
+        adapter.setSongsList(parsedSongs);
     }
 
 

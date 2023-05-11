@@ -88,6 +88,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     }
 
     public void setSongsList(ArrayList<Song> songsList){
+        MainActivity.songList.setList(songsList);
         this.songsList = songsList;
         notifyDataSetChanged(); //Notify adapter whenever the song list has updated, so the up to date information can be shown
     }
