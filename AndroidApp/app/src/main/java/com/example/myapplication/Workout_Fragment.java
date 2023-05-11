@@ -5,10 +5,16 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,7 +29,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import java.io.File;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,8 +46,6 @@ import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
 import nl.dionsegijn.konfetti.core.models.Shape;
 import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import java.util.Date;
@@ -51,9 +62,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private ProgressBar caloriesProgressbar;
     private TextView targetWorkoutsThisMonth;
     private TextView currentWorkoutsThisMonth;
-    private TextView walkingClickableView;
-    private TextView runningClickableView;
-    private TextView hikingClickableView;
+
     private TextView caloriesBurnt;
     private Button stopOrPlayStopwatch;
     private TextView timeElapsed;
@@ -62,18 +71,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private NewWorkoutFragment newWorkoutFragment;
 
     private boolean stopwatchRunning = false;
-    private final String WORKOUT_NOT_STARTED = "No ongoing workout";
+    WorkoutManager workoutManager;
+    private User user;
 
     private View rootView;
-    private WorkoutManager workoutManager;
-    private ProgressBar calorieProgressBar;
+    MaterialCalendarView calendarView;
 
-    int currentCalorie = 0;
 
-    //required empty constructor
-    public Workout_Fragment() {
-
-    }
     @Override
     public void onStart() {
         super.onStart();
@@ -112,22 +116,32 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         super.onSaveInstanceState(outState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
-        workoutManager = WorkoutManager.getInstance();
+
+
+        String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json"; //data/user/0/myapplication/files
+        File managerFile = new File(managerPath);
+
+        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.setMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
+        String filePath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+        user = User.getInstance(new File(filePath));
+
         widgetInit();
 
         return rootView;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void widgetInit() {
-
+        calendarView = rootView.findViewById(R.id.day_date_picker);
         userBalance = rootView.findViewById(R.id.workout_tab_user_balance);
         workoutsCount = rootView.findViewById(R.id.user_total_workouts);
         username = rootView.findViewById(R.id.Username_workout_tab);
@@ -138,64 +152,113 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesProgressbar =  rootView.findViewById(R.id.calories_burnt_progressbar);
         targetWorkoutsThisMonth =  rootView.findViewById(R.id.max_workouts_this_month);
         currentWorkoutsThisMonth =  rootView.findViewById(R.id.current_workouts_this_month);
-        walkingClickableView =  rootView.findViewById(R.id.walking_textview_BTN);
-        runningClickableView =  rootView.findViewById(R.id.running_textview_BTN);
-        hikingClickableView =  rootView.findViewById(R.id.hiking_textview_BTN);
         caloriesBurnt = rootView.findViewById(R.id.calories_burnt_textview);
         stopOrPlayStopwatch = rootView.findViewById(R.id.stop_or_start_stopwatch_btn);
         timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
         timeLeft = rootView.findViewById(R.id.time_left_textview);
-        //TODO ADD OTHER BTNS AND RPELACE WITH POPUP
         addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addHikingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addRunningWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
 
+        calendarView.setOnDateChangedListener((widget, date, selected) -> onDateSelected(date));
+
+
         caloriesProgressbar.setMax(workoutManager.getCalorieGoal());
         caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
         if (!workoutManager.getWorkoutHasStarted()) {
+            stopOrPlayStopwatch.setVisibility(View.INVISIBLE);
             caloriesBurnt.setText("0");
             caloriesProgressbar.setProgress(0,true);
         }
 
+
+        workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
+        userBalance.setText(Integer.toString(user.getCalorieCredit()));
+
+        monthlyWorkoutsProgressbar.setMax(user.getMonthlyWorkouts());
+        monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
+
+        username.setText(user.getUsername());
+
+        //sets the date to be today
+
+        CalendarDay today = CalendarDay.today();
+        calendarView.setDateSelected(today,true);
+        calendarView.state().edit().setMaximumDate(today).commit();
+        //reset monthly progress bar if the today is first day of the month
+        if(today.getDay()==1){
+            final int resetVal = 0;
+            monthlyWorkoutsProgressbar.setProgress(resetVal,true);
+            workoutManager.setCurrentMonthlyWorkoutsProgress(resetVal);
+        }
+
     }
+
     public void changeToNewWorkoutFragment(View buttonPressed) {
         newWorkoutFragment.setWorkoutType(buttonPressed.getId());
         FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
         fm.replace(R.id.frameLayout, newWorkoutFragment).setReorderingAllowed(true).commit();
     }
-    public void onDateSelected(@Nullable Date date) {
-        if(date != null){
-            // do something with selected date
+    public void onDateSelected(CalendarDay date) {
+        FinishedWorkoutData data = workoutManager.getWorkoutDataHashMap().get(date.toString());
+        //check if its before
+        if(CalendarDay.today().equals(date)){
+            showToday();
         }
-    }
+        else if(date.isBefore(CalendarDay.today())) {
+            if(data==null || date.isAfter(CalendarDay.today())){
+                //just showing that the progress is 0 since no workouts done that day
+                showPastWorkoutStats("00:00",0,100);
+            }
+            else{
+                //there is data in the past now setting the proper views to show it
+                int totalSeconds = data.getDurationInSeconds();
+                int hours = totalSeconds / 3600;
+                int minutes = (totalSeconds % 3600) / 60;
+                String timeString = String.format("%02d:%02d", hours, minutes);
+                showPastWorkoutStats(timeString,data.getCaloriesBurntWithExercise(), data.getGoalCalories());
+            }
+        }
 
+        }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageArrived(String payload) {
 
         if (workoutManager.getWorkoutHasStarted()) {
             workoutManager.setCaloriesBurnt((int)Float.parseFloat(payload));
-            //TODO update the calorie balance and lifetime calories, but thats a seperate issue
+            //TODO update the calorie balance
 
-            calorieProgressBar.setProgress(workoutManager.getCaloriesBurnt(), true);
+            caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
             String calculatedTimeLeft = workoutManager.calculateTimeLeft();
             timeLeft.setText(calculatedTimeLeft);
 
-            int cumulativeCalorie = Integer.parseInt(payload);
-            int changeInCalories = Math.abs(cumulativeCalorie - currentCalorie);
-            currentCalorie = changeInCalories;
-            MainActivity.user.updateLifeTimeCalories(changeInCalories);
-            MainActivity.user.updateCredit(changeInCalories);
         }
 
         //TODO update the time left gto reach goal view
         if (workoutManager.isGoalAchieved()&& workoutManager.getWorkoutHasStarted()) {
+            //before anything add the workout data
+            CalendarDay date = CalendarDay.today();
+            //get the time calories burnt and the goal with the workout after its done and the type
+            FinishedWorkoutData finishedWorkout = new FinishedWorkoutData(workoutManager.getDurationInSeconds(),workoutManager.getCaloriesBurnt(),
+                    workoutManager.getType(),workoutManager.getCalorieGoal());
+            workoutManager.addWorkoutData(finishedWorkout,date);
+
+
             caloriesProgressbar.setProgress(0,true);
             caloriesBurnt.setText("0");
             createPopWindow();
             workoutManager.stopWorkout();
             timeLeft.setText("0:00:00");
-            currentCalorie = 0;
+            //todo use manager
+            workoutManager.incrementTotalWorkouts();
+            workoutManager.incrementMonthlyWorkouts();
+            monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
+            workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
+            stopOrPlayStopwatch.setVisibility(View.INVISIBLE);
 
         }
     }
@@ -283,4 +346,42 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
 
     }
+
+    public void adjustVisibility(int statsVisibility,int pastStatsVisibility){
+
+        //first remove the stats views for the current workouts
+        rootView.findViewById(R.id.stopwatch_whitebix).setVisibility(statsVisibility);
+        rootView.findViewById(R.id.stopwatch_icon).setVisibility(statsVisibility);
+        rootView.findViewById(R.id.stopwatch_textview).setVisibility(statsVisibility);
+        rootView.findViewById(R.id.stopwatch_whitebix).setVisibility(statsVisibility);
+        rootView.findViewById(R.id.stop_or_start_stopwatch_btn).setVisibility(statsVisibility);
+        rootView.findViewById(R.id.time_left_label).setVisibility(statsVisibility);
+        rootView.findViewById(R.id.time_left_whitebox).setVisibility(statsVisibility);
+        rootView.findViewById(R.id.time_left_textview).setVisibility(statsVisibility);
+
+        TextView totalTime = rootView.findViewById(R.id.total_past_exercise_time);
+        TextView whiteBox = rootView.findViewById(R.id.total_exercise_time_box);
+        totalTime.setVisibility(pastStatsVisibility);
+        whiteBox.setVisibility(pastStatsVisibility);
+    }
+
+    public void showPastWorkoutStats(String time, int caloriesBurntData,int GoalCalories){
+        //make stats views invisible while past stats views visible
+        adjustVisibility(View.INVISIBLE,View.VISIBLE);
+        TextView totalTime = rootView.findViewById(R.id.total_past_exercise_time);
+        totalTime.setText(time);
+        caloriesProgressbar.setMax(GoalCalories);
+        caloriesProgressbar.setProgress(caloriesBurntData,true);
+        caloriesBurnt.setText(Integer.toString(caloriesBurntData));
+    }
+
+    public void showToday(){
+        //make stats views invisible while past stats views visible
+        adjustVisibility(View.VISIBLE,View.INVISIBLE);
+        caloriesProgressbar.setMax(workoutManager.getCalorieGoal());
+        caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt());
+        caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
+
+    }
+
 }
