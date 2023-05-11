@@ -91,8 +91,9 @@ void updateSongName(char json[]) {
 
 void updateSong(char json[]) {
 
-  Serial.println("user requested to change song");
+  // Serial.println("user requested to change song");
 
+  /*
   DynamicJsonDocument doc(JSON_ARRAY_SIZE(2048)) PROGMEM;
   DeserializationError error = deserializeJson(doc, json);
 
@@ -107,9 +108,11 @@ void updateSong(char json[]) {
   for (int i = 0; i < jsonArray.size(); i++) {
     newSong[i] = jsonArray[i];
   }
+  */
 
-  player.changeSong(newSong, jsonArray.size());
-
+  deserializeJson(doc, json);
+  int* newSong = doc["newSong"];
+  player.changeSong(newSong, newSong.length);
 }
 
 // void printMessage(String message) {

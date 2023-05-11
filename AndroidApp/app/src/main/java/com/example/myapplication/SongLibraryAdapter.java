@@ -118,7 +118,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         try {
             String notes = writer.writeValueAsString(currentSong.getNotes());
-            String[] songSegmentNotes = Util.splitStringInSegments(notes, 8); // TODO: Code general formula: Parameter: MaxCharBoundary Calculation: Length of string, Return: n-value
+            String[] songSegmentNotes = Util.splitStringInSegments(notes, 12, 40);
 
             Song.resetCurrentChunkIdx(); //
 
