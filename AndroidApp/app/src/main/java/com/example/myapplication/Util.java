@@ -107,4 +107,106 @@ public class Util {
 
         return -1;
     }
+
+    public static int[][] splitIntegerArrayInSegments(int[] allSongNotes, int targetN, int maxCharBoundary)
+    {
+        int[][] segments = new int[targetN][];
+        int subArrLength = 0;
+
+        try
+        {
+            subArrLength = (int)Math.ceil((double)allSongNotes.length / targetN);
+
+            if (subArrLength > maxCharBoundary)
+            {
+                targetN = findMaxN(maxCharBoundary, allSongNotes.length);
+                subArrLength = maxCharBoundary;
+            }
+
+            segments = new int[targetN][];
+        }
+        catch (NegativeArraySizeException exception)
+        {
+            System.out.println(exception.getMessage());
+        }
+
+        int x = 0; // current element in sub-arr
+        int y = 0; // current sub-arr
+        int t = 0; // total
+        segments[0] = new int[subArrLength];
+        while (y < targetN)
+        {
+            segments[y][x] = allSongNotes[t];
+
+
+            if (++x == subArrLength)
+            {
+                x = 0;
+                y++;
+
+                if (y == targetN) // Remove this break later
+                    break;
+
+                segments[y] = new int[subArrLength]; // Note: for the last iteration, subtract the space of the array
+            }
+
+            // x++;
+            t++;
+        }
+
+        return segments;
+    }
+
+    public static int[][] splitIntegerArrayInSegments(int[] allSongNotes, int targetN, int maxDigitBoundary)
+    {
+        int[][] segments = new int[targetN][];
+        int subArrLength = 0;
+
+        try
+        {
+            subArrLength = (int)Math.ceil((double)allSongNotes.length / targetN);
+
+            if (subArrLength > maxDigitBoundary)
+            {
+                targetN = findMaxN(maxDigitBoundary, allSongNotes.length);
+                subArrLength = maxDigitBoundary;
+            }
+
+            segments = new int[targetN][];
+        }
+        catch (NegativeArraySizeException exception)
+        {
+            System.out.println(exception.getMessage());
+        }
+
+        int x = 0; // current element in sub-arr
+        int y = 0; // current sub-arr
+        int t = 0; // total
+        segments[0] = new int[subArrLength];
+        while (t < allSongNotes.length) // y < targetN
+        {
+            segments[y][x] = allSongNotes[t];
+
+
+            if (++x == subArrLength)
+            {
+                x = 0;
+                y++;
+
+                if (y == targetN) // Remove this break later
+                    break;
+
+                int chunkLength = subArrLength;
+                if (targetN - y == 1)
+                {
+                    chunkLength = allSongNotes.length - t - 1; // +-1
+                }
+
+                segments[y] = new int[chunkLength];
+            }
+            t++;
+        }
+
+        return segments;
+    }
 }
