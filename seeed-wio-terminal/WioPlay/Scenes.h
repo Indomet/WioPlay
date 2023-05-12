@@ -12,7 +12,7 @@ TFT_eSPI tft;
 // #define logo_x 95
 // #define logo_y 25
 
-
+const char* imageList[] = {"/photos/ali.bmp", "/photos/Asim.bmp"};
 
 class Scenes {
 public:
@@ -20,14 +20,15 @@ public:
   //  const char songImage;
   bool isOnMusicScene = true;
   bool messageReceived = false;
-  const char* songImage = "/photos/ali.bmp";
+  int count = 0;
+  
   const char* prevButton = "/photos/prev.bmp";
   const char* pauseButton = "/photos/pause.bmp";
   const char* nextButton = "/photos/next.bmp";
   Scenes()
   /* : songImage(songImage) */ {
     this->songName = songName;
-    this->songImage = songImage;
+ 
   }
 
   void playerScene() {
@@ -42,7 +43,8 @@ public:
       // Serialize the JSON to the buffer
       // serializeJson(songImage, buffer, capacity);
       // tft.drawXBitmap(logo_x, logo_y, songImage, logo_width, logo_width, TFT_TRANSPARENT);
-      drawImage<uint16_t>(songImage, 95, 25);
+      
+      drawImage<uint16_t>(imageList[count], 95, 25);
       tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);
       tft.println(songName);
       drawImage<uint16_t>(prevButton, 100, 200);
@@ -51,6 +53,7 @@ public:
       isOnMusicScene = false;
     }
     if (messageReceived) {
+      drawImage<uint16_t>(imageList[count], 95, 25);
       tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 2, TFT_WHITE);
       tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);
       tft.println(songName);
@@ -70,20 +73,17 @@ public:
 
   void buttonOnPress() {
     if (digitalRead(BUTTON_NEXT) == LOW) {
-      while (digitalRead(BUTTON_NEXT) == LOW)
-        ;
+      while (digitalRead(BUTTON_NEXT) == LOW);
       player.nextSong();
     }
 
     if (digitalRead(BUTTON_PAUSE) == LOW) {
-      while (digitalRead(BUTTON_PAUSE) == LOW)
-        ;
+      while (digitalRead(BUTTON_PAUSE) == LOW);
       player.toggle();
     }
 
     if (digitalRead(BUTTON_PREVIOUS) == LOW) {
-      while (digitalRead(BUTTON_PREVIOUS) == LOW)
-        ;
+      while (digitalRead(BUTTON_PREVIOUS) == LOW);
       player.previousSong();
     }
   }
@@ -99,6 +99,10 @@ public:
 
   void changeSongName(const char* newSongName) {
     songName = newSongName;
+
+    count++;
+    count = count % (sizeof(imageList)/sizeof(int));
+
     messageReceived = true;
   }
 
