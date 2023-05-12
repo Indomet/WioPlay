@@ -32,6 +32,7 @@ import java.util.List;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
 
 public class SettingsFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -276,7 +277,6 @@ public class SettingsFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             profilePicture.setImageURI(imageUri);// adding the image from gallery to the imageview
-            //usercircle.setImageURI(imageUri);
             dialog.dismiss();// close the dialod
 
 
@@ -285,8 +285,10 @@ public class SettingsFragment extends Fragment {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");// creating a bitmap from the image from camera
             profilePicture.setImageBitmap(imageBitmap); //adding the camera from gallery to the imageview
-           // usercircle.setImageBitmap(imageBitmap);
             dialog.dismiss();// close the dialod
+
+
+
 
 
         }
