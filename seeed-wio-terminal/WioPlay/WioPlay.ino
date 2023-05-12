@@ -13,6 +13,7 @@ DynamicJsonDocument doc(1024);
 MusicPlayer player(song, sizeof(song) / sizeof(int), 2);
 
 #include "Scenes.h"
+Scenes scenes;
 #include "BurndownChart.h"
 #include "MqttConnection.h"
 
@@ -26,7 +27,7 @@ const char* calorie_pub = "Send/Calorie/Burn/Data";
 void setup() {
   Serial.begin(115200);  //Start serial communication
   setupMqtt();
-  setupButton();
+  scenes.setupButton();
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) { // setup sd
     Serial.print("ERROR sd card not recognized");
   }
@@ -47,8 +48,8 @@ void loop() {
   if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
-    buttonOnPress();
-    menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
+    scenes.buttonOnPress();
+    scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
 
@@ -75,4 +76,8 @@ void loop() {
 
 void showBurndownChartScene() {
   burndownChart.updateGraphVizuals();
+}
+
+void showPlayerScene(){
+  scenes.playerScene();
 }
