@@ -114,13 +114,12 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
 
     private void playSong(@NonNull Song currentSong) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         try {
             String notes = writer.writeValueAsString(currentSong.getNotes());
-            String[] songSegmentNotes = Util.splitStringInSegments(notes, 12, 40);
+            String[] songSegmentNotes = Util.splitStringInSegments(notes, 12, 40); //
+            int[][] songNotes =  Util.splitIntegerArrayInSegments(currentSong.getNotes(), 30, 40);
 
-            Song.resetCurrentChunkIdx(); //
+            // Song.resetCurrentChunkIdx(); //
 
             // Two possible solutions: MQQT & Future-Scheduling-Invoking of publish-methods
 
@@ -138,9 +137,16 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
             MainActivity.scheduledExecutorService.shutdownNow(); // Interrupt future-scheduled publishes of the previously played song's chunks
             int currentScheduleDelay = 0;
 
-            for (int i = 0; i < songSegmentNotes.length; i++)
+            for (int i = 0; i < songNotes.length; i++)
             {
-                MainActivity.scheduledExecutorService.schedule(()->BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, songSegmentNotes[i], 0, null), currentScheduleDelay, TimeUnit.SECONDS);
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+
+                String currentChunk = writer.writeValueAsString(songNotes[i]);
+
+                MainActivity.scheduledExecutorService.schedule(()->BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, currentChunk, 0, null), currentScheduleDelay, TimeUnit.SECONDS);
+
+                // MainActivity.scheduledExecutorService.schedule(()->BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, songSegmentNotes[i], 0, null), currentScheduleDelay, TimeUnit.SECONDS);
                 currentScheduleDelay += currentSong.calculateChunkDuration(songSegmentNotes[i].length());
             }
 
