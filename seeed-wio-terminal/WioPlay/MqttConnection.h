@@ -84,21 +84,6 @@ void updateSongData(char json[]) {
   deserializeJson(doc, json);
   const char* songName = doc["songName"];
   scenes.changeSongName(songName);
-
-  // DynamicJsonDocument doc(JSON_ARRAY_SIZE(2300));
-  // DeserializationError error = deserializeJson(doc, json);
-
-  // if (error)
-  // {
-  //   Serial.print(F("deserializeJson() failed: "));
-  //   Serial.println(error.f_str());
-  //   return;
-  // }
-
-  // doc.shrinkToFit();
-
-
-  // scenes.changeArtwork(doc);
 }
 
 // void printMessage(String message) {

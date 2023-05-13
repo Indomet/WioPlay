@@ -28,10 +28,10 @@ void setup() {
   Serial.begin(115200);  //Start serial communication
   setupMqtt();
   scenes.setupButton();
-  while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) { // setup sd
+  while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
-   
+
 
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
@@ -78,6 +78,6 @@ void showBurndownChartScene() {
   burndownChart.updateGraphVizuals();
 }
 
-void showPlayerScene(){
+void showPlayerScene() {
   scenes.playerScene();
 }
