@@ -1,34 +1,28 @@
 TFT_eSPI tft;
 #include "TFT_eSPI.h"
 #include "RawImage.h"  // image processing library
-// #include "Adafruit_GFX.h"
 // #include "image.h"
 #define RIGHT_BUTTON WIO_5S_RIGHT  // Right joystick  WIO_5S_PRESS press is probably using same pins as the burndown chart
 #define BUTTON_NEXT WIO_KEY_A
 #define BUTTON_PAUSE WIO_KEY_B
 #define BUTTON_PREVIOUS WIO_KEY_C
-// #define logo_width 140
-// #define logo_height 136
-// #define logo_x 95
-// #define logo_y 25
+const char* imageList[] = { "/photos/ali.bmp", "/photos/Asim.bmp" };
 
-const char* imageList[] = {"/photos/ali.bmp", "/photos/Asim.bmp"};
 
 class Scenes {
-public:
+private:
   String songName;
-  //  const char songImage;
   bool isOnMusicScene = true;
   bool messageReceived = false;
   int count = 0;
-  
   const char* prevButton = "/photos/prev.bmp";
   const char* pauseButton = "/photos/pause.bmp";
   const char* nextButton = "/photos/next.bmp";
+
+public:
   Scenes()
   /* : songImage(songImage) */ {
     this->songName = songName;
- 
   }
 
   void playerScene() {
@@ -43,7 +37,7 @@ public:
       // Serialize the JSON to the buffer
       // serializeJson(songImage, buffer, capacity);
       // tft.drawXBitmap(logo_x, logo_y, songImage, logo_width, logo_width, TFT_TRANSPARENT);
-      
+
       drawImage<uint16_t>(imageList[count], 95, 25);
       tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);
       tft.println(songName);
@@ -73,17 +67,14 @@ public:
 
   void buttonOnPress() {
     if (digitalRead(BUTTON_NEXT) == LOW) {
-      while (digitalRead(BUTTON_NEXT) == LOW);
       player.nextSong();
     }
 
     if (digitalRead(BUTTON_PAUSE) == LOW) {
-      while (digitalRead(BUTTON_PAUSE) == LOW);
       player.toggle();
     }
 
     if (digitalRead(BUTTON_PREVIOUS) == LOW) {
-      while (digitalRead(BUTTON_PREVIOUS) == LOW);
       player.previousSong();
     }
   }
@@ -98,10 +89,10 @@ public:
   }
 
   void changeSongName(const char* newSongName) {
-    songName = newSongName;
+    this->songName = newSongName;
 
     count++;
-    count = count % (sizeof(imageList)/sizeof(int));
+    count = count % (sizeof(imageList) / sizeof(int));
 
     messageReceived = true;
   }
