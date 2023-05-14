@@ -48,7 +48,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         adapter = new SongLibraryAdapter(recyclerView.getContext());
 
         MainActivity.brokerConnection = BrokerConnection.getInstance(rootView.getContext());
-        MainActivity.brokerConnection.setMessageListener(this);
+        MainActivity.brokerConnection.addMessageListener(this);
 
 
 
@@ -92,6 +92,14 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
             parsedSongs.add(song);
         });
         adapter.setSongsList(parsedSongs);
+    }
+
+
+        @Override
+        public String getSubbedTopic() {
+            String SONG_TOPIC = "songs";
+            return SONG_TOPIC;
+
     }
 
 
