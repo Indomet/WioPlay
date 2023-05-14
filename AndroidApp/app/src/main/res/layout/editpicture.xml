@@ -2,19 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
     android:layout_height="300dp"
-    android:background="@color/dark_grey"
+    android:background="@color/ButtonTint"
     android:layout_gravity="center">
 
 
     <ImageButton
         android:id="@+id/cameraImageView"
-        android:layout_width="134dp"
-        android:layout_height="150dp"
+        android:layout_width="139dp"
+        android:layout_height="144dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="2dp"
-        android:background="@drawable/istockphoto" />
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/camera1" />
 
     <ImageButton
         android:id="@+id/galleryImageview"
@@ -22,7 +21,7 @@
         android:layout_height="144dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="6dp"
-        android:background="@drawable/gallery_icon" />
+        android:background="@drawable/gallery11" />
 
     <TextView
         android:id="@+id/pictureClosebtn"
@@ -30,9 +29,9 @@
         android:layout_height="66dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="59dp"
-        android:text="@string/cancer"
+        android:text="@string/cancel"
         android:gravity="center"
-        android:background="@color/white"
+        android:background="@drawable/shapeforcancel"
         android:textSize="35sp" />
 
 
