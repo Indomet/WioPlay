@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public static BrokerConnection brokerConnection;
 
     public static User user;
-
-    public static SongList songList;
+    private SongList songList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         musicFragment = new MusicFragment();
         settingsFragment = new SettingsFragment();
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
-        changeFragment(workoutFragment);
+        changeFragment(musicFragment);
         bottomNavigation.setOnItemSelectedListener(this);
         brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
 
@@ -50,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         user = User.getInstance(userFile);
 //        user.setCalorieCredit(9000);
 
-        songList = new SongList(songFile);
+        //songList = new SongList(songFile);
+        songList = SongList.getInstance(songFile);
 
 
 

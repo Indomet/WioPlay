@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -27,6 +28,11 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private RecyclerView recyclerView;
     private TextView userBalance;
     private View rootView;
+
+    private SongLibraryAdapter adapter;
+
+
+
     private ArrayList<Song> songsList = new ArrayList<>();
     private boolean hasCreated = false;
 
@@ -39,13 +45,14 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         userBalance = rootView.findViewById(R.id.user_balance);
 
         userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+        adapter = new SongLibraryAdapter(recyclerView.getContext());
 
         MainActivity.brokerConnection = BrokerConnection.getInstance(rootView.getContext());
         MainActivity.brokerConnection.addMessageListener(this);
 
 
-        SongLibraryAdapter adapter = new SongLibraryAdapter(recyclerView.getContext());
-        adapter.setSongsList(MainActivity.songList.getSongList());
+
+        adapter.setSongsList(SongList.getInstance().getSongList());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false));
         //Linearly displays a single line of items vertically
@@ -76,13 +83,15 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
             //TODO: include numOfNotes and tempo in payload, currently null
             double tempo = node.get("tempo").asLong();
-            int numOfNotes = node.get("numOfNotes").asInt();
-            int duration = (int) Math.round(numOfNotes/tempo);
 
-            Song song = new Song(title, artist, duration, cost, imageURL, false);
+            int[] notes = mapper.convertValue(node.get("notes"), new TypeReference<int[]>(){});
+            int numOfNotes = notes.length;
+            int duration = (int) Math.round(numOfNotes/tempo) * 60/ 6; //divide by 6 since every 6 notes in the array corresponds to about 1 second.
+
+            Song song = new Song(title, artist, duration, cost, imageURL, false, notes, tempo);
             parsedSongs.add(song);
         });
-        MainActivity.songList.setList(parsedSongs);
+        adapter.setSongsList(parsedSongs);
     }
 
 
