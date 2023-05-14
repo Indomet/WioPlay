@@ -14,7 +14,7 @@ private:
   String songName;
   bool isOnMusicScene = true;
   bool messageReceived = false;
-  int count = 0;
+  int index = 0;
   const char* prevButton = "/photos/prev.bmp";
   const char* pauseButton = "/photos/pause.bmp";
   const char* nextButton = "/photos/next.bmp";
@@ -38,7 +38,7 @@ public:
       // serializeJson(songImage, buffer, capacity);
       // tft.drawXBitmap(logo_x, logo_y, songImage, logo_width, logo_width, TFT_TRANSPARENT);
 
-      drawImage<uint16_t>(imageList[count], 95, 25);
+      drawImage<uint16_t>(imageList[index], 95, 25);
       tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);
       tft.println(songName);
       drawImage<uint16_t>(prevButton, 100, 200);
@@ -47,7 +47,7 @@ public:
       isOnMusicScene = false;
     }
     if (messageReceived) {
-      drawImage<uint16_t>(imageList[count], 95, 25);
+      drawImage<uint16_t>(imageList[index], 95, 25);
       tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 2, TFT_WHITE);
       tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);
       tft.println(songName);
@@ -91,8 +91,8 @@ public:
   void changeSongName(const char* newSongName) {
     this->songName = newSongName;
 
-    count++;
-    count = count % (sizeof(imageList) / sizeof(int));
+    index++;
+    index = index % (sizeof(imageList) / sizeof(int));
 
     messageReceived = true;
   }
