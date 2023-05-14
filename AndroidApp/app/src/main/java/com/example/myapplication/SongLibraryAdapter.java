@@ -14,8 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
@@ -85,6 +88,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     }
 
     public void setSongsList(ArrayList<Song> songsList){
+        SongList.getInstance().setList(songsList);
         this.songsList = songsList;
         notifyDataSetChanged(); //Notify adapter whenever the song list has updated, so the up to date information can be shown
     }
@@ -97,7 +101,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     private void unlockSong(@NonNull Song currentSong){
         MainActivity.user.updateCredit(-currentSong.getPrice());
-        MainActivity.songList.unlockSong(currentSong);
+        SongList.getInstance().unlockSong(currentSong);
         currentSong.setUnlocked(true);
         updateData();
         Toast.makeText(context, "Unlocked " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
@@ -106,7 +110,16 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
 
     private void playSong(@NonNull Song currentSong) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+        try {
+            String notes = writer.writeValueAsString(currentSong.getNotes());
+            BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, notes, 0, null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+
         // TODO: Implement the logic to play the song
     }
 
