@@ -1,5 +1,6 @@
 package com.wioplay.parser.Utils;
 
+import com.wioplay.parser.Core.Parser;
 import com.wioplay.parser.Core.Song;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class Reader {
                     .filter(Files::isRegularFile)
                     .forEach(file -> songs.add(Reader.loadFile(file)));
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -57,7 +58,10 @@ public class Reader {
         List<String> noteChunks =  lines.subList(6, lines.size());
         String notes = String.join("\n", noteChunks);
 
-        return new Song(title, artist, imageURL, tempo, 200, notes);
+        Parser parser = new Parser();
+        String[] parsedNotes = parser.parse(notes);
+        int[] frequencies = parser.getFrequencies(parsedNotes);
+        return new Song(title, artist, imageURL, tempo, 200, frequencies);
 
     }
 
