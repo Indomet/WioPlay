@@ -16,14 +16,32 @@ public class SongList {
     private ArrayList<Song> songList;
     private File songFile;
 
-    public SongList(){}
+    private static SongList instance;
 
-    public SongList(File songFile){
+    private SongList(){} //Jackson library requires a default empty constructor
+
+    private SongList(File songFile){
         this.songFile = songFile;
         defaultList();
         loadData();
 
     }
+    public static SongList getInstance(){
+        if(instance == null){
+            instance = new SongList();
+            return instance;
+        }
+        return  instance;
+    }
+
+    public static SongList getInstance(File songFile){
+        if(instance == null){
+            instance = new SongList(songFile);
+            return instance;
+        }
+        return  instance;
+    }
+
 
     private void defaultList(){
         this.songList = new ArrayList<>();
@@ -80,5 +98,4 @@ public class SongList {
         saveSongList();
     }
 
-    //TODO: implement changing of unlock status of a specific song
 }
