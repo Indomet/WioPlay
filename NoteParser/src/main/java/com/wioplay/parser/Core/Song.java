@@ -9,7 +9,7 @@ public class Song {
     private final String imageURL;
     private final double tempo;
     private final int cost;
-    private String notes;
+    private int[] notes;
 
     public Song(String title, String artist, String imageURL, double tempo, int cost) {
         this.title = title;
@@ -17,10 +17,10 @@ public class Song {
         this.imageURL = imageURL;
         this.tempo = tempo;
         this.cost = cost;
-        this.notes = "";
+        this.notes = new int[0];
     }
 
-    public Song(String title, String artist, String imageURL, double tempo, int cost, String notes) {
+    public Song(String title, String artist, String imageURL, double tempo, int cost, int[] notes) {
         this(title, artist, imageURL, tempo, cost);
         this.notes = notes;
     }
@@ -71,8 +71,10 @@ public class Song {
                 ", imageURL='" + imageURL + '\'' +
                 ", tempo=" + tempo +
                 ", cost=" + cost +
-                ", notes='" + notes + '\'' +
                 '}';
     }
 
+    public int[] getNotes() {
+        return notes;
+    }
 }
