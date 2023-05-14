@@ -79,11 +79,11 @@ void updateChart(char json[]) {
   burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
 }
 
-void updateSongName (char json[]) {
+
+void updateSongData(char json[]) {
   deserializeJson(doc, json);
   const char* songName = doc["songName"];
-  // int song = doc ["song"];
-  updateSongName(songName);
+  scenes.changeSongName(songName);
 }
 
 // void printMessage(String message) {
@@ -126,7 +126,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   } else if (strcmp(Workout_sub, topic) == 0) {
     updateChart(charBuf);
   } else if (strcmp(Music_sub, topic) == 0) {
-    updateSongName(charBuf);
+    updateSongData(charBuf);
   }
 }
 
