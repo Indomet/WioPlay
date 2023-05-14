@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public static BrokerConnection brokerConnection;
 
     public static User user;
-
-    public static SongList songList;
+    private SongList songList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         user = User.getInstance(userFile);
 //        user.setCalorieCredit(9000);
 
-        songList = new SongList(songFile);
+        //songList = new SongList(songFile);
+        songList = SongList.getInstance(songFile);
 
 
 

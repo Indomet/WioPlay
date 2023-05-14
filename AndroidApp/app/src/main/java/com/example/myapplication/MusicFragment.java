@@ -52,7 +52,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
 
 
-        adapter.setSongsList(MainActivity.songList.getSongList());
+        adapter.setSongsList(SongList.getInstance().getSongList());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false));
         //Linearly displays a single line of items vertically
