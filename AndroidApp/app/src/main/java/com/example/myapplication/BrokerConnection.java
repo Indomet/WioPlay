@@ -25,7 +25,7 @@ public class BrokerConnection extends AppCompatActivity {
     public static  final String SONG_LIST_TOPIC = "Send/SongList";
 
     public static final String SONG_NOTES_TOPIC = "Music/Song/Notes";
-    public static final String LOCALHOST = "broker.emqx.io"; // Ip address of the local host
+    public static final String LOCALHOST = "192.168.68.80"; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
     public static final String CLIENT_ID = "Android Phone";   // the app client ID name
     public static final int QOS = 0;    // quality of service
