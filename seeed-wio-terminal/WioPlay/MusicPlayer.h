@@ -8,7 +8,6 @@ class MusicPlayer
   static const int CHUNK_SIZE = 5;
 
 private:
-  int size;
   int tempo;
   int position;
   int pauseDuration;
@@ -30,7 +29,7 @@ public:
 private:
   void bumpPosition()
   {
-    if (this->position + 5 < this->size)
+    if (this->position + 5 < this->song.size())
     {
       this->position = this->position + 5;
     }
@@ -58,7 +57,7 @@ public:
   {
 
     currentPauseChunkDuration = 0;
-    int limit = min(this->position + CHUNK_SIZE, this->size);
+    int limit = min(this->position + CHUNK_SIZE, this->song.size());
     for (int i = this->position; i < limit; i++)
     {
       play(i);
@@ -125,7 +124,6 @@ public:
   void changeSong(DynamicJsonDocument newSong)
   {
     this->position = 0;
-    this->size = newSong.size();
     this->song = newSong;
   }
 
