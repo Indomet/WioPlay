@@ -36,6 +36,10 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private ArrayList<Song> songsList = new ArrayList<>();
     private boolean hasCreated = false;
 
+    MusicFragment(){
+        BrokerConnection broker= MainActivity.brokerConnection;
+        broker.addMessageListener(this);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,8 +51,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
         adapter = new SongLibraryAdapter(recyclerView.getContext());
 
-        MainActivity.brokerConnection = BrokerConnection.getInstance(rootView.getContext());
-        MainActivity.brokerConnection.addMessageListener(this);
+
 
 
 
