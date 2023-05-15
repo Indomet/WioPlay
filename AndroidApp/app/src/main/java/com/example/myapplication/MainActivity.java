@@ -17,7 +17,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private MusicFragment musicFragment;
     private SettingsFragment settingsFragment;
 
-    //TODO THIS IS TO BE REFACTORED ITS BAD PRACTICE make into singleton pattern
+    //This field is set to the singleton getinstance method then the same refrence is used
+    //elsewher ein other classes
     public static BrokerConnection brokerConnection;
 
     public static User user;
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
         changeFragment(musicFragment);
         bottomNavigation.setOnItemSelectedListener(this);
-
 
         String userPath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
         File userFile = new File(userPath);
@@ -89,10 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .addToBackStack(null)
                 .commit();
         return true;
-    }
-
-    public void publishChangedData(){
-
     }
 
 

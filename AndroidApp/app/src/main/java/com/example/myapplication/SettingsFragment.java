@@ -55,23 +55,12 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-        widgetInit();
 
         String userPath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
         File userFile = new File(userPath);
         user = User.getInstance(userFile);
 
-
-
-
-
-
-
-
-        ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
-        sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
-        chengeProfile.setOnClickListener(v -> addPictureToTheBackground());
-
+        widgetInit();
 
         return rootView;
     }
@@ -97,6 +86,10 @@ public class SettingsFragment extends Fragment {
         usernameTextView.setText(user.getUsername());
         saveButton.setOnClickListener(view -> updateUserState());
         editButton.setOnClickListener(v -> editUserNamePopup());
+        ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
+        sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
+        chengeProfile.setOnClickListener(v -> addPictureToTheBackground());
+
         spinnerInit();
     }
 
@@ -164,7 +157,7 @@ public class SettingsFragment extends Fragment {
 
         try {
         MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
-         ,Util.objectToJSON(MainActivity.user)
+         ,Util.objectToJSON(user)
          ,MainActivity.brokerConnection.QOS, null);
          } catch (IllegalAccessException e) {
          e.printStackTrace();
@@ -190,11 +183,11 @@ public class SettingsFragment extends Fragment {
             checkTheRange(0,150,age);
             checkTheRange(0,100,monthylWorkoutsCount);
 
-            MainActivity.user.setAge(age);
-            MainActivity.user.setHeight(height);
-            MainActivity.user.setWeight(weight);
-            MainActivity.user.setMonthlyWorkouts(monthylWorkoutsCount);
-            MainActivity.user.setSex(sexSpinner.getSelectedItem().toString());
+            user.setAge(age);
+            user.setHeight(height);
+            user.setWeight(weight);
+            user.setMonthlyWorkouts(monthylWorkoutsCount);
+            user.setSex(sexSpinner.getSelectedItem().toString());
     }
 
             // tobe thrown if any of the Editfield is not filled

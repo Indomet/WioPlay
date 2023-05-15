@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -14,7 +16,6 @@ public class User {
     private float weight;
     private String sex;
     private int calorieCredit;
-    private int lifeTimeCalories;
     private File userFile;
     private static User user=null;
     private int monthlyWorkouts;
@@ -37,7 +38,6 @@ public class User {
         this.weight = 0;
         this.username = "username";
         this.calorieCredit = 727; //A new user starts with 0 CalorieCurrency
-        this.lifeTimeCalories = 0;
         monthlyWorkouts=30;//30 is the default number, so a workout per day per month
     }
 
@@ -72,10 +72,6 @@ public class User {
         saveUserData();
     }
 
-    public String getSex() {
-        return sex;
-    }
-
     public void updateCredit(float calorie) {
         //calorie can be positive when gaining, and negative when spending.
         int diff = Math.round(calorie);
@@ -97,34 +93,20 @@ public class User {
         return age + "," + height + "," + weight;
     }
 
-    public int getLifeTimeCalories() {
-        return lifeTimeCalories;
-    }
-
-    public void setLifeTimeCalories(int lifeTimeCalories) {
-        this.lifeTimeCalories = lifeTimeCalories;
-        saveUserData();
-    }
-
     private void load() {
 
         try {
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(this.userFile);
-            this.setUsername(node.get("username").asText());
-            this.setAge(node.get("age").asInt());
-            this.setHeight(node.get("height").asLong());
-            this.setSex(node.get("sex").asText());
-            this.setWeight(node.get("weight").asLong());
-            this.setCalorieCredit(node.get("calorieCredit").asInt());
-            this.setLifeTimeCalories(node.get("lifeTimeCalories").asInt());
-            this.setMonthlyWorkouts(node.get("monthlyWorkouts").asInt());
+            Util.loadFields(this,node,mapper);
         } catch (IOException e) {
 
             saveUserData();
             load();
 
+        } catch (IllegalAccessException e) {
+            Log.e("IllegalAccessException",e.getMessage());
         }
 
     }
@@ -140,22 +122,10 @@ public class User {
         }
     }
 
-    public void updateLifeTimeCalories(int payload){
-        this.lifeTimeCalories += payload;
-        saveUserData();
-    }
-
     public String getUsername() {
         return username;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public float getWeight() {
-        return weight;
-    }
 
     public void setMonthlyWorkouts(int monthylWorkoutsCount) {
         this.monthlyWorkouts=monthylWorkoutsCount;
