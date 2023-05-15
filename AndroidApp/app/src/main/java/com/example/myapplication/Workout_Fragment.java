@@ -115,6 +115,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         super.onSaveInstanceState(outState);
     }
 
+    Workout_Fragment(){
+        BrokerConnection broker= MainActivity.brokerConnection;
+        broker.addMessageListener(this);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
