@@ -78,7 +78,7 @@ public class NewWorkoutFragment extends Fragment {
 
         String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json"; //data/user/0/myapplication/files
         File managerFile = new File(managerPath);
-        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
+        workoutManager = WorkoutManager.getInstance(managerFile);
 
         targetCaloriesTextView.setText(Integer.toString(workoutManager.getCalorieGoal()));
         ImageButton incrementButton = rootView.findViewById(R.id.plus_calories_btn);

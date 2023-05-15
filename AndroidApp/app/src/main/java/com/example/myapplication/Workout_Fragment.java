@@ -131,7 +131,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json";
         File managerFile = new File(managerPath);
 
-        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
+        workoutManager = WorkoutManager.getInstance(managerFile);
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.addMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
@@ -281,7 +281,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             @Override
             public void run() {
 
-                String time = workoutManager.calculateTimeElapsed();
+                String time = workoutManager.formatTime(workoutManager.getSecondsElapsed());
                 timeElapsed.setText(time);
 
                 if (workoutManager.getWorkoutHasStarted()) {
