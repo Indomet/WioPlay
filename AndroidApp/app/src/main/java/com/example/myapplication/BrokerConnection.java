@@ -10,6 +10,9 @@ import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import info.mqtt.android.service.Ack;
 
 public class BrokerConnection extends AppCompatActivity {
@@ -22,7 +25,7 @@ public class BrokerConnection extends AppCompatActivity {
     public static  final String SONG_LIST_TOPIC = "Send/SongList";
 
     public static final String SONG_NOTES_TOPIC = "Music/Song/Notes";
-    public static final String LOCALHOST = "broker.hivemq.com"; // Ip address of the local host
+    public static final String LOCALHOST = "192.168.134.236"; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
     public static final String CLIENT_ID = "Android Phone";   // the app client ID name
     public static final int QOS = 0;    // quality of service
@@ -31,23 +34,25 @@ public class BrokerConnection extends AppCompatActivity {
     private MqttClient mqttClient;
     private Context context;
 
-    private static BrokerConnection brokerConnection= null; // this is for singelton for this class.
+    private static BrokerConnection brokerConnection; // this is for singelton for this class.
 
     //Alternatively this could be an arraylist to notify many subscribers to the message listenrs
-    private MessageListener messageListener;
+    //private MessageListener messageListener;
+    private List<MessageListener> observers;
     //This interface is a contract between this class to notify other classes that implement it that a message has arrived
     public interface MessageListener{
-        public void onMessageArrived(String payload);
+        public void onMessageArrived(String payload) throws InterruptedException;
+        public String getSubbedTopic();
     }
 
     //attach a class to listen to incoming messages with this setter
-    public void setMessageListener(MessageListener messageListener){
-        this.messageListener=messageListener;
+    public void addMessageListener(MessageListener messageListener){
+        observers.add(messageListener);
     }
-
     //we automatically try to connect the broke in the constructor by calling the connectToMqttBroker method
     private BrokerConnection(Context context){
         this.context = context;
+        this.observers = new ArrayList<>();
         mqttClient = new MqttClient(context, MQTT_SERVER, CLIENT_ID, Ack.AUTO_ACK);
         connectToMqttBroker();
     }
@@ -70,9 +75,15 @@ public class BrokerConnection extends AppCompatActivity {
                     isConnected = true;
                     final String successfulConnection = "Connected to MQTT broker";
                     Toast.makeText(context, successfulConnection, Toast.LENGTH_LONG).show();
+                    for(MessageListener listener : observers){
+                        String topic = listener.getSubbedTopic();
+                        mqttClient.subscribe(topic,0, null);
 
-                    mqttClient.subscribe(SUB_TOPIC,0, null);
-                    mqttClient.subscribe(SONG_LIST_TOPIC,0, null);
+                    }
+                    //the for loop subscribes to the below topics pretty much as both fragments implement the observer
+                    //mqttClient.subscribe(SUB_TOPIC,0, null);
+                    //mqttClient.subscribe(SONG_LIST_TOPIC,0, null);
+                    //mqttClient.subscribe(SONG_LIST_TOPIC,0, null);
 
                 }
 
@@ -102,22 +113,24 @@ public class BrokerConnection extends AppCompatActivity {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     //check if the topic of the message is the subscribed topic
-                    if(isConnected && topic.equals("songs")){ //TODO: Make separate messageListeners for each fragment
+                    if(isConnected){ //TODO: Make separate messageListeners for each fragment
                         Toast.makeText(context, "The message is "+ message.toString(), Toast.LENGTH_SHORT).show();
                         String messageMQTT = message.toString();
                         Log.i(CLIENT_ID, "Message" + messageMQTT);  // prints in the console
                         //this will execute the method in all classes that implement this interface and thereby forward the message to allow
                         //communicate between fragements and the broker
-                        if(messageListener!=null){
-                            messageListener.onMessageArrived(messageMQTT);
-                        }
+                            for(MessageListener listener : observers) {
+                                if (topic.equals(listener.getSubbedTopic())) {
+                                    listener.onMessageArrived(messageMQTT);
+                                }
+
+                            }
 
                     }else {
                         // prints in the console
                         Log.i(CLIENT_ID, "[MQTT] Topic: " + topic + " | Message: " + message.toString());
                     }
                 }
-
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken token) {
                     Log.d(CLIENT_ID, "Message delivered");

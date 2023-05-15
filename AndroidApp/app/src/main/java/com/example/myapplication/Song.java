@@ -3,6 +3,9 @@ package com.example.myapplication;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Song {
     private String title;
@@ -103,4 +106,16 @@ public class Song {
     {
         return duration = (int) Math.round(numOfNotes/tempo) * 60/ 6; //divide by 6 since every 6 notes in the array corresponds to about 1 second.
     }
+
+    public LinkedList<int[]> getNoteQueue() {
+
+        LinkedList<int[]> chunks = new LinkedList<>();
+        int[][] songNotes =  Util.chunkify(this.notes, 40);
+        for (int[] chunk:songNotes) {
+            chunks.add(chunk);
+        }
+        return chunks;
+
+    }
+
 }
