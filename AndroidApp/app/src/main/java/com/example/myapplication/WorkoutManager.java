@@ -1,44 +1,27 @@
 
 package com.example.myapplication;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.type.MapType;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 //This class manages the workout. Updates the target goal, the calories they burn and keeps track of the time
 public class WorkoutManager {
 
-    //final variable that declares how much the target calories the user
-    private final int CHANGE_TARGET_CALORIES_AMOUNT=20;
     private boolean workoutHasStarted;
     private int caloriesBurnt;
     private int calorieGoal;
     private int secondsElapsed;
     private static WorkoutManager singleton;
-    //this is to communciate with the terminal such that it knows the workout type
+    //this is to communicate with the terminal such that it knows the workout type
     private int workoutTypeTerminalInt;
     private int durationInSeconds;
 
@@ -50,7 +33,7 @@ public class WorkoutManager {
     private int totalWorkoutsCount;
     //This enum is used for the arduino calorie calculations
     private WorkoutType type;
-    private File managerFile;
+    private final File managerFile;
 
 
     private WorkoutManager(File managerFile) {
@@ -65,7 +48,6 @@ public class WorkoutManager {
 
     private void load() throws IllegalAccessException{
         try {
-
             //reads the json node and saves all attributes according to the data in the file
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(this.managerFile);
@@ -83,8 +65,7 @@ public class WorkoutManager {
             //the data hash map is a special case that needs to be treated differently
             final String dataHashMapPointerName = "workoutDataHashMap";
             String jsonInput = node.get(dataHashMapPointerName).toString();
-            TypeReference<HashMap<String, FinishedWorkoutData>> typeRef
-                    = new TypeReference<HashMap<String, FinishedWorkoutData>>() {};
+            TypeReference<HashMap<String, FinishedWorkoutData>> typeRef = new TypeReference<>() {};
             HashMap<String, FinishedWorkoutData> map = mapper.readValue(jsonInput, typeRef);
             workoutDataHashMap=map;
         } catch (IOException e) {
@@ -175,7 +156,9 @@ public class WorkoutManager {
         return caloriesBurnt >= calorieGoal;
     }
     public int getCHANGE_TARGET_CALORIES_AMOUNT(){
-        return  CHANGE_TARGET_CALORIES_AMOUNT;
+        //final variable that declares how much the target calories the user
+        int CHANGE_TARGET_CALORIES_AMOUNT = 20;
+        return CHANGE_TARGET_CALORIES_AMOUNT;
     }
 
     public int getCaloriesBurnt(){
@@ -206,8 +189,11 @@ public class WorkoutManager {
     // Calculates the elapsed time in hours, minutes, and seconds
     // returns a formatted string of the elapsed time in the format HH:MM:SS
     public String formatTime(int timeInSeconds){
+        //3600 is how many seconds in an hour
         int hours = timeInSeconds / 3600;
+        //60 is how many seconds in a minute
         int minutes = (timeInSeconds % 3600) / 60;
+        //% 60 to limit the seconds when being formatted
         int seconds = timeInSeconds % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
@@ -225,8 +211,8 @@ public class WorkoutManager {
     }
 
     public void addWorkoutData(FinishedWorkoutData workout,CalendarDay date){
-        if(workoutDataHashMap.containsKey(date)){
-            FinishedWorkoutData data = workoutDataHashMap.get(date);
+        if(workoutDataHashMap.containsKey(date.toString())){
+            FinishedWorkoutData data = workoutDataHashMap.get(date.toString());
             //add the previous calories and time
             data.setGoalCalories(workout.getGoalCalories()+data.getGoalCalories());
             data.setCaloriesBurntWithExercise(workout.getCaloriesBurntWithExercise()+data.getCaloriesBurntWithExercise());
