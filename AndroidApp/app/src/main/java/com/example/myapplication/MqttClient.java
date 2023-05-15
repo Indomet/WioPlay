@@ -14,14 +14,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 // we use this for api 31 and above, since above is not updated yet
 import info.mqtt.android.service.Ack;
 import info.mqtt.android.service.MqttAndroidClient;
-/*
-    This class creates the Mqtt client and contains the most important (basic) methods.
-    Feel free to create a subscribeToAll and a unsubscribeToAll methods.
 
-    Extra material:
-    https://www.eclipse.org/paho/files/android-javadoc/index.html
-    https://www.hivemq.com/blog/mqtt-client-library-enyclopedia-paho-android-service/
- */
 public class MqttClient {
 
     private MqttAndroidClient mMqttAndroidClient;
@@ -50,26 +43,10 @@ public class MqttClient {
             e.printStackTrace();
         }
     }
-    // disconnect from mqtt broker
-    public void disconnect(IMqttActionListener disconnectionCallback) {
-        try {
-            mMqttAndroidClient.disconnect(null, disconnectionCallback);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     // receive message
     public void subscribe(String topic, int qos, IMqttActionListener subscriptionCallback) {
         try {
             mMqttAndroidClient.subscribe(topic, qos, null, subscriptionCallback);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    // unsubscribe from a topic
-    public void unsubscribe(String topic, IMqttActionListener unsubscriptionCallback) {
-        try {
-            mMqttAndroidClient.unsubscribe(topic, null, unsubscriptionCallback);
         } catch (Exception e) {
             e.printStackTrace();
         }
