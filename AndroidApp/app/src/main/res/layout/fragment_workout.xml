@@ -390,22 +390,11 @@
             android:textColor="#8C85CE"
 
             android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/stopwatch_icon"
             app:layout_constraintEnd_toEndOf="@+id/stopwatch_whitebix"
             app:layout_constraintStart_toEndOf="@+id/stopwatch_icon"
             app:layout_constraintTop_toTopOf="@+id/stopwatch_icon" />
 
-        <Button
-            android:id="@+id/stop_or_start_stopwatch_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/pause_or_play_button"
-            android:minHeight="30dp"
-            android:text="Pause"
-            android:textAllCaps="false"
-            app:layout_constraintEnd_toEndOf="@+id/stopwatch_textview"
-            app:layout_constraintStart_toStartOf="@+id/stopwatch_textview"
-            app:layout_constraintTop_toBottomOf="@+id/stopwatch_textview" />
 
         <TextView
             android:id="@+id/time_left_label"
