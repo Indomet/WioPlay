@@ -107,4 +107,75 @@ public class Util {
 
         return -1;
     }
+
+    public static int[][] splitIntegerArrayInSegments(int[] allSongNotes, int targetN, int maxCharBoundary)
+    {
+        int[][] segments = new int[targetN][];
+        int subArrLength = 0;
+
+        try
+        {
+            subArrLength = (int)Math.ceil((double)allSongNotes.length / targetN);
+
+            if (subArrLength > maxCharBoundary)
+            {
+                targetN = findMaxN(maxCharBoundary, allSongNotes.length);
+                subArrLength = maxCharBoundary;
+            }
+
+            segments = new int[targetN][];
+        }
+        catch (NegativeArraySizeException exception)
+        {
+            System.out.println(exception.getMessage());
+        }
+
+        int x = 0; // current element in sub-arr
+        int y = 0; // current sub-arr
+        int t = 0; // total
+        segments[0] = new int[subArrLength];
+        while (y < targetN)
+        {
+            segments[y][x] = allSongNotes[t];
+
+
+            if (++x == subArrLength)
+            {
+                x = 0;
+                y++;
+
+                if (y == targetN) // Remove this break later
+                    break;
+
+                segments[y] = new int[subArrLength]; // Note: for the last iteration, subtract the space of the array
+            }
+
+            // x++;
+            t++;
+        }
+
+        return segments;
+    }
+
+
+    public static int[][] chunkify(int[] array, int chunkSize) {
+        int numOfChunks = (int) Math.ceil((double) array.length / chunkSize);
+        int[][] result = new int[numOfChunks][chunkSize];
+
+        int arrayIndex = 0;
+        for (int i = 0; i < numOfChunks; i++) {
+            for (int j = 0; j < chunkSize; j++) {
+                if (arrayIndex < array.length) {
+                    result[i][j] = array[arrayIndex];
+                    arrayIndex++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
 }
