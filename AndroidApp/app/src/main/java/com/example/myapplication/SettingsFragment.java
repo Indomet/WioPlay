@@ -13,7 +13,6 @@ import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
-import android.sax.RootElement;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Timer;
 
 public class SettingsFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -58,6 +55,36 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+        widgetInit();
+
+        String userPath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+        File userFile = new File(userPath);
+        user = User.getInstance(userFile);
+
+
+
+
+
+
+
+
+        ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
+        sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
+        chengeProfile.setOnClickListener(v -> addPictureToTheBackground());
+
+
+        return rootView;
+    }
+
+    public void updateUserState(){
+        try {
+            updateUserInfo();
+        } catch (Exception e) {
+            String message= e.getMessage();
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void widgetInit(){
         saveButton = rootView.findViewById(R.id.Save_Button);
         weightEditText = rootView.findViewById(R.id.kg_edittext);
         heightEditText = rootView.findViewById(R.id.height_edittext);
@@ -67,42 +94,20 @@ public class SettingsFragment extends Fragment {
         usernameTextView = rootView.findViewById(R.id.settings_username_textview);
         chengeProfile=rootView.findViewById(R.id.chengeProfile);
         monthlyWorkouts = rootView.findViewById(R.id.monthly_workouts_edittxt);
-        String userPath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-        File userFile = new File(userPath);
-
-        user = User.getInstance(userFile);
         usernameTextView.setText(user.getUsername());
-        /*
-        weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
-        heightEditText.setText(Integer.toString(MainActivity.user.getAge()));
-        ageEditText.setText(Integer.toString(MainActivity.user.getAge()));
-        */
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            String filePath = rootView.getContext().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-            File userFile = new File(filePath);
-            @Override
-            public void onClick(View v) {
-                try {
-                    updateUserInfo();
-                } catch (Exception e) {
-                    String message= e.getMessage();
-                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
+        saveButton.setOnClickListener(view -> updateUserState());
         editButton.setOnClickListener(v -> editUserNamePopup());
+        spinnerInit();
+    }
 
-                //TODO make sex take enum instead of string
-                sexSpinner = rootView.findViewById(R.id.sex_spinner);
+    public void spinnerInit(){
+        sexSpinner = rootView.findViewById(R.id.sex_spinner);
         String[] sex = {"Select", "Female", "Male"};
         ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(
                 this.getContext(),
                 android.R.layout.simple_selectable_list_item,
                 sex
         );
-
         sexSpinner.setAdapter(sexAdapter);
         sexSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -117,17 +122,8 @@ public class SettingsFragment extends Fragment {
                 Toast.makeText(rootView.getContext(), "Sex cannot be blank", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
-        ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
-        sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
-        chengeProfile.setOnClickListener(v -> addPictureToTheBackground());
-
-
-        return rootView;
     }
+
     public void editUserNamePopup(){
         Dialog dialog= new Dialog(getActivity());
         dialog.setContentView(R.layout.popupeditusername);
@@ -166,7 +162,7 @@ public class SettingsFragment extends Fragment {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
 
-        try {//todo use singleton
+        try {
         MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
          ,Util.objectToJSON(MainActivity.user)
          ,MainActivity.brokerConnection.QOS, null);
@@ -174,8 +170,6 @@ public class SettingsFragment extends Fragment {
          e.printStackTrace();
         }
     }
-//TODO: READ ONLY??? SO READ FIRST THEN WRITE TO /data/user/0/com.example.myapplication/files/user.json
-
     private void updateUserInfo() throws Exception {
 
 
