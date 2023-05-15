@@ -13,13 +13,11 @@ const char *ssid = SSID;         // WiFi Name
 const char *password = PASSWORD; // WiFi Password
 const char *server = my_IPv4;    // MQTT Broker URL
 
-const char* Music_sub = "Music/Data/Change";
-const char* TOPIC_sub = "User/Data/Change";
-const char* Workout_sub = "User/Workout/Start";
-const char* Music_notes_sub = "Music/Song/Notes";
-
-const char* TOPIC_pub_connection = "Send/Calorie/Burn/Data";
-const char* TOPIC_pub_songChunk = "Music/Song/Chunk";
+const char *Music_sub = "Music/Data/Change";
+const char *TOPIC_sub = "User/Data/Change";
+const char *Workout_sub = "User/Workout/Start";
+const char *TOPIC_pub_connection = "Send/Calorie/Burn/Data";
+const char *Music_notes_sub = "Music/Song/Notes";
 
 WiFiClient wioClient;
 PubSubClient client(wioClient);
@@ -96,9 +94,8 @@ void updateSongName(char json[])
 void updateSong(char json[])
 {
 
-  // Serial.println("user requested to change song");
+  Serial.println("user requested to change song");
 
-  /*
   DynamicJsonDocument doc(JSON_ARRAY_SIZE(2300));
   DeserializationError error = deserializeJson(doc, json);
 
@@ -109,21 +106,8 @@ void updateSong(char json[])
     return;
   }
 
-  JsonArray jsonArray PROGMEM = doc.as<JsonArray>();
-  int newSong[jsonArray.size()] PROGMEM;
-  for (int i = 0; i < jsonArray.size(); i++) {
-    newSong[i] = jsonArray[i];
-  }
-  */
-
-  deserializeJson(doc, json);
-  int* newSong = doc["newSong"];
-  player.changeSong(newSong, newSong.length);
-
-  /*
   doc.shrinkToFit();
   player.changeSong(doc);
-  */
 }
 
 // void printMessage(String message) {
