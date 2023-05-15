@@ -4,11 +4,13 @@ import static android.app.PendingIntent.getActivity;
 
 import android.app.Activity;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 
 public class Util {
@@ -45,6 +47,21 @@ public class Util {
         int hours = timeInSeconds / 3600;
         int minutes = (timeInSeconds % 3600) / 60;
         return String.format("%02d:%02d", hours, minutes);
+    }
+
+    public static void loadFields(Object object,JsonNode node, ObjectMapper mapper) throws IllegalAccessException {
+        for(Field field : object.getClass().getDeclaredFields()){
+            String name = field.getName();
+            field.setAccessible(true);
+            JsonNode jsonValue = node.get(name);
+            if (jsonValue != null) {
+                //set the value of the field to be the json saved value
+                Object value = mapper.convertValue(jsonValue, field.getType());
+                field.set(object, value);
+            }
+            field.setAccessible(false);
+
+        }
     }
 
 }

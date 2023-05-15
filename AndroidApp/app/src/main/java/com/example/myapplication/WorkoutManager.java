@@ -50,17 +50,7 @@ public class WorkoutManager {
             //reads the json node and saves all attributes according to the data in the file
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(this.managerFile);
-            //iterate over each field in this class
-            for(Field field : this.getClass().getDeclaredFields()){
-                String name = field.getName();
-                field.setAccessible(true);
-                JsonNode jsonValue = node.get(name);
-                if (jsonValue != null) {
-                    //set the value of the field to be the json saved value
-                    Object value = mapper.convertValue(jsonValue, field.getType());
-                    field.set(this, value);
-                }
-            }
+            Util.loadFields(this,node,mapper);
             //the data hash map is a special case that needs to be treated differently
             final String dataHashMapPointerName = "workoutDataHashMap";
             String jsonInput = node.get(dataHashMapPointerName).toString();
