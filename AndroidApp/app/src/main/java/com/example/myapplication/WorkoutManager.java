@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -99,9 +98,9 @@ public class WorkoutManager {
         durationInSeconds=0;
         workoutsMap = new HashMap<>();
         workoutDataHashMap  = new HashMap<>();
-        workoutsMap.put("Walking",0);
-        workoutsMap.put("Running",1);
-        workoutsMap.put("Hiking",2);
+        workoutsMap.put(WorkoutType.WALKING.getName(), 0);
+        workoutsMap.put(WorkoutType.RUNNING.getName(),1);
+        workoutsMap.put(WorkoutType.HIKING.getName(),2);
     }
 
 
@@ -183,20 +182,12 @@ public class WorkoutManager {
         // estimate time needed to burn remaining calories based on current rate of calorie burn
         int secondsLeftToAchieveGoal = (int) (caloriesLeftToBurn / caloriesBurntPerSecond);
         // convert time to hours, minutes, seconds
-        return formatTime(secondsLeftToAchieveGoal);
+        return Util.formatHoursMinsSecs(secondsLeftToAchieveGoal);
 
     }
     // Calculates the elapsed time in hours, minutes, and seconds
     // returns a formatted string of the elapsed time in the format HH:MM:SS
-    public String formatTime(int timeInSeconds){
-        //3600 is how many seconds in an hour
-        int hours = timeInSeconds / 3600;
-        //60 is how many seconds in a minute
-        int minutes = (timeInSeconds % 3600) / 60;
-        //% 60 to limit the seconds when being formatted
-        int seconds = timeInSeconds % 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-    }
+
     public void setCaloriesBurnt(int caloriesBurnt){
         this.caloriesBurnt=caloriesBurnt;
         saveManagerData();
