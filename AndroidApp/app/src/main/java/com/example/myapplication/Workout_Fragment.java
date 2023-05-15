@@ -1,54 +1,35 @@
 package com.example.myapplication;
 
 import android.app.Dialog;
-
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Handler;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-
 import java.io.File;
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import nl.dionsegijn.konfetti.core.PartyFactory;
 import nl.dionsegijn.konfetti.core.emitter.Emitter;
 import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
 import nl.dionsegijn.konfetti.core.models.Shape;
 import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
-
-
-import java.util.Date;
 
 
 public class Workout_Fragment extends Fragment implements BrokerConnection.MessageListener{
@@ -62,7 +43,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private ProgressBar monthlyWorkoutsProgressbar;
     private ProgressBar caloriesProgressbar;
     private TextView targetWorkoutsThisMonth;
-    private TextView currentWorkoutsThisMonth;
 
     private TextView caloriesBurnt;
     private Button stopOrPlayStopwatch;
@@ -70,11 +50,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private TextView timeLeft;private NewWorkoutFragment newWorkoutFragment;
 
     private boolean stopwatchRunning = false;
-    WorkoutManager workoutManager;
+    private WorkoutManager workoutManager;
     private User user;
 
     private View rootView;
-    MaterialCalendarView calendarView;
+    private MaterialCalendarView calendarView;
 
 
     @Override
@@ -87,25 +67,23 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     @Override
     public void onResume() {
         super.onResume();
-        // Reconnect to any necessary services or resources here
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // Release any resources that are no longer needed here
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Release all resources here
     }
 
 
     @Override
     public void onPause() {
         super.onPause();
+        //pause the stopwatch
         Handler handler = new Handler();
         handler.removeCallbacksAndMessages(null);
     }
@@ -128,10 +106,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
 
 
-        String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json";
-        File managerFile = new File(managerPath);
+        workoutManager = Util.loadManagerFromFile(getActivity());
 
-        workoutManager = WorkoutManager.getInstance(managerFile);
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.addMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
@@ -155,7 +131,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         monthlyWorkoutsProgressbar =  rootView.findViewById(R.id.monthly_progressbar);
         caloriesProgressbar =  rootView.findViewById(R.id.calories_burnt_progressbar);
         targetWorkoutsThisMonth =  rootView.findViewById(R.id.max_workouts_this_month);
-        currentWorkoutsThisMonth =  rootView.findViewById(R.id.current_workouts_this_month);
         caloriesBurnt = rootView.findViewById(R.id.calories_burnt_textview);
         stopOrPlayStopwatch = rootView.findViewById(R.id.stop_or_start_stopwatch_btn);
         timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
@@ -211,14 +186,12 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         else if(date.isBefore(CalendarDay.today())) {
             if(data==null || date.isAfter(CalendarDay.today())){
                 //just showing that the progress is 0 since no workouts done that day
-                showPastWorkoutStats("00:00",0,100);
+                showPastWorkoutStats("00:00:00",0,100);
             }
             else{
                 //there is data in the past now setting the proper views to show it
                 int totalSeconds = data.getDurationInSeconds();
-                int hours = totalSeconds / 3600;
-                int minutes = (totalSeconds % 3600) / 60;
-                String timeString = String.format("%02d:%02d", hours, minutes);
+                String timeString =Util.formatHoursMinsSecs(totalSeconds);
                 showPastWorkoutStats(timeString,data.getCaloriesBurntWithExercise(), data.getGoalCalories());
             }
         }
@@ -281,7 +254,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             @Override
             public void run() {
 
-                String time = workoutManager.formatTime(workoutManager.getSecondsElapsed());
+                String time = Util.formatHoursMinsSecs(workoutManager.getSecondsElapsed());
                 timeElapsed.setText(time);
 
                 if (workoutManager.getWorkoutHasStarted()) {

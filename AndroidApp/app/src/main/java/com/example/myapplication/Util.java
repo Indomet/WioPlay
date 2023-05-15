@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class Util {
 
-    public static final String WORKOUT_MANAGER_PATH = "/workoutManager.json";
     public static String objectToJSON(Object object) throws IllegalArgumentException, IllegalAccessException {
         ObjectWriter jsonWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;
@@ -26,9 +25,26 @@ public class Util {
     }
 
     public static WorkoutManager loadManagerFromFile(Activity activity){
-        String managerPath = activity.getFilesDir().getPath() + Util.WORKOUT_MANAGER_PATH;
+        final String WORKOUT_MANAGER_PATH = "/workoutManager.json";
+        String managerPath = activity.getFilesDir().getPath() + WORKOUT_MANAGER_PATH;
         File managerFile = new File(managerPath);
         return WorkoutManager.getInstance(managerFile);
+    }
+
+    public static String formatHoursMinsSecs(int timeInSeconds){
+        //3600 is how many seconds in an hour
+        int hours = timeInSeconds / 3600;
+        //60 is how many seconds in a minute
+        int minutes = (timeInSeconds % 3600) / 60;
+        //% 60 to limit the seconds when being formatted
+        int seconds = timeInSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public static String formatHoursMins(int timeInSeconds){
+        int hours = timeInSeconds / 3600;
+        int minutes = (timeInSeconds % 3600) / 60;
+        return String.format("%02d:%02d", hours, minutes);
     }
 
 }
