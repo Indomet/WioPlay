@@ -13,7 +13,6 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     private BottomNavigationView bottomNavigation;
     private Workout_Fragment workoutFragment;
-    private SearchFragment searchFragment;
     private MusicFragment musicFragment;
     private SettingsFragment settingsFragment;
 
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         //initializing the variables
         bottomNavigation = findViewById(R.id.bottomNavigationView);
         workoutFragment = new Workout_Fragment();
-        searchFragment = new SearchFragment();
         musicFragment = new MusicFragment();
         settingsFragment = new SettingsFragment();
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
@@ -66,10 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             case R.id.workout:
 
                 return changeFragment(workoutFragment);
-
-            case R.id.search:
-                //brokerConnection.getMqttClient().publish("calories","only top gs can see this message",brokerConnection.QOS,null);
-                return changeFragment(searchFragment);
 
             case R.id.settings:
                 return changeFragment(settingsFragment);

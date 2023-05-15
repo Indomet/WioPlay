@@ -132,7 +132,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesProgressbar =  rootView.findViewById(R.id.calories_burnt_progressbar);
         targetWorkoutsThisMonth =  rootView.findViewById(R.id.max_workouts_this_month);
         caloriesBurnt = rootView.findViewById(R.id.calories_burnt_textview);
-        stopOrPlayStopwatch = rootView.findViewById(R.id.stop_or_start_stopwatch_btn);
         timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
         timeLeft = rootView.findViewById(R.id.time_left_textview);
         addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
@@ -339,7 +338,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         rootView.findViewById(R.id.stopwatch_icon).setVisibility(statsVisibility);
         rootView.findViewById(R.id.stopwatch_textview).setVisibility(statsVisibility);
         rootView.findViewById(R.id.stopwatch_whitebix).setVisibility(statsVisibility);
-        rootView.findViewById(R.id.stop_or_start_stopwatch_btn).setVisibility(statsVisibility);
         rootView.findViewById(R.id.time_left_label).setVisibility(statsVisibility);
         rootView.findViewById(R.id.time_left_whitebox).setVisibility(statsVisibility);
         rootView.findViewById(R.id.time_left_textview).setVisibility(statsVisibility);

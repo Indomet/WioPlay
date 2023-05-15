@@ -13,10 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="red_calorie_progress_bar">
-        <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/calories_progress_bar</item>
-    </style>
+  
     <style name="new_progress_bar">
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/new_cal_progress_bar</item>
