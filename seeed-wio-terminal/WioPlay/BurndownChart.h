@@ -1,9 +1,9 @@
-// #include "Arduino.h"
+#include "Arduino.h"
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(400, 260, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
-BurndownChartFrontEnd burndownChartFrontEnd(20);             // (float graphUIXStartValue)
+BurndownChartBackEnd burndownChartBackEnd(200000, 3, 0);      // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartFrontEnd burndownChartFrontEnd(20);           // (float graphUIXStartValue)
 
 #include <iostream>
 #include <string>
@@ -35,8 +35,8 @@ public:
     return burndownChartBackEnd.isExercising();
   }
 
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float songPauseChunkDuration) {
-    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue, songPauseChunkDuration);
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float updateDelay) {
+    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
   }
 
   // Constrain dynamic variables in front-end and back-end in real-time
