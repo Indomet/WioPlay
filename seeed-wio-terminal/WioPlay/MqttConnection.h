@@ -85,6 +85,7 @@ void updateChart(char json[])
 }
 
 void updateSongData(char json[]) {
+  DynamicJsonDocument doc(1024);
   deserializeJson(doc, json);
   const char* songName = doc["title"];
   scenes.changeSongName(songName);

@@ -47,7 +47,7 @@ public:
       drawImage<uint16_t>(imageList[index], 95, 25); //change the image and reprint
       tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 2, TFT_WHITE); // delete the old music name on the display
       tft.setCursor((320 - tft.textWidth(songName)) / 2, 165); // location to display music name on the screen
-      tft.println(songName);  display the new music name on the screen
+      tft.println(songName);  // display the new music name on the screen
       messageReceived = false;
     }
   }
