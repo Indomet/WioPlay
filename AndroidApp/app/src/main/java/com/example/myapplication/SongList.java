@@ -84,14 +84,32 @@ public class SongList {
     public void unlockSong(Song song) {
         this.songList.get(this.songList.indexOf(song)).setUnlocked(true);
         saveSongList();
+        addUnlockedSong(song);
     }
 
     private void addUnlockedSong(Song song)
     {
-        /*
-        for (int i = 0; i < unlockedSongs.size(); i++) {
+        int insertIdx = sortSongsByTitle(song);
+        unlockedSongs.add(insertIdx, song);
+    }
 
+    // Returns the index to insert the song at
+    private int sortSongsByTitle(Song songToAdd)
+    {
+        String titleToAdd = songToAdd.getTitle();
+
+        for (int i = unlockedSongs.size() - 1; i >= 0; i--)
+        {
+            Song currentSong = unlockedSongs.get(i);
+            String currentTitle = unlockedSongs.get(unlockedSongs.indexOf(currentSong)).getTitle();
+
+            String[] sortedTitles = sortTwoStringsAlphabetically(titleToAdd, currentTitle);
+
+            // Iterate while titleToAdd hasn't reached its alphabetically correct index in 'unlockedSongs'
+            if (titleToAdd.equals(sortedTitles[1]))
+                return i;
         }
-         */
+
+        return 0;
     }
 }
