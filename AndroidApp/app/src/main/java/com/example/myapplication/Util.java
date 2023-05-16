@@ -71,4 +71,33 @@ public class Util {
         }
     }
 
+    public static String[] sortTwoStringsAlphabetically(String string1, String string2) {
+        int minLength = Math.min(string1.length(), string2.length());
+        String[] sortedOutput = new String[] {string1, string2};
+
+        for (int i = 0; i < minLength; i++) {
+            if (checkIfCharacterIsAlphabeticallyGreater(string1.charAt(i), string2.charAt(i))) {
+                return sortedOutput;
+            }
+        }
+
+        if (string1.length() > string2.length())
+            return sortedOutput;
+        return swapElements(sortedOutput, 0, 1);
+    }
+
+    public static String[] swapElements(String[] array, int i, int j) {
+        String element1 = array[i];
+        String element2 = array[j];
+
+        array[i] = element2;
+        array[j] = element1;
+
+        return array;
+    }
+
+    public static boolean checkIfCharacterIsAlphabeticallyGreater(char c1, char c2)
+    {
+        return c1 < c2;
+    }
 }
