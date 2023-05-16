@@ -8,35 +8,23 @@ class MusicPlayer
   static const int CHUNK_SIZE = 5;
 
 private:
-  int tempo;
   int position;
+  int tempo;
   int pauseDuration;
   int currentPauseChunkDuration;
   bool isPaused;
 
 public:
+  boolean hasRequested;
   DynamicJsonDocument song;
   MusicPlayer(float tempo) : song(song)
   {
     this->tempo = tempo;
     this->position = 0;
     this->isPaused = false;
-
+    this->hasRequested = false;
     // this is the approximate duration between notes calculated based on the provided tempo
     pauseDuration = GENERIC_DURATION / tempo;
-  }
-
-private:
-  void bumpPosition()
-  {
-    if (this->position + 5 < this->song.size())
-    {
-      this->position = this->position + 5;
-    }
-    else
-    {
-      this->position = 0;
-    }
   }
 
 private:
@@ -60,10 +48,11 @@ public:
     int limit = min(this->position + CHUNK_SIZE, this->song.size());
     for (int i = this->position; i < limit; i++)
     {
+      Serial.println(i);
       play(i);
       // registerIncreasedChunkDuration();
     }
-    this->bumpPosition();
+    this->position = limit;
   }
 
 public:

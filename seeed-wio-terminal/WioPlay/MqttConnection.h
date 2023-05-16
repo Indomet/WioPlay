@@ -18,6 +18,8 @@ const char *TOPIC_sub = "User/Data/Change";
 const char *Workout_sub = "User/Workout/Start";
 const char *TOPIC_pub_connection = "Send/Calorie/Burn/Data";
 const char *Music_notes_sub = "Music/Song/Notes";
+const char *Loop_trigger_sub = "Music/Loop";
+
 
 WiFiClient wioClient;
 PubSubClient client(wioClient);
@@ -94,9 +96,9 @@ void updateSongName(char json[])
 void updateSong(char json[])
 {
 
-  Serial.println("user requested to change song");
+  Serial.println("switching chunk");
 
-  DynamicJsonDocument doc(JSON_ARRAY_SIZE(2300));
+  DynamicJsonDocument doc(JSON_ARRAY_SIZE(40));
   DeserializationError error = deserializeJson(doc, json);
 
   if (error)
@@ -108,6 +110,7 @@ void updateSong(char json[])
 
   doc.shrinkToFit();
   player.changeSong(doc);
+  player.hasRequested = false;
 }
 
 // void printMessage(String message) {
@@ -125,6 +128,11 @@ void updateSong(char json[])
 //   tft.setCursor((320 - tft.textWidth(message)) / 2, 120);
 //   tft.println(message);
 // }
+
+void startStreaming() {
+  Serial.println("Requesting notes.."); 
+  client.publish("request/notes", "I need a new set of notes");
+}
 
 void callback(char *topic, byte *payload, unsigned int length)
 {
@@ -151,11 +159,15 @@ void callback(char *topic, byte *payload, unsigned int length)
   {
     updateSongName(charBuf);
   }
+    else if (strcmp(Loop_trigger_sub, topic) == 0)
+  {
+    startStreaming();
+  }
   else if (strcmp(Music_notes_sub, topic) == 0)
   {
-
     updateSong(charBuf);
   }
+
 }
 
 void reconnect()
@@ -190,6 +202,12 @@ void reconnect()
       client.subscribe(Music_notes_sub);
       Serial.print("Subcribed to: ");
       Serial.println(Music_notes_sub);
+
+      
+      client.subscribe(Loop_trigger_sub);
+      Serial.print("Subcribed to: ");
+      Serial.println(Loop_trigger_sub);
+
     }
     else
     {
