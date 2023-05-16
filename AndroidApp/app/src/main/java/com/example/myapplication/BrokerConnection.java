@@ -20,12 +20,10 @@ public class BrokerConnection extends AppCompatActivity {
     // topics to subscribe to
     public static final String SETTINGS_CHANGE_TOPIC = "User/Data/Change";
     public static final String WORKOUT_STARTED_TOPIC = "User/Workout/Start";
-    public static final String SUB_TOPIC = "Send/Calorie/Burn/Data";
+    //public static final String SUB_TOPIC = "Send/Calorie/Burn/Data";
 
-    public static  final String SONG_LIST_TOPIC = "Send/SongList";
-
-    public static final String SONG_NOTES_TOPIC = "Music/Song/Notes";
-    public static final String LOCALHOST = "192.168.134.236"; // Ip address of the local host
+    //public static  final String SONG_LIST_TOPIC = "songs";
+    public static final String LOCALHOST = "broker.emqx.io"; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
     public static final String CLIENT_ID = "Android Phone";   // the app client ID name
     public static final int QOS = 0;    // quality of service
@@ -34,14 +32,14 @@ public class BrokerConnection extends AppCompatActivity {
     private MqttClient mqttClient;
     private Context context;
 
-    private static BrokerConnection brokerConnection; // this is for singelton for this class.
+    private static BrokerConnection brokerConnection= null; // this is for singelton for this class.
 
     //Alternatively this could be an arraylist to notify many subscribers to the message listenrs
     //private MessageListener messageListener;
     private List<MessageListener> observers;
     //This interface is a contract between this class to notify other classes that implement it that a message has arrived
     public interface MessageListener{
-        public void onMessageArrived(String payload) throws InterruptedException;
+        public void onMessageArrived(String payload);
         public String getSubbedTopic();
     }
 
@@ -49,12 +47,13 @@ public class BrokerConnection extends AppCompatActivity {
     public void addMessageListener(MessageListener messageListener){
         observers.add(messageListener);
     }
+
     //we automatically try to connect the broke in the constructor by calling the connectToMqttBroker method
     private BrokerConnection(Context context){
         this.context = context;
-        this.observers = new ArrayList<>();
         mqttClient = new MqttClient(context, MQTT_SERVER, CLIENT_ID, Ack.AUTO_ACK);
         connectToMqttBroker();
+        observers=new ArrayList<>();
     }
     public static BrokerConnection getInstance(Context context){
         if(brokerConnection ==null){
@@ -119,18 +118,20 @@ public class BrokerConnection extends AppCompatActivity {
                         Log.i(CLIENT_ID, "Message" + messageMQTT);  // prints in the console
                         //this will execute the method in all classes that implement this interface and thereby forward the message to allow
                         //communicate between fragements and the broker
+                        if(!observers.isEmpty()){
                             for(MessageListener listener : observers) {
                                 if (topic.equals(listener.getSubbedTopic())) {
                                     listener.onMessageArrived(messageMQTT);
                                 }
-
                             }
+                        }
 
                     }else {
                         // prints in the console
                         Log.i(CLIENT_ID, "[MQTT] Topic: " + topic + " | Message: " + message.toString());
                     }
                 }
+
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken token) {
                     Log.d(CLIENT_ID, "Message delivered");
