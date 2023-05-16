@@ -6,11 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 public class SongList {
     private ArrayList<Song> songList;
@@ -28,18 +24,16 @@ public class SongList {
     }
     public static SongList getInstance(){
         if(instance == null){
-            instance = new SongList();
-            return instance;
+            throw new NullPointerException();
         }
         return  instance;
     }
 
-    public static SongList getInstance(File songFile){
+    public static SongList initialize(File songFile){
         if(instance == null){
             instance = new SongList(songFile);
-            return instance;
         }
-        return  instance;
+        return instance;
     }
 
 
@@ -52,17 +46,9 @@ public class SongList {
         return this.songList;
     }
 
-    public File getSongFile() {
-        return songFile;
-    }
 
     public void setList(ArrayList<Song> songList) {
         this.songList = songList;
-        saveSongList();
-    }
-
-    public void add(Song song){
-        this.songList.add(song);
         saveSongList();
     }
 

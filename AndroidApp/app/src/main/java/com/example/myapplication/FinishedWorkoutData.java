@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 public class FinishedWorkoutData {
-    //IDK IF IT SHOULD BE IN SECONDS OR NOT YET
     private int durationInSeconds;
     private int caloriesBurntWithExercise;
     private int goalCalories;
@@ -13,6 +12,7 @@ public class FinishedWorkoutData {
             this.durationInSeconds=durationInSeconds;
             this.goalCalories=goalCalories;
     }
+    //Empty constructor is needed such that the object can serialize upon reading from the file
     public FinishedWorkoutData() {}
 
     public int getDurationInSeconds() {
