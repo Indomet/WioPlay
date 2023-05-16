@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -14,31 +16,36 @@ public class User {
     private float weight;
     private String sex;
     private int calorieCredit;
-    private int lifeTimeCalories;
     private File userFile;
-    private static User user=null;
+
+    private static User instance;
     private int monthlyWorkouts;
     private User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
         load();
     }
-    public static User getInstance(File userFile){
-        if(user==null){
-            user=new User(userFile);
+
+    public static User getInstance(){
+        if(instance == null){
+            throw new NullPointerException();
         }
-        return user;
+        return instance;
+    }
+    public static User initialize(File userFile){
+        if(instance == null){
+            instance = new User(userFile);
+        }
+        return instance;
     }
 
-    //todo make the user start in settings to input stuff and cant leave if they don't do it
     private void defaultUser() {
         this.age = 0;
         this.height = 0;
         this.weight = 0;
         this.username = "username";
-        this.calorieCredit = 727; //A new user starts with 0 CalorieCurrency
-        this.lifeTimeCalories = 0;
-        monthlyWorkouts=30;//30 is the default number, so a workout per day per month
+        this.calorieCredit = 500; //A new user starts with 500 CalorieCurrency
+        this.monthlyWorkouts=30; //30 is the default number, so a workout per day per month
     }
 
     public void setUsername(String username) {
@@ -72,10 +79,6 @@ public class User {
         saveUserData();
     }
 
-    public String getSex() {
-        return sex;
-    }
-
     public void updateCredit(float calorie) {
         //calorie can be positive when gaining, and negative when spending.
         int diff = Math.round(calorie);
@@ -88,22 +91,9 @@ public class User {
         return this.calorieCredit;
     }
 
-    public void setCalorieCredit(int calorieCredit) {
-        this.calorieCredit = calorieCredit;
-        saveUserData();
-    }
 
     public String toString() {
         return age + "," + height + "," + weight;
-    }
-
-    public int getLifeTimeCalories() {
-        return lifeTimeCalories;
-    }
-
-    public void setLifeTimeCalories(int lifeTimeCalories) {
-        this.lifeTimeCalories = lifeTimeCalories;
-        saveUserData();
     }
 
     private void load() {
@@ -112,19 +102,14 @@ public class User {
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(this.userFile);
-            this.setUsername(node.get("username").asText());
-            this.setAge(node.get("age").asInt());
-            this.setHeight(node.get("height").asLong());
-            this.setSex(node.get("sex").asText());
-            this.setWeight(node.get("weight").asLong());
-            this.setCalorieCredit(node.get("calorieCredit").asInt());
-            this.setLifeTimeCalories(node.get("lifeTimeCalories").asInt());
-            this.setMonthlyWorkouts(node.get("monthlyWorkouts").asInt());
+            Util.loadFields(this,node,mapper);
         } catch (IOException e) {
 
             saveUserData();
             load();
 
+        } catch (IllegalAccessException e) {
+            Log.e("IllegalAccessException",e.getMessage());
         }
 
     }
@@ -140,32 +125,23 @@ public class User {
         }
     }
 
-    public void updateLifeTimeCalories(int payload){
-        this.lifeTimeCalories += payload;
-        saveUserData();
-    }
-
     public String getUsername() {
         return username;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public float getWeight() {
-        return weight;
-    }
 
     public void setMonthlyWorkouts(int monthylWorkoutsCount) {
         this.monthlyWorkouts=monthylWorkoutsCount;
         saveUserData();
-
     }
 
     public int getMonthlyWorkouts() {
         return monthlyWorkouts;
 
+    }
+
+    public File getUserFile() {
+        return userFile;
     }
 
 

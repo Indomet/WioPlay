@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +17,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.io.File;
-
 
 public class NewWorkoutFragment extends Fragment {
-
-
-
-
 
     private WorkoutType workoutType;
 
     private View rootView;
-
 
     private TextView targetCaloriesTextView;
 
@@ -70,15 +64,19 @@ public class NewWorkoutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView= inflater.inflate(R.layout.fragment_new_workout, container, false);
+        widgetInit();
 
+        workoutManager = WorkoutManager.getInstance();
+        return rootView;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void widgetInit(){
         Button startWorkoutButton = rootView.findViewById(R.id.start_button);
+        targetCaloriesTextView = rootView.findViewById(R.id.current_calorie_goal);
         startWorkoutButton.setOnClickListener(view->startWorkout());
 
         targetCaloriesTextView = rootView.findViewById(R.id.current_calorie_goal);
-
-        String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json"; //data/user/0/myapplication/files
-        File managerFile = new File(managerPath);
-        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
 
         targetCaloriesTextView.setText(Integer.toString(workoutManager.getCalorieGoal()));
         ImageButton incrementButton = rootView.findViewById(R.id.plus_calories_btn);
@@ -91,7 +89,6 @@ public class NewWorkoutFragment extends Fragment {
         timePicker.setIs24HourView(true);
         timePicker.setHour(0);
         timePicker.setMinute(0);
-        return rootView;
     }
 
     //here we set the calorie goal based on if the uer want sto burn more or less calories. If they want
@@ -107,20 +104,22 @@ public class NewWorkoutFragment extends Fragment {
         boolean calorieGoalIsValid = workoutManager.getCalorieGoal()>0;
         boolean durationIsValid = timePicker.getHour()>0 || timePicker.getMinute()>0;
         if(workoutManager.getWorkoutHasStarted()){
-            Toast.makeText(rootView.getContext(), "Please finish your ongoing workout before starting a new one", Toast.LENGTH_SHORT).show();
+            final String WORKOUT_GOING_MSG = "Please finish your ongoing workout before starting a new one";
+            Toast.makeText(rootView.getContext(), WORKOUT_GOING_MSG, Toast.LENGTH_SHORT).show();
 
         }
 
         else if(!calorieGoalIsValid){
-            Toast.makeText(rootView.getContext(), "Please set a calorie goal above 0", Toast.LENGTH_SHORT).show();
+            final String INVALID_CALORIES = "Please set a calorie goal above 0";
+            Toast.makeText(rootView.getContext(),INVALID_CALORIES , Toast.LENGTH_SHORT).show();
         }
         else if(!durationIsValid){
-            Toast.makeText(rootView.getContext(), "Please set a valid time", Toast.LENGTH_SHORT).show();
+            final String INVALID_CALORIES = "Please set time goal to be over 0";
+            Toast.makeText(rootView.getContext(), INVALID_CALORIES, Toast.LENGTH_SHORT).show();
 
         }
 
         else {
-            //TODO use singleton
             workoutManager.setWorkoutHasStarted(true);
             //publish the exercise type and calorie goal
             workoutManager.setWorkoutTypeTerminalInt(workoutType.getName());
@@ -132,9 +131,10 @@ public class NewWorkoutFragment extends Fragment {
 
             try {
                 String json = Util.objectToJSON(workoutManager);
-                MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager),MainActivity.brokerConnection.QOS,null);
+                Util.changeFragment(new Workout_Fragment(), getActivity());
+                MainActivity.brokerConnection.getMqttClient().publish(BrokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager), BrokerConnection.QOS,null);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                Log.d("PUB_ERROR","Could not publish the data. Json couldn't be converted");
             }
 
         }
