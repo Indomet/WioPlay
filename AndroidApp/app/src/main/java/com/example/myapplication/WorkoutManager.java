@@ -95,7 +95,14 @@ public class WorkoutManager {
 
 
     //singleton design pattern as the user only needs 1 workout manager to manage the backend logic
-    public static WorkoutManager getInstance(File managerFile){
+    public static WorkoutManager getInstance(){
+        if(singleton==null){
+            throw new NullPointerException();
+        }
+        return singleton;
+    }
+
+    public static WorkoutManager initialize(File managerFile){
         if(singleton==null){
             singleton=new WorkoutManager(managerFile);
         }

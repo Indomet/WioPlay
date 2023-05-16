@@ -5,30 +5,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private BottomNavigationView bottomNavigation;
     private Workout_Fragment workoutFragment;
     private MusicFragment musicFragment;
     private SettingsFragment settingsFragment;
 
-    //This field is set to the singleton getinstance method then the same refrence is used
-    //elsewher ein other classes
+    //This field is set to the singleton getInstance method then the same reference is used
+    //elsewhere ein other classes
     public static BrokerConnection brokerConnection;
-
-    public static User user;
-    private SongList songList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
+        brokerConnection = BrokerConnection.initialize(getApplicationContext());
 
         //initializing the variables
         bottomNavigation = findViewById(R.id.bottomNavigationView);
@@ -39,28 +37,29 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         changeFragment(musicFragment);
         bottomNavigation.setOnItemSelectedListener(this);
 
-        String userPath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+
+        String downloadsDir = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOCUMENTS;
+
+        String userPath = downloadsDir + "/user.json";
         File userFile = new File(userPath);
 
-        String songPath = this.getFilesDir().getPath() + "/songList.json";
+        String songPath = downloadsDir + "/songList.json";
         File songFile = new File(songPath);
 
-        user = User.getInstance(userFile);
-//        user.setCalorieCredit(9000);
+        String managerPath = downloadsDir + "/workoutManager.json";
+        File managerFile = new File(managerPath);
 
-        //songList = new SongList(songFile);
-        songList = SongList.getInstance(songFile);
+        User.initialize(userFile);
 
+        SongList.initialize(songFile);
 
-
-
-
+        WorkoutManager.initialize(managerFile);
     }
 
     @Override   //This method checks which fragment was selected by the user
     //and switches the layout accordingly
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.workout:
 
                 return changeFragment(workoutFragment);
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         return false;
     }
 
-    public boolean changeFragment(Fragment fragment){
+    public boolean changeFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
 // Add or replace the fragment using the FragmentManager
@@ -86,4 +85,4 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
 
-    }
+}

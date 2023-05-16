@@ -29,8 +29,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.io.File;
-
 public class SettingsFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int TAKE_PICTURE_REQUEST = 2;
@@ -56,24 +54,13 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-
-        String userPath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-        File userFile = new File(userPath);
-        user = User.getInstance(userFile);
+        user = User.getInstance();
 
         widgetInit();
 
         return rootView;
     }
 
-    public void updateUserState(){
-        try {
-            updateUserInfo();
-        } catch (Exception e) {
-            String message= e.getMessage();
-            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        }
-    }
     public void widgetInit(){
         saveButton = rootView.findViewById(R.id.Save_Button);
         weightEditText = rootView.findViewById(R.id.kg_edittext);
@@ -85,7 +72,9 @@ public class SettingsFragment extends Fragment {
         changeProfile=rootView.findViewById(R.id.chengeProfile);
         monthlyWorkouts = rootView.findViewById(R.id.monthly_workouts_edittxt);
         usernameTextView.setText(user.getUsername());
-        saveButton.setOnClickListener(view -> updateUserState());
+
+        saveButton.setOnClickListener(view -> publishSavedData());
+
         editButton.setOnClickListener(v -> editUserNamePopup());
         ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
         sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
@@ -180,7 +169,7 @@ public class SettingsFragment extends Fragment {
             int monthylWorkoutsCount = Integer.parseInt((monthlyWorkouts.getText().toString()));
 // checking if all entered numbers are within specific ranges
             checkTheRange(0, 450, weight);
-            checkTheRange(0, 120, height);
+            checkTheRange(0, 250, height);
             checkTheRange(0,150,age);
             checkTheRange(0,100,monthylWorkoutsCount);
 
