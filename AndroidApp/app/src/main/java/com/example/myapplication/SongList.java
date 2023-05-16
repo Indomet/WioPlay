@@ -10,9 +10,11 @@ import java.util.ArrayList;
 
 public class SongList {
     private ArrayList<Song> songList;
+    private ArrayList<Song> unlockedSongs;
     private File songFile;
 
     private static SongList instance;
+    private static int currentSongIdx = 0;
 
     private SongList(){} //Jackson library requires a default empty constructor
 
@@ -39,7 +41,7 @@ public class SongList {
 
     private void defaultList(){
         this.songList = new ArrayList<>();
-
+        this.unlockedSongs = new ArrayList<>();
     }
 
     public ArrayList<Song> getSongList(){
@@ -79,9 +81,17 @@ public class SongList {
         }
     }
 
-    public void unlockSong(Song song){
+    public void unlockSong(Song song) {
         this.songList.get(this.songList.indexOf(song)).setUnlocked(true);
         saveSongList();
     }
 
+    private void addUnlockedSong(Song song)
+    {
+        /*
+        for (int i = 0; i < unlockedSongs.size(); i++) {
+
+        }
+         */
+    }
 }
