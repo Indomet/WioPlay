@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+
+import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import nl.dionsegijn.konfetti.core.PartyFactory;
@@ -45,7 +45,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private TextView targetWorkoutsThisMonth;
 
     private TextView caloriesBurnt;
-    private Button stopOrPlayStopwatch;
+
     private TextView timeElapsed;
     private TextView timeLeft;private NewWorkoutFragment newWorkoutFragment;
 
@@ -105,14 +105,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
 
-
-        workoutManager = Util.loadManagerFromFile(getActivity());
-
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.addMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
-        String filePath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-        user = User.getInstance(new File(filePath));
+        user = User.getInstance();
+        workoutManager = WorkoutManager.getInstance();
 
         widgetInit();
 
@@ -173,8 +170,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     public void changeToNewWorkoutFragment(View buttonPressed) {
         newWorkoutFragment.setWorkoutType(buttonPressed.getId());
-        FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-        fm.replace(R.id.frameLayout, newWorkoutFragment).setReorderingAllowed(true).commit();
+        Util.changeFragment(newWorkoutFragment, getActivity());
     }
     public void onDateSelected(CalendarDay date) {
         FinishedWorkoutData data = workoutManager.getWorkoutDataHashMap().get(date.toString());
@@ -204,7 +200,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         if (workoutManager.getWorkoutHasStarted()) {
             int integerPayload = (int)Float.parseFloat(payload);
             workoutManager.setCaloriesBurnt(integerPayload);
-            //TODO update the calorie balance
 
             caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
@@ -236,15 +231,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutManager.incrementMonthlyWorkouts();
             monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
             workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
-            stopOrPlayStopwatch.setVisibility(View.INVISIBLE);
-
         }
     }
 
     @Override
     public String getSubbedTopic() {
-        String WOROKOUT_TOPIC = "Send/Calorie/Burn/Data";
-        return WOROKOUT_TOPIC;
+        final String WORKOUT_TOPIC = "Send/Calorie/Burn/Data";
+        return WORKOUT_TOPIC;
     }
 
     public void startStopWatch() {

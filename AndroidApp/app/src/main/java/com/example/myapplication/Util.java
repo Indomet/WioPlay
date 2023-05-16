@@ -1,10 +1,13 @@
 package com.example.myapplication;
 
-import static android.app.PendingIntent.getActivity;
 
 import android.app.Activity;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -26,11 +29,9 @@ public class Util {
         return json;
     }
 
-    public static WorkoutManager loadManagerFromFile(Activity activity){
-        final String WORKOUT_MANAGER_PATH = "/workoutManager.json";
-        String managerPath = activity.getFilesDir().getPath() + WORKOUT_MANAGER_PATH;
-        File managerFile = new File(managerPath);
-        return WorkoutManager.getInstance(managerFile);
+    public static void changeFragment(Fragment fragment, FragmentActivity activity){
+        FragmentTransaction fm = activity.getSupportFragmentManager().beginTransaction();
+        fm.replace(R.id.frameLayout, fragment).setReorderingAllowed(true).commit();
     }
 
     public static String formatHoursMinsSecs(int timeInSeconds){

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
 
     private ArrayList<Song> songsList = new ArrayList<>();
-    private Context context;
+    private final Context context;
     private boolean confirm;
 
     public SongLibraryAdapter(Context context) {
@@ -36,8 +36,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //ViewGroup is the parent of all layout types
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item_list, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -45,8 +44,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         //position is the index of the items in the recycler view
         int currentPosition = holder.getBindingAdapterPosition();
 
-        Song currentSong = songsList.get(currentPosition); //This has to be initialized here to work properly.
-        Picasso.get().load(currentSong.getImageURL()).into(holder.songImage);//Loads image from url
+        Song currentSong = songsList.get(currentPosition); //Maps each song to its position in the list
+        Picasso.get().load(currentSong.getImageURL()).into(holder.songImage);//Loads song image from url
         holder.artistName.setText(currentSong.getArtist());
         holder.songTitle.setText(currentSong.getTitle());
         int duration = currentSong.getDuration();
@@ -57,22 +56,22 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         }else{
             holder.songPrice.setText("Play");
         }
-        //TODO Glide framework image display
-        holder.parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(currentSong.isUnlocked()){
-                    playSong(currentSong);
-                }else{
-                    if (MainActivity.user.getCalorieCredit() >= currentSong.getPrice()) {
-                        confirmationDialog(currentSong); //Calls the popup window
-                    } else {
-                        Toast.makeText(context, "Not enough calorie credits", Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(context, "Locked, " +currentSong.getTitle() + " costs " + currentSong.getPrice() + " Calorie Credits", Toast.LENGTH_SHORT).show();
-                    }
-                }
+
+        holder.parent.setOnClickListener(view -> validateSong(currentSong));
+
+
+    }
+
+    public void validateSong(Song currentSong){
+        if(currentSong.isUnlocked()){
+            playSong(currentSong);
+        }else{
+            if (User.getInstance().getCalorieCredit() >= currentSong.getPrice()) { //if user has enough credits
+                confirmationDialog(currentSong); //Calls the popup window
+            } else {
+                Toast.makeText(context, "Not enough calorie credits", Toast.LENGTH_SHORT).show();
             }
-        });
+        }
     }
 
     @Override
@@ -94,13 +93,14 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     }
 
     public void updateData(){
-        TextView view =((MainActivity)context).findViewById(R.id.user_balance); //Updates balance display in MusicFragment
-        view.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+        TextView view =((MainActivity)context).findViewById(R.id.user_balance); //Updates balance display in MusicFragment,
+        //context is cast to MainActivity in order to access findViewById()
+        view.setText(Integer.toString(User.getInstance().getCalorieCredit()));
         notifyDataSetChanged();
     }
 
     private void unlockSong(@NonNull Song currentSong){
-        MainActivity.user.updateCredit(-currentSong.getPrice());
+        User.getInstance().updateCredit(-currentSong.getPrice());
         SongList.getInstance().unlockSong(currentSong);
         currentSong.setUnlocked(true);
         updateData();
@@ -114,7 +114,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         try {
             String notes = writer.writeValueAsString(currentSong.getNotes());
-            BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, notes, 0, null);
+            BrokerConnection.getInstance().getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, notes, 0, null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -145,17 +145,19 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 //TODO Display artist name
     public class ViewHolder extends RecyclerView.ViewHolder{
     //Holds all views
-        private TextView songTitle, songPrice, songDuration, artistName, userBalance;
-        private ImageView songImage;
-
-        private CardView parent;
+        private final TextView songTitle;
+        private final TextView songPrice;
+        private final TextView songDuration;
+        private final TextView artistName;
+        private final ImageView songImage;
+        private final CardView parent;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             parent = itemView.findViewById(R.id.parent_layout);
             songTitle = itemView.findViewById(R.id.song_title);
             songPrice = itemView.findViewById(R.id.song_price);
             songDuration = itemView.findViewById(R.id.song_duration);
-            userBalance = itemView.findViewById(R.id.user_balance);
+            TextView userBalance = itemView.findViewById(R.id.user_balance);
             songImage = itemView.findViewById(R.id.image);
             artistName = itemView.findViewById(R.id.artist_name);
 
