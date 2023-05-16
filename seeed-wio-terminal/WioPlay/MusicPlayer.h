@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 #include "pitches.h"
 // #include "themes.h"
+=======
+#include "pitches.h" //converting int frequencies to note names
+#include "themes.h"
+>>>>>>> main
 
 class MusicPlayer
 {

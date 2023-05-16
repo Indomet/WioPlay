@@ -40,8 +40,7 @@ public class MQTTConnection extends MqttClient {
                     AbstractSubscription subscription = subscriptionDefinition.getDeclaredConstructor().newInstance();
                     this.subscribe(subscription.getTopic(), subscription);
 
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | MqttException |
-                         NoSuchMethodException e) {
+                } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }

@@ -4,9 +4,6 @@
     <item android:id="@+id/music"
         android:title="Music"
         android:icon="@drawable/music_note_icon"/>
-    <item android:id="@+id/search"
-        android:title="Search"
-        android:icon="@drawable/search_icon"/>
     <item android:id="@+id/workout"
         android:title="Workout"
         android:icon="@drawable/run_icon"
