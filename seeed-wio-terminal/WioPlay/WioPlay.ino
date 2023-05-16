@@ -33,6 +33,11 @@ void setup() {
   burndownChart.initializeUI();
 
   burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
+
+  if (!burndownChart.checkIfExerciseSettingsAreRealistic()) {
+    Serial.println("Exercise settings are not realistic! Consider changing exercise type to a more passive one,
+    or/and lower the calorie-goal and increase length of exercise");
+  }
 }
 
 void loop() {
@@ -67,7 +72,6 @@ void loop() {
 
 
     float updateDelay = isPlayingSong ? player.getCurrentPauseChunkDuration() : 1000;
-
     burndownChart.updateTimeElapsed(updateDelay);
 
 
