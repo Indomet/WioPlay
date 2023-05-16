@@ -1,8 +1,6 @@
 package com.example.myapplication;
 
 
-import android.app.Activity;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -11,9 +9,10 @@ import androidx.fragment.app.FragmentTransaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Util {
@@ -27,6 +26,19 @@ public class Util {
             e.printStackTrace();
         }
         return json;
+    }
+
+    public static List<int[]> chunkify(int[] array, int N) {
+        List<int[]> chunks = new ArrayList<>();
+
+        for (int i = 0; i < array.length; i += N) {
+            int chunkSize = Math.min(N, array.length - i);
+            int[] chunk = new int[chunkSize];
+            System.arraycopy(array, i, chunk, 0, chunkSize);
+            chunks.add(chunk);
+        }
+
+        return chunks;
     }
 
     public static void changeFragment(Fragment fragment, FragmentActivity activity){
