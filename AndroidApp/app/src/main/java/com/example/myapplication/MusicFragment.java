@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class MusicFragment extends Fragment implements BrokerConnection.MessageListener{
@@ -32,6 +33,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private SongLibraryAdapter adapter;
 
 
+    public static Song currentSong;
+    public static ArrayList<int[]> notes = new ArrayList<>();
 
     private ArrayList<Song> songsList = new ArrayList<>();
     private boolean hasCreated = false;
@@ -50,13 +53,9 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
         adapter = new SongLibraryAdapter(recyclerView.getContext());
-
-
-
-
-
         adapter.setSongsList(SongList.getInstance().getSongList());
         recyclerView.setAdapter(adapter);
+        BrokerConnection.getInstance(getContext()).addMessageListener(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false));
         //Linearly displays a single line of items vertically
 
