@@ -8,7 +8,6 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 #include "MotionDetection.h"
 #include "MusicPlayer.h"
 
-
 MusicPlayer player(2);
 
 #include "Scenes.h"
@@ -34,8 +33,6 @@ void setup() {
   burndownChart.initializeUI();
 
   burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
-
-
 }
 
 void loop() {
@@ -52,12 +49,14 @@ void loop() {
     bool isPlayingSong = player.isPlayingSong();
 
 
-    if (player.song.size() > 0 && !player.hasRequested) {
-      if (player.getPosition() >= player.song.size()) {
-        Serial.println(player.getPosition());
+    if (player.song.size() > 0 && !player.isPaused)
+    {
+      if (player.getPosition() >= player.song.size())
+      {
         client.publish("request/notes", "I need a new set of notes");
-        player.hasRequested = true;
-      } else {
+      }
+      else
+      {
         player.playChunk();
       }
     }
@@ -67,8 +66,7 @@ void loop() {
     }
 
 
-    float updateDelay = isPlayingSong ? player.getCurrentPauseChunkDuration() : 1000; // FrontEnd update delay
-    // burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
+    float updateDelay = isPlayingSong ? player.getCurrentPauseChunkDuration() : 1000;
 
     burndownChart.updateTimeElapsed(updateDelay);
 
@@ -80,9 +78,7 @@ void loop() {
     // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
     // Serial.println("***********************");
 
-    movementValue = motionDetection.detectMotion(); // Read current user-position
-
-    // burndownChart.sufficientMovementInquiry(userInformation, movementValue, 1000); // player.getCurrentPauseChunkDuration() -------------> Add if-statement for this case
+    movementValue = motionDetection.detectMotion();
     burndownChart.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
 
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
