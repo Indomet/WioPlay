@@ -13,19 +13,13 @@ public:
     timeElapsed = 0;
 
     balanceFactor = constrainCaloriesBurntVelocity(0.08, 1000); // Note: Create variable for 'originalUpdateDelay' --> Delay used when song not playing  and 'targetBalanceFactor'
-
-    standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
-
-    proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
-    minMovement = (float)metRanges[chosenActivityIdx][0] / proportionalConstant;  // Minimal movement required for user to be considered actually doing the selected activity
-    maxMovement = (float)metRanges[chosenActivityIdx][1] / proportionalConstant;  // Maximal movement boundary
+    calorieVariableBoundaries();
   }
 
   // Returns a string comparing the actual calories burnt per second with the expected
   std::string displayCalorieStatistics() {
-    std::string actual = std::to_string(getActualCaloriesPerSecond());
-    // std::string expected = std::to_string(burndownChartBackEnd.getExpectedCaloriesPerSecond());
-    std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
+  std::string actual = std::to_string(getActualCaloriesPerSecond());
+  std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
 
     return actual + ", " + expected;
   }
@@ -170,5 +164,13 @@ private:
 
   bool userIsMovingFastEnough(float movementValue) {
     return movementValue >= minMovement;
+  }
+
+  void calorieVariableBoundaries()
+  {
+    standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
+    proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
+    minMovement = (float)metRanges[chosenActivityIdx][0] / proportionalConstant;  // Minimal movement required for user to be considered actually doing the selected activity
+    maxMovement = (float)metRanges[chosenActivityIdx][1] / proportionalConstant;  // Maximal movement boundary
   }
 };
