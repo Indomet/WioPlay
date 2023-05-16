@@ -54,7 +54,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
                     LinearLayoutManager.VERTICAL,
                     false));
         //Linearly displays a single line of items vertically
-
+        BrokerConnection.getInstance().addMessageListener(adapter);
         return rootView;
     }
 
