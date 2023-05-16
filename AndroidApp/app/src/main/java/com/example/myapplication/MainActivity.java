@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -20,15 +22,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     //TODO THIS IS TO BE REFACTORED ITS BAD PRACTICE make into singleton pattern
     public static BrokerConnection brokerConnection;
 
-    public static User user;
+    private User user;
     private SongList songList;
+
+    private WorkoutManager workoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
+        brokerConnection =  BrokerConnection.initialize(getApplicationContext());
 
         //initializing the variables
         bottomNavigation = findViewById(R.id.bottomNavigationView);
@@ -41,17 +45,25 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         bottomNavigation.setOnItemSelectedListener(this);
 
 
-        String userPath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
+        String downloadsDir = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOCUMENTS;
+        String userPath = downloadsDir + "/user.json";
         File userFile = new File(userPath);
+        //String userPath = this.getFilesDir().getPath() + "/user.json";
 
-        String songPath = this.getFilesDir().getPath() + "/songList.json";
+        //String songPath = this.getFilesDir().getPath() + "/songList.json";
+        String songPath = downloadsDir + "/songList.json";
         File songFile = new File(songPath);
 
-        user = User.getInstance(userFile);
+        user = User.initialize(userFile);
 //        user.setCalorieCredit(9000);
 
         //songList = new SongList(songFile);
-        songList = SongList.getInstance(songFile);
+        songList = SongList.initialize(songFile);
+
+        String managerPath = downloadsDir + "/workoutManager.json";
+        File managerFile = new File(managerPath);
+
+        workoutManager = WorkoutManager.initialize(managerFile);
 
 
 
