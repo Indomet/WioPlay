@@ -65,7 +65,6 @@ void loop()
     }
 
     float updateDelay = isPlayingSong ? player.getCurrentPauseChunkDuration() : 1000; // FrontEnd update delay
-
     // burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
 
     burndownChart.updateTimeElapsed(updateDelay);
