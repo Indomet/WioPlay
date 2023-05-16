@@ -1,6 +1,6 @@
-#include "seeed_line_chart.h" // library for drawing the burndown chart
+#include "seeed_line_chart.h"
 #include <map>
-#include <ArduinoJson.h> // json library
+#include <ArduinoJson.h>
 #include "Seeed_FS.h"  // SD card library
 #include "UserInformation.h"
 UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, userAge, isMale)
@@ -12,7 +12,6 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 MusicPlayer player(2);
 
 #include "Scenes.h"
-Scenes scenes;
 #include "BurndownChart.h"
 #include "MqttConnection.h"
 
@@ -21,12 +20,12 @@ float movementValue;
 MotionDetection motionDetection;
 BurndownChart burndownChart;
 
-const char* calorie_pub = "Send/Calorie/Burn/Data";
+const char *calorie_pub = "Send/Calorie/Burn/Data";
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
-  scenes.setupButton();
+  setupButton();
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
@@ -34,6 +33,8 @@ void setup() {
   burndownChart.initializeUI();
 
   burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
+
+  // menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 }
 
 void loop() {
@@ -43,17 +44,12 @@ void loop() {
   if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
-    scenes.buttonOnPress();
-    scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
+    buttonOnPress();
+    menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
-
     bool isPlayingSong = player.isPlayingSong();
 
-    if (isPlayingSong && player.song != NULL)
-    {
-      player.playChunk();
-    }
 
     if (player.song.size() > 0 && !player.hasRequested) {
       if (player.getPosition() >= player.song.size()) {
@@ -68,6 +64,7 @@ void loop() {
     {
       delay(1000);
     }
+
 
     float updateDelay = isPlayingSong ? player.getCurrentPauseChunkDuration() : 1000; // FrontEnd update delay
     // burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
@@ -98,8 +95,4 @@ void loop() {
 
 void showBurndownChartScene() {
   burndownChart.updateGraphVizuals();
-}
-
-void showPlayerScene() {
-  scenes.playerScene();
 }
