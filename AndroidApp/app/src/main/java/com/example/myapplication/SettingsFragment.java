@@ -42,7 +42,8 @@ public class SettingsFragment extends Fragment {
     private EditText monthlyWorkouts;
     private Spinner sexSpinner;
     private Dialog dialog;
-    private ImageButton chengeProfile;
+
+    private ImageButton changeProfile;
     private ImageFilterView profilePicture;
 
     private Button editButton;
@@ -81,14 +82,14 @@ public class SettingsFragment extends Fragment {
         editButton=rootView.findViewById(R.id.edit_username_btn);
         profilePicture=rootView.findViewById(R.id.user_profile_pic_settings);
         usernameTextView = rootView.findViewById(R.id.settings_username_textview);
-        chengeProfile=rootView.findViewById(R.id.chengeProfile);
+        changeProfile=rootView.findViewById(R.id.chengeProfile);
         monthlyWorkouts = rootView.findViewById(R.id.monthly_workouts_edittxt);
         usernameTextView.setText(user.getUsername());
         saveButton.setOnClickListener(view -> updateUserState());
         editButton.setOnClickListener(v -> editUserNamePopup());
         ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
         sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
-        chengeProfile.setOnClickListener(v -> addPictureToTheBackground());
+        changeProfile.setOnClickListener(v -> addPictureToTheBackground());
 
         spinnerInit();
     }
