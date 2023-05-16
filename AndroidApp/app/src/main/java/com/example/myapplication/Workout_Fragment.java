@@ -77,7 +77,10 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private View rootView;
     MaterialCalendarView calendarView;
 
-
+    Workout_Fragment(){
+        BrokerConnection broker= MainActivity.brokerConnection;
+        broker.addMessageListener(this);
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -128,8 +131,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         File managerFile = new File(managerPath);
 
         workoutManager = WorkoutManager.getInstance(managerFile,getContext());
-        BrokerConnection broker = MainActivity.brokerConnection;
-        broker.setMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
         String filePath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
         user = User.getInstance(new File(filePath));
@@ -382,6 +383,12 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt());
         caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
 
+    }
+
+    @Override
+    public String getSubbedTopic() {
+        String WOROKOUT_TOPIC = "Send/Calorie/Burn/Data";
+        return WOROKOUT_TOPIC;
     }
 
 }
