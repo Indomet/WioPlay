@@ -6,7 +6,8 @@ TFT_eSPI tft;
 #define BUTTON_NEXT WIO_KEY_A
 #define BUTTON_PAUSE WIO_KEY_B
 #define BUTTON_PREVIOUS WIO_KEY_C
-const char* imageList[] = { "/photos/ali.bmp", "/photos/Asim.bmp" };
+const char* imageList[] = { "/photos/Ali.bmp", "/photos/Asim.bmp", "/photos/Zepei.bmp", "/photos/Joel.bmp", 
+"/photos/Jackson.bmp", "/photos/Mohamad.bmp" ,"/photos/Ali2.bmp", "/photos/Zepei2.bmp", "/photos/Asim3.bmp"};
 
 
 class Scenes {
@@ -32,26 +33,21 @@ public:
       tft.setTextColor(TFT_BLACK);
       tft.setTextSize(2);
 
-      // const size_t capacity = JSON_OBJECT_SIZE(2500);
-      // uint8_t buffer[capacity];
+      drawImage<uint16_t>(imageList[index], 95, 25); 
 
-      // Serialize the JSON to the buffer
-      // serializeJson(songImage, buffer, capacity);
-      // tft.drawXBitmap(logo_x, logo_y, songImage, logo_width, logo_width, TFT_TRANSPARENT);
+      tft.setCursor((320 - tft.textWidth(songName)) / 2, 165); // location to display music name on the screen
+      tft.println(songName); // display the music name on the screen
 
-      drawImage<uint16_t>(imageList[index], 95, 25);
-      tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);
-      tft.println(songName);
       drawImage<uint16_t>(prevButton, 100, 200);
       drawImage<uint16_t>(pauseButton, 150, 200);
       drawImage<uint16_t>(nextButton, 200, 200);
       isOnMusicScene = false;
     }
     if (messageReceived) {
-      drawImage<uint16_t>(imageList[index], 95, 25);
-      tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 2, TFT_WHITE);
-      tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);
-      tft.println(songName);
+      drawImage<uint16_t>(imageList[index], 95, 25); //change the image and reprint
+      tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 2, TFT_WHITE); // delete the old music name on the display
+      tft.setCursor((320 - tft.textWidth(songName)) / 2, 165); // location to display music name on the screen
+      tft.println(songName);  display the new music name on the screen
       messageReceived = false;
     }
   }
@@ -82,7 +78,7 @@ public:
 
   void menuNavigationOnPress(void (*firstScene)(), void (*secondScene)()) {
     unsigned long currentTime = millis();
-    if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+    if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) { // non blocking delay
       lastUpdateTime = currentTime;
       if (digitalRead(RIGHT_BUTTON) == LOW) {
         secondScene();
