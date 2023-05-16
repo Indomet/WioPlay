@@ -35,8 +35,8 @@ public:
     return burndownChartBackEnd.isExercising();
   }
 
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float songPauseChunkDuration) {
-    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue, songPauseChunkDuration);
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float updateDelay) {
+    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
   }
 
   // Constrain dynamic variables in front-end and back-end in real-time

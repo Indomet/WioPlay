@@ -12,11 +12,9 @@ public:
     caloriesBurnt = 0;
     timeElapsed = 0;
 
-    // balanceFactor = 0.08;
-    balanceFactor = constrainCaloriesBurntVelocity(0.08);
+    balanceFactor = constrainCaloriesBurntVelocity(0.08, 1000); // Note: Create variable for 'originalUpdateDelay' --> Delay used when song not playing  and 'targetBalanceFactor'
 
-    // standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
-    standard = getAverageValue(new float[2] {(float)(metRanges[chosenActivityIdx][0]), (float)(metRanges[chosenActivityIdx][1])});
+    standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
 
     proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
     minMovement = (float)metRanges[chosenActivityIdx][0] / proportionalConstant;  // Minimal movement required for user to be considered actually doing the selected activity
@@ -47,20 +45,11 @@ public:
 
   // Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
   // Takes into consideration the inputted user characteristics and how much the user has moved since last update of the burndown chart to calculate calories burnt
-  float burnCalories(UserInformation userInformation, float movementValue, float songPauseChunkDuration)  // Burn calories based on the movement-value
+  float burnCalories(UserInformation userInformation, float movementValue, float updateDelay)  // Burn calories based on the movement-value
   {
     movementValue = getMETValue(movementValue);
-    // float moveFactor = (movementValue / songPauseChunkDuration) * balanceFactor;
-    float moveFactor = (movementValue / songPauseChunkDuration) * balanceFactor;
-    
-
-    Serial.println();
-    Serial.println("**************************");
-    Serial.println(balanceFactor);
-    Serial.println(moveFactor);
-    Serial.println("**************************");
-    Serial.println();
-
+    float moveFactor = (movementValue / updateDelay) * balanceFactor;
+  
     int sexIdx = userInformation.isMale ? 0 : 1;
 
     return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.userWeight) +
@@ -73,32 +62,21 @@ public:
   }
 
   // Conform calories burned velocity in accordance to realistic boundaries
-  float constrainCaloriesBurntVelocity(float balanceFactor)
+  float constrainCaloriesBurntVelocity(float balanceFactor, float updateValue)
   {
-    float controlVariable = 1 / balanceFactor; // ((songPauseChunkDuration + 1) * 1000) / balanceFactor;
+    // float controlVariable = 1 / balanceFactor; // ((songPauseChunkDuration + 1) * 1000) / balanceFactor;
+    float controlVariable = (balanceFactor * 100) / updateValue;
     
     float minValue = min(controlVariable, realisticCaloriesBurntVelocity[0]);
     float maxValue = max(controlVariable, realisticCaloriesBurntVelocity[1]);
 
-    return getAverageValue(new float[2] {maxValue, minValue});
-  }
-
-  float getAverageValue(float values[])
-  {
-    float sum = 0;
-
-    for (int i = 0; i < sizeof(values); i++)
-    {
-      sum += values[i];
-    }
-
-    return sum / sizeof(values);
+    return minValue + maxValue;
   }
 
   // Only burn calories if user's movement-intensity corresponds with selected exercise
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float songPauseChunkDuration) {
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float updateDelay) {
     if (userIsMovingFastEnough(movementValue)) {
-      caloriesBurnt += burnCalories(userInformation, movementValue, songPauseChunkDuration);
+      caloriesBurnt += burnCalories(userInformation, movementValue, updateDelay);
     } else {
       // Serial.println("You are not exercising hard enough for the selected exercise!");
     }
@@ -121,9 +99,6 @@ public:
 
   // Expected calories to burn per second from current calories burnt to reach goal
   float getExpectedCaloriesPerSecond() {
-    // float caloriesLeft = max(0, caloriesGoal - caloriesBurnt);
-    // float secondsLeft = exerciseDuration - convertMilliToSeconds(timeElapsed);
-
     float caloriesLeft = getCaloriesLeft();
     float secondsLeft = getSecondsLeft();
 
@@ -148,7 +123,7 @@ public:
   }
 
 private:
-  const float realisticCaloriesBurntVelocity[2] {0.01, 0.2};
+  const float realisticCaloriesBurntVelocity[2] {0.0025, 0.0065};
   float standard;
   float minMovement;  // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
   float maxMovement;  // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
@@ -163,8 +138,8 @@ private:
 
 
   float sexCalorieConstants[2][4] {
-    {66, 6.2, 12.7, 6.76},     // Male: {}
-    {655.1, 4.35, 4.7, 4.65}   // Female: {}
+    {66, 6.2, 12.7, 6.76},      // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
+    {655.1, 4.35, 4.7, 4.65}    // Female: {startConstant, weightConstant, heightConstant, ageConstant}
   };
 
   // Note: Row[i] is equivalent to the (i)th activity
