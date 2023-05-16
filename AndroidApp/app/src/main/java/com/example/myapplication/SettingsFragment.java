@@ -67,10 +67,7 @@ public class SettingsFragment extends Fragment {
         usernameTextView = rootView.findViewById(R.id.settings_username_textview);
         chengeProfile=rootView.findViewById(R.id.chengeProfile);
         monthlyWorkouts = rootView.findViewById(R.id.monthly_workouts_edittxt);
-        String userPath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-        File userFile = new File(userPath);
-
-        user = User.getInstance(userFile);
+        user = User.getInstance();
         usernameTextView.setText(user.getUsername());
         /*
         weightEditText.setText(Float.toString(MainActivity.user.getWeight()));
@@ -78,19 +75,7 @@ public class SettingsFragment extends Fragment {
         ageEditText.setText(Integer.toString(MainActivity.user.getAge()));
         */
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            String filePath = rootView.getContext().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-            File userFile = new File(filePath);
-            @Override
-            public void onClick(View v) {
-                try {
-                    updateUserInfo();
-                } catch (Exception e) {
-                    String message= e.getMessage();
-                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        saveButton.setOnClickListener(view -> publishSavedData());
 
         editButton.setOnClickListener(v -> editUserNamePopup());
 
@@ -168,7 +153,7 @@ public class SettingsFragment extends Fragment {
 
         try {//todo use singleton
         MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
-         ,Util.objectToJSON(MainActivity.user)
+         ,Util.objectToJSON(User.getInstance())
          ,MainActivity.brokerConnection.QOS, null);
          } catch (IllegalAccessException e) {
          e.printStackTrace();
@@ -192,15 +177,15 @@ public class SettingsFragment extends Fragment {
             int monthylWorkoutsCount = Integer.parseInt((monthlyWorkouts.getText().toString()));
 // checking if all entered numbers are within specific ranges
             checkTheRange(0, 450, weight);
-            checkTheRange(0, 120, height);
+            checkTheRange(0, 250, height);
             checkTheRange(0,150,age);
             checkTheRange(0,100,monthylWorkoutsCount);
 
-            MainActivity.user.setAge(age);
-            MainActivity.user.setHeight(height);
-            MainActivity.user.setWeight(weight);
-            MainActivity.user.setMonthlyWorkouts(monthylWorkoutsCount);
-            MainActivity.user.setSex(sexSpinner.getSelectedItem().toString());
+            User.getInstance().setAge(age);
+            User.getInstance().setHeight(height);
+            User.getInstance().setWeight(weight);
+            User.getInstance().setMonthlyWorkouts(monthylWorkoutsCount);
+            User.getInstance().setSex(sexSpinner.getSelectedItem().toString());
     }
 
             // tobe thrown if any of the Editfield is not filled

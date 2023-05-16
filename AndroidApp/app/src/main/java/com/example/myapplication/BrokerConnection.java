@@ -25,7 +25,7 @@ public class BrokerConnection extends AppCompatActivity {
     public static  final String SONG_LIST_TOPIC = "Send/SongList";
 
     public static final String SONG_NOTES_TOPIC = "Music/Song/Notes";
-    public static final String LOCALHOST = "192.168.68.80"; // Ip address of the local host
+    public static final String LOCALHOST = "broker.emqx.io"; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
     public static final String CLIENT_ID = "Android Phone";   // the app client ID name
     public static final int QOS = 0;    // quality of service
@@ -34,9 +34,9 @@ public class BrokerConnection extends AppCompatActivity {
     private MqttClient mqttClient;
     private Context context;
 
-    private static BrokerConnection brokerConnection= null; // this is for singelton for this class.
+    private static BrokerConnection instance; // this is for singelton for this class.
 
-    //Alternatively this could be an arraylist to notify many subscribers to the message listenrs
+    //Alternatively this could be an arraylist to notify many subscribers to the message listeners
     //private MessageListener messageListener;
     private List<MessageListener> observers;
     //This interface is a contract between this class to notify other classes that implement it that a message has arrived
@@ -57,11 +57,18 @@ public class BrokerConnection extends AppCompatActivity {
         connectToMqttBroker();
         observers=new ArrayList<>();
     }
-    public static BrokerConnection getInstance(Context context){
-        if(brokerConnection ==null){
-          brokerConnection=new BrokerConnection(context);
+
+    public static BrokerConnection initialize(Context context){
+        if(instance == null){
+            instance = new BrokerConnection(context);
         }
-        return brokerConnection;
+        return instance;
+    }
+    public static BrokerConnection getInstance(){
+        if(instance == null){
+            throw new NullPointerException();
+        }
+        return instance;
     }
 
     public void connectToMqttBroker() {
@@ -115,7 +122,7 @@ public class BrokerConnection extends AppCompatActivity {
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     //check if the topic of the message is the subscribed topic
                     if(isConnected){ //TODO: Make separate messageListeners for each fragment
-                        Toast.makeText(context, "The message is "+ message.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "The message is "+ message.toString(), Toast.LENGTH_SHORT).show();
                         String messageMQTT = message.toString();
                         Log.i(CLIENT_ID, "Message" + messageMQTT);  // prints in the console
                         //this will execute the method in all classes that implement this interface and thereby forward the message to allow
