@@ -1,87 +1,60 @@
 
 package com.example.myapplication;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.type.MapType;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 //This class manages the workout. Updates the target goal, the calories they burn and keeps track of the time
 public class WorkoutManager {
 
-    Context context;
-    private final int CHANGE_TARGET_CALORIES_AMOUNT=20;
     private boolean workoutHasStarted;
     private int caloriesBurnt;
     private int calorieGoal;
     private int secondsElapsed;
     private static WorkoutManager singleton;
-    //this is to communciate with the terminal such that it knows the workout type
+    //this is to communicate with the terminal such that it knows the workout type
     private int workoutTypeTerminalInt;
     private int durationInSeconds;
 
+    //This hashmap is used to create final variables that the arduino uses to calculate calories
     private HashMap<String,Integer> workoutsMap;
+    //This hashmap is used to store the data when a workout is done to be displayed in the calendar
     private HashMap<String,FinishedWorkoutData> workoutDataHashMap;
     private int currentMonthlyWorkoutsProgress;
     private int totalWorkoutsCount;
-    WorkoutType type;
-    private File managerFile;
+    //This enum is used for the arduino calorie calculations
+    private WorkoutType type;
+    private final File managerFile;
 
 
-    private WorkoutManager(File managerFile,Context context) {
+    private WorkoutManager(File managerFile) {
         this.defaultWorkoutManager();
         this.managerFile = managerFile;
-        this.context=context;
         try {
             load();
         } catch (IllegalAccessException e) {
+            Log.e("IllegalAccessException", "Cannot access workout manager file");
         }
     }
 
     private void load() throws IllegalAccessException{
         try {
-
+            //reads the json node and saves all attributes according to the data in the file
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(this.managerFile);
-            //mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-            //MapType hashMapType = mapper.getTypeFactory().constructMapType(HashMap.class, CalendarDay.class, FinishedWorkoutData.class);
-
-
-            for(Field field : this.getClass().getDeclaredFields()){
-                String name = field.getName();
-                field.setAccessible(true);
-                JsonNode jsonValue = node.get(name);
-                if (jsonValue != null) {
-                    Object value = mapper.convertValue(jsonValue, field.getType());
-                    field.set(this, value);
-                }
-            }
-
-            String jsonInput = node.get("workoutDataHashMap").toString();
-            TypeReference<HashMap<String, FinishedWorkoutData>> typeRef
-                    = new TypeReference<HashMap<String, FinishedWorkoutData>>() {};
+            Util.loadFields(this,node,mapper);
+            //the data hash map is a special case that needs to be treated differently
+            final String dataHashMapPointerName = "workoutDataHashMap";
+            String jsonInput = node.get(dataHashMapPointerName).toString();
+            TypeReference<HashMap<String, FinishedWorkoutData>> typeRef = new TypeReference<>() {};
             HashMap<String, FinishedWorkoutData> map = mapper.readValue(jsonInput, typeRef);
             workoutDataHashMap=map;
         } catch (IOException e) {
@@ -98,9 +71,9 @@ public class WorkoutManager {
         ObjectWriter writer = mapper.writer();
         JsonNode node = mapper.valueToTree(this);
         try {
-            writer.writeValue(this.managerFile, node);//works
+            writer.writeValue(this.managerFile, node);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Log.e("saving failure","File couldn't be saved");
         }
     }
 
@@ -115,30 +88,29 @@ public class WorkoutManager {
         durationInSeconds=0;
         workoutsMap = new HashMap<>();
         workoutDataHashMap  = new HashMap<>();
-        workoutsMap.put("Walking",0);
-        workoutsMap.put("Running",1);
-        workoutsMap.put("Hiking",2);
+        workoutsMap.put(WorkoutType.WALKING.getName(), 0);
+        workoutsMap.put(WorkoutType.RUNNING.getName(),1);
+        workoutsMap.put(WorkoutType.HIKING.getName(),2);
     }
 
 
     //singleton design pattern as the user only needs 1 workout manager to manage the backend logic
-    public static WorkoutManager getInstance(File managerFile,Context c){
+    public static WorkoutManager getInstance(){
         if(singleton==null){
-            singleton=new WorkoutManager(managerFile,c);
+            throw new NullPointerException();
         }
         return singleton;
     }
 
-    // Calculates the elapsed time in hours, minutes, and seconds
-    // returns a formatted string of the elapsed time in the format HH:MM:SS
-    public String calculateTimeElapsed(){
-
-        int hours = secondsElapsed / 3600;
-        int minutes = (secondsElapsed % 3600) / 60;
-        int secs = secondsElapsed % 60;
-
-        return String.format("%02d:%02d:%02d", hours, minutes, secs);
+    public static WorkoutManager initialize(File managerFile){
+        if(singleton==null){
+            singleton=new WorkoutManager(managerFile);
+        }
+        return singleton;
     }
+
+
+
     public void setDurationInSeconds(int seconds){
         durationInSeconds=seconds;
     }
@@ -180,15 +152,13 @@ public class WorkoutManager {
         return caloriesBurnt >= calorieGoal;
     }
     public int getCHANGE_TARGET_CALORIES_AMOUNT(){
-        return  CHANGE_TARGET_CALORIES_AMOUNT;
+        //final variable that declares how much the target calories the user
+        int CHANGE_TARGET_CALORIES_AMOUNT = 20;
+        return CHANGE_TARGET_CALORIES_AMOUNT;
     }
 
     public int getCaloriesBurnt(){
         return caloriesBurnt;
-    }
-
-    public int getWorkoutTypeTerminalInt(){
-        return workoutTypeTerminalInt;
     }
 
     public void setWorkoutTypeTerminalInt(String workoutType){
@@ -209,12 +179,12 @@ public class WorkoutManager {
         // estimate time needed to burn remaining calories based on current rate of calorie burn
         int secondsLeftToAchieveGoal = (int) (caloriesLeftToBurn / caloriesBurntPerSecond);
         // convert time to hours, minutes, seconds
-        int hours = secondsLeftToAchieveGoal / 3600;
-        int minutes = (secondsLeftToAchieveGoal % 3600) / 60;
-        int seconds = secondsLeftToAchieveGoal % 60;
-        String temp= String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        return temp;
+        return Util.formatHoursMinsSecs(secondsLeftToAchieveGoal);
+
     }
+    // Calculates the elapsed time in hours, minutes, and seconds
+    // returns a formatted string of the elapsed time in the format HH:MM:SS
+
     public void setCaloriesBurnt(int caloriesBurnt){
         this.caloriesBurnt=caloriesBurnt;
         saveManagerData();
@@ -229,8 +199,8 @@ public class WorkoutManager {
     }
 
     public void addWorkoutData(FinishedWorkoutData workout,CalendarDay date){
-        if(workoutDataHashMap.containsKey(date)){
-            FinishedWorkoutData data = workoutDataHashMap.get(date);
+        if(workoutDataHashMap.containsKey(date.toString())){
+            FinishedWorkoutData data = workoutDataHashMap.get(date.toString());
             //add the previous calories and time
             data.setGoalCalories(workout.getGoalCalories()+data.getGoalCalories());
             data.setCaloriesBurntWithExercise(workout.getCaloriesBurntWithExercise()+data.getCaloriesBurntWithExercise());
@@ -271,12 +241,6 @@ public class WorkoutManager {
         return totalWorkoutsCount;
     }
 
-    // Setter for totalWorkoutsCount
-    public void setTotalWorkoutsCount(int count) {
-        this.totalWorkoutsCount = count;
-        saveManagerData();
-    }
-
 
     public void incrementTotalWorkouts() {
         totalWorkoutsCount++;
@@ -287,11 +251,5 @@ public class WorkoutManager {
         currentMonthlyWorkoutsProgress++;
         saveManagerData();
     }
-
-
-
-
-
-
 
 }

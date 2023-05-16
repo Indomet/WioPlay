@@ -16,28 +16,19 @@ import android.widget.Toast;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 
 public class MusicFragment extends Fragment implements BrokerConnection.MessageListener{
 
 
-    private RecyclerView recyclerView;
-    private TextView userBalance;
     private View rootView;
-
     private SongLibraryAdapter adapter;
-
 
     public static Song currentSong;
     public static ArrayList<int[]> notes = new ArrayList<>();
-
-    private ArrayList<Song> songsList = new ArrayList<>();
-    private boolean hasCreated = false;
 
     MusicFragment(){
         BrokerConnection broker= MainActivity.brokerConnection;
@@ -48,15 +39,20 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_music, container, false);
-        recyclerView = rootView.findViewById(R.id.songLibraryView);
-        userBalance = rootView.findViewById(R.id.user_balance);
 
-        userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+        RecyclerView recyclerView = rootView.findViewById(R.id.songLibraryView);
+        TextView userBalance = rootView.findViewById(R.id.user_balance);
+
+        userBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
+        //The adapter that handles the recycler view functionalities
         adapter = new SongLibraryAdapter(recyclerView.getContext());
+
         adapter.setSongsList(SongList.getInstance().getSongList());
         recyclerView.setAdapter(adapter);
-        BrokerConnection.getInstance(getContext()).addMessageListener(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(recyclerView.getContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false));
         //Linearly displays a single line of items vertically
 
         return rootView;
@@ -64,34 +60,18 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
     @Override
     public void onMessageArrived(String payload) {
-
-        Toast.makeText(rootView.getContext(), payload, Toast.LENGTH_SHORT).show();
-
+        Log.d("onMusicPayloadArrived", payload);
         ArrayList<Song> parsedSongs = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode songs = null;
+        JsonNode songs;
         try {
             songs = mapper.readTree(payload);
         } catch (IOException e) {
             Log.d("error", "unable to read payload");
             throw new RuntimeException(e);
         }
-        songs.elements().forEachRemaining(node -> {
-
-            String title = node.get("title").asText();
-            String artist = node.get("artist").asText();
-            String imageURL = node.get("imageURL").asText();
-            int cost = node.get("cost").asInt();
-
-            //TODO: include numOfNotes and tempo in payload, currently null
-            double tempo = node.get("tempo").asLong();
-
-            int[] notes = mapper.convertValue(node.get("notes"), new TypeReference<int[]>(){});
-            int numOfNotes = notes.length;
-            int duration = (int) Math.round(numOfNotes/tempo) * 60/ 6; //divide by 6 since every 6 notes in the array corresponds to about 1 second.
-
-            Song song = new Song(title, artist, duration, cost, imageURL, false, notes, tempo);
-            parsedSongs.add(song);
+        songs.elements().forEachRemaining(node -> { //Iterates over each song in the payload containing a list of song objects
+            parsedSongs.add(parseSong(node, mapper));
         });
         adapter.setSongsList(parsedSongs);
     }
@@ -99,9 +79,23 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         @Override
         public String getSubbedTopic() {
-            String SONG_TOPIC = "songs";
+            final String SONG_TOPIC = "Send/SongList";
             return SONG_TOPIC;
 
+    }
+
+    private Song parseSong(JsonNode node, ObjectMapper mapper){
+        String title = node.get("title").asText();
+        String artist = node.get("artist").asText();
+        String imageURL = node.get("imageURL").asText();
+        int cost = node.get("cost").asInt();
+        double tempo = node.get("tempo").asLong();
+        int[] notes = mapper.convertValue(node.get("notes"), new TypeReference<int[]>(){});
+        int numOfNotes = notes.length;
+        int durationInMinute = (int) Math.round(numOfNotes/tempo);
+        int durationInSeconds = durationInMinute * 60 / 6; //divide by 6 since every 6 notes in the array corresponds to about 1 second.
+
+        return new Song(title, artist, durationInSeconds, cost, imageURL, false, notes, tempo);
     }
 
 

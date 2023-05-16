@@ -1,10 +1,5 @@
 package com.example.myapplication;
 
-import androidx.constraintlayout.utils.widget.ImageFilterView;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
-import java.util.Iterator;
 
 public class Song {
     private String title;
@@ -34,33 +29,17 @@ public class Song {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getDuration() {
 
         return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
     public int getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     public String getImageURL() {
         return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
     }
 
     public boolean isUnlocked() {
@@ -75,19 +54,11 @@ public class Song {
         return artist;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
     public int[] getNotes() {
         return notes;
     }
 
-    public void setNotes(int[] notes) {
-        this.notes = notes;
-    }
-
-    public double getTempo() {
+    public double getTempo() { //Needed for jackson library
         return tempo;
     }
 
