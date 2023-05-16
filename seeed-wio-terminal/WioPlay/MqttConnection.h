@@ -1,6 +1,6 @@
 #include <rpcWiFi.h>
 #include <PubSubClient.h>
-// This should be created by the user to enter wifi name password and the broker for mqtt
+// WifiInformation.h file should be created by the user to enter wifi name password and the broker for mqtt
 /*
 #define SSID "Wifi-name-here" 
 #define PASSWORD "Password-here" 
@@ -85,22 +85,6 @@ void updateSongData(char json[]) {
   const char* songName = doc["songName"];
   scenes.changeSongName(songName);
 }
-
-// void printMessage(String message) {
-//   int bgColor;                // declare a backgroundColor
-//   int textColor = TFT_WHITE;  // initializee the text color to white
-//   String displayText = "Received message:";
-
-//   bgColor = TFT_RED;
-//   // Update TFT display and print input message
-//   tft.fillScreen(bgColor);
-//   tft.setTextColor(textColor, bgColor);  // set the text and background color
-//   tft.setTextSize(2);
-//   tft.setCursor((320 - tft.textWidth(displayText)) / 2, 90);  // Make sure to align the text to the center of the screen
-//   tft.println(displayText);                                   // print the text
-//   tft.setCursor((320 - tft.textWidth(message)) / 2, 120);
-//   tft.println(message);
-// }
 
 void callback(char* topic, byte* payload, unsigned int length) {
   // tft.fillScreen(TFT_BLACK);

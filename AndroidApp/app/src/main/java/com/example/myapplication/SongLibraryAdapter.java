@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
+public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder> implements BrokerConnection.MessageListener {
 
     private ArrayList<Song> songsList = new ArrayList<>();
     private final Context context;
@@ -77,7 +78,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     @Override
     public int getItemCount() {
         int size;
-        try{
+        try {
             size = songsList.size();
         } catch (Exception e){
             size = 0;
@@ -108,7 +109,6 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     }
 
 
-
     private void playSong(@NonNull Song currentSong) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
@@ -118,6 +118,11 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        MusicFragment.currentSong = currentSong;
+        MusicFragment.notes = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
+        Log.d("chunks amount", Integer.toString(MusicFragment.notes.size()));
+        BrokerConnection.getInstance().getMqttClient().publish("Music/Loop", "Green light", 0, null);
         Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
 
         // TODO: Implement the logic to play the song
@@ -130,7 +135,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 confirm = true;
-                    unlockSong(currentSong);
+                unlockSong(currentSong);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -142,6 +147,33 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         alert.show();
     }
 
+    @Override
+    public void onMessageArrived(String payload) {
+
+        Log.d("terminal", "terminal needs chunks");
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+
+        if(MusicFragment.notes.size() < 1) {
+            MusicFragment.notes = new ArrayList<>(Util.chunkify(MusicFragment.currentSong.getNotes(), 40));
+        }
+        int[] chunk = MusicFragment.notes.remove(0);
+        try {
+            String currentChunk = writer.writeValueAsString(chunk);
+            BrokerConnection.getInstance().getMqttClient().publish("Music/Song/Notes", currentChunk, 0, null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    @Override
+    public String getSubbedTopic() {
+        return "request/notes";
+    }
+
+
 //TODO Display artist name
     public class ViewHolder extends RecyclerView.ViewHolder{
     //Holds all views
@@ -149,6 +181,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         private final TextView songPrice;
         private final TextView songDuration;
         private final TextView artistName;
+        private final TextView userBalance;
         private final ImageView songImage;
         private final CardView parent;
         public ViewHolder(@NonNull View itemView) {
@@ -157,7 +190,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
             songTitle = itemView.findViewById(R.id.song_title);
             songPrice = itemView.findViewById(R.id.song_price);
             songDuration = itemView.findViewById(R.id.song_duration);
-            TextView userBalance = itemView.findViewById(R.id.user_balance);
+            userBalance = itemView.findViewById(R.id.user_balance);
             songImage = itemView.findViewById(R.id.image);
             artistName = itemView.findViewById(R.id.artist_name);
 

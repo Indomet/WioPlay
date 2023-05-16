@@ -27,6 +27,9 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private View rootView;
     private SongLibraryAdapter adapter;
 
+    public static Song currentSong;
+    public static ArrayList<int[]> notes = new ArrayList<>();
+
     MusicFragment(){
         BrokerConnection broker= MainActivity.brokerConnection;
         broker.addMessageListener(this);
@@ -57,9 +60,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
     @Override
     public void onMessageArrived(String payload) {
-        Toast.makeText(rootView.getContext(), User.getInstance().getUserFile().getPath(), Toast.LENGTH_LONG).show();
         Log.d("onMusicPayloadArrived", payload);
-
         ArrayList<Song> parsedSongs = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode songs;
