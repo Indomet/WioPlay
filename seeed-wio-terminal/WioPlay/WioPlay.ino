@@ -1,6 +1,6 @@
-#include "seeed_line_chart.h"
-#include <map>
-#include <ArduinoJson.h>
+#include "seeed_line_chart.h" // library for drawing the burndown chart
+#include <map> 
+#include <ArduinoJson.h> // json library
 #include "Seeed_FS.h"  // SD card library
 #include "UserInformation.h"
 UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, userAge, isMale)
@@ -12,6 +12,7 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 MusicPlayer player(2);
 
 #include "Scenes.h"
+Scenes scenes;
 #include "BurndownChart.h"
 #include "MqttConnection.h"
 
@@ -34,7 +35,7 @@ void setup() {
 
   burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
 
-  // menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
+
 }
 
 void loop() {
