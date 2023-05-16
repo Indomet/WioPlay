@@ -86,7 +86,7 @@ public class Util {
         return swapElements(sortedOutput, 0, 1);
     }
 
-    public static String[] swapElements(String[] array, int i, int j) {
+    private static String[] swapElements(String[] array, int i, int j) {
         String element1 = array[i];
         String element2 = array[j];
 
@@ -96,7 +96,7 @@ public class Util {
         return array;
     }
 
-    public static boolean checkIfCharacterIsAlphabeticallyGreater(char c1, char c2)
+    private static boolean checkIfCharacterIsAlphabeticallyGreater(char c1, char c2)
     {
         return c1 < c2;
     }
