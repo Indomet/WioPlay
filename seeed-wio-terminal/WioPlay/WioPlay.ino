@@ -53,9 +53,29 @@ void loop()
 
     motionDetection.recordPreviousAcceleration(); // Read previous user-position
 
+    /*
     if (player.song != NULL)
     {
       player.playChunk();
+    }
+    */
+
+    if (player.isPlayingSong())
+    {
+      if (player.song != NULL)
+      {
+        player.playChunk();
+      }
+    }
+    else
+    {
+      // TODO: Calculate appropriate delay:
+      // 1. exerciseDuration - timeElapsed = timeLeft 
+
+
+      // Calculate approporate delay based on time remaining
+
+      delay(1000);
     }
 
     burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
@@ -68,7 +88,7 @@ void loop()
     // Serial.println("***********************");
 
     movementValue = motionDetection.detectMotion(); // Read current user-position
-    burndownChart.sufficientMovementInquiry(userInformation, movementValue, 1000); // player.getCurrentPauseChunkDuration()
+    burndownChart.sufficientMovementInquiry(userInformation, movementValue, 1000); // player.getCurrentPauseChunkDuration() -------------> Add if-statement for this case
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
 
