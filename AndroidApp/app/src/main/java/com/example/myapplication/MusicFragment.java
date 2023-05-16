@@ -29,10 +29,14 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private TextView userBalance;
     private View rootView;
 
-
-
     private ArrayList<Song> songsList = new ArrayList<>();
     private boolean hasCreated = false;
+
+    MusicFragment(){
+        BrokerConnection broker= MainActivity.brokerConnection;
+        broker.addMessageListener(this);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,9 +50,6 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         SongLibraryAdapter adapter = new SongLibraryAdapter(recyclerView.getContext());
 
         MainActivity.brokerConnection = BrokerConnection.getInstance(rootView.getContext());
-        MainActivity.brokerConnection.setMessageListener(this);
-
-
 
         adapter.setSongsList(MainActivity.songList.getSongList());
         recyclerView.setAdapter(adapter);
@@ -91,6 +92,12 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         });
         MainActivity.songList.setList(parsedSongs);
         //adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public String getSubbedTopic() {
+        String SONG_TOPIC = "Send/SongList";
+        return SONG_TOPIC;
     }
 
 

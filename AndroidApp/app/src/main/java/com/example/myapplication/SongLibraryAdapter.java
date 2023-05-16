@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,22 +19,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.squareup.picasso.Picasso;
 
-import org.graalvm.compiler.core.common.util.Util;
+// import org.graalvm.compiler.core.common.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-import javax.swing.text.Utilities;
+// import javax.swing.text.Utilities;
 
-public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder>{
+public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder> implements BrokerConnection.MessageListener{
 
+    public static int counter = 0;
+    public static boolean isPlayingSong = false;
     private ArrayList<Song> songsList = new ArrayList<>();
     private Context context;
     private boolean confirm;
 
+    private Thread thread = new Thread();
+
+    public static LinkedList<int[]> temp = new LinkedList<>();
+
     public SongLibraryAdapter(Context context) {
         this.context = context;
+        BrokerConnection.getInstance(context).addMessageListener(this);
     }
 
     @NonNull
@@ -111,14 +123,18 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         Toast.makeText(context, "Unlocked " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
-
-
     private void playSong(@NonNull Song currentSong) {
         try {
-            String notes = writer.writeValueAsString(currentSong.getNotes());
-            String[] songSegmentNotes = Util.splitStringInSegments(notes, 12, 40); //
-            int[][] songNotes =  Util.splitIntegerArrayInSegments(currentSong.getNotes(), 30, 40);
 
+            isPlayingSong = true;
+
+            Log.d("mr.jex", "mr.jex :))");
+            temp = currentSong.getNoteQueue();
+            // String notes = writer.writeValueAsString(currentSong.getNotes());
+            // String[] songSegmentNotes = Util.splitStringInSegments(notes, 12, 40); //
+
+            //int[][] songNotes =  Util.chunkify(currentSong.getNotes(), 40);
+            BrokerConnection.getInstance(context).getMqttClient().publish("Music/Trigger", "start requesting", 0, null);
             // Song.resetCurrentChunkIdx(); //
 
             // Two possible solutions: MQQT & Future-Scheduling-Invoking of publish-methods
@@ -134,27 +150,16 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
             // Future-Scheduling-Invoking of publish-methods solution
 
-            MainActivity.scheduledExecutorService.shutdownNow(); // Interrupt future-scheduled publishes of the previously played song's chunks
+           // MainActivity.scheduledExecutorService.shutdownNow(); // Interrupt future-scheduled publishes of the previously played song's chunks
             int currentScheduleDelay = 0;
 
-            for (int i = 0; i < songNotes.length; i++)
-            {
-                ObjectMapper mapper = new ObjectMapper();
-                ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
 
-                String currentChunk = writer.writeValueAsString(songNotes[i]);
 
-                MainActivity.scheduledExecutorService.schedule(()->BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, currentChunk, 0, null), currentScheduleDelay, TimeUnit.SECONDS);
-
-                // MainActivity.scheduledExecutorService.schedule(()->BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, songSegmentNotes[i], 0, null), currentScheduleDelay, TimeUnit.SECONDS);
-                currentScheduleDelay += currentSong.calculateChunkDuration(songSegmentNotes[i].length());
-            }
-
-            scheduledExecutorService.shutdown(); // Shutdown when song is done for the sake of performance
+            //MainActivity.scheduledExecutorService.shutdown(); // Shutdown when song is done for the sake of performance
 
             // Song.incrementCurrentChunkIdx(); // (This is only needed for MQTT solution)
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
@@ -181,7 +186,52 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         alert.show();
     }
 
-//TODO Display artist name
+    @Override
+    public void onMessageArrived(String payload) throws InterruptedException {
+
+        if (isPlayingSong)
+        {
+            if (counter++ == 0)
+            {
+                Log.d("lol","calling the cursed method");
+                int[] chunk = temp.removeFirst();
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+                String currentChunk = null;
+                try {
+                    currentChunk = writer.writeValueAsString(chunk);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, currentChunk, 0, null);
+
+                thread.sleep(1000);
+                isPlayingSong = false;
+            }
+        }
+        else
+        {
+            Log.d("lol","calling the cursed method");
+            int[] chunk = temp.removeFirst();
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+            String currentChunk = null;
+            try {
+                currentChunk = writer.writeValueAsString(chunk);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            BrokerConnection.getInstance(context).getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, currentChunk, 0, null);
+
+        }
+    }
+
+    @Override
+    public String getSubbedTopic() {
+        return "Notes/Request";
+    }
+
+    //TODO Display artist name
     public class ViewHolder extends RecyclerView.ViewHolder{
     //Holds all views
         private TextView songTitle, songPrice, songDuration, artistName, userBalance;
