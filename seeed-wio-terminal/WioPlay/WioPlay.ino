@@ -58,7 +58,7 @@ void loop()
       player.playChunk();
     }
 
-    burndownChart.updateTimeElapsed(player.getCurrentPauseChunkDuration());
+    burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
 
     // TEMPORARY
     // Serial.println("***********************");
@@ -68,7 +68,7 @@ void loop()
     // Serial.println("***********************");
 
     movementValue = motionDetection.detectMotion(); // Read current user-position
-    burndownChart.sufficientMovementInquiry(userInformation, movementValue, player.getCurrentPauseChunkDuration());
+    burndownChart.sufficientMovementInquiry(userInformation, movementValue, 1000); // player.getCurrentPauseChunkDuration()
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
 
