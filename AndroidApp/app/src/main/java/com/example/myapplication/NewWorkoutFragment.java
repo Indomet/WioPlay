@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,9 +77,7 @@ public class NewWorkoutFragment extends Fragment {
 
         targetCaloriesTextView = rootView.findViewById(R.id.current_calorie_goal);
 
-        String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json"; //data/user/0/myapplication/files
-        File managerFile = new File(managerPath);
-        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
+        workoutManager = WorkoutManager.getInstance();
 
         targetCaloriesTextView.setText(Integer.toString(workoutManager.getCalorieGoal()));
         ImageButton incrementButton = rootView.findViewById(R.id.plus_calories_btn);
@@ -133,9 +132,11 @@ public class NewWorkoutFragment extends Fragment {
             try {
                 String json = Util.objectToJSON(workoutManager);
                 MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager),MainActivity.brokerConnection.QOS,null);
+                Util.changeFragment(new Workout_Fragment(), getActivity());
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+
 
         }
 

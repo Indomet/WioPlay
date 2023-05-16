@@ -1,5 +1,11 @@
 package com.example.myapplication;
 
+import android.app.Activity;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
@@ -16,6 +22,11 @@ public class Util {
             e.printStackTrace();
         }
         return json;
+    }
+
+    public static void changeFragment(Fragment fragment, FragmentActivity activity){
+        FragmentTransaction fm = activity.getSupportFragmentManager().beginTransaction();
+        fm.replace(R.id.frameLayout, fragment).setReorderingAllowed(true).commit();
     }
 
 }
