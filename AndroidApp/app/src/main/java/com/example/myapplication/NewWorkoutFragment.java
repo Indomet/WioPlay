@@ -2,6 +2,11 @@ package com.example.myapplication;
 
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +17,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-
 
 public class NewWorkoutFragment extends Fragment {
 
     private WorkoutType workoutType;
 
     private View rootView;
-
 
     private TextView targetCaloriesTextView;
 
@@ -66,7 +66,7 @@ public class NewWorkoutFragment extends Fragment {
         rootView= inflater.inflate(R.layout.fragment_new_workout, container, false);
         widgetInit();
 
-        workoutManager = Util.loadManagerFromFile(getActivity());
+        workoutManager = WorkoutManager.getInstance();
         return rootView;
     }
 
@@ -75,6 +75,9 @@ public class NewWorkoutFragment extends Fragment {
         Button startWorkoutButton = rootView.findViewById(R.id.start_button);
         targetCaloriesTextView = rootView.findViewById(R.id.current_calorie_goal);
         startWorkoutButton.setOnClickListener(view->startWorkout());
+
+        targetCaloriesTextView = rootView.findViewById(R.id.current_calorie_goal);
+
         targetCaloriesTextView.setText(Integer.toString(workoutManager.getCalorieGoal()));
         ImageButton incrementButton = rootView.findViewById(R.id.plus_calories_btn);
         ImageButton decrementButton = rootView.findViewById(R.id.minus_calories_btn);
@@ -127,6 +130,8 @@ public class NewWorkoutFragment extends Fragment {
             workoutManager.setType(workoutType);
 
             try {
+                String json = Util.objectToJSON(workoutManager);
+                Util.changeFragment(new Workout_Fragment(), getActivity());
                 MainActivity.brokerConnection.getMqttClient().publish(BrokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager), BrokerConnection.QOS,null);
             } catch (IllegalAccessException e) {
                 Log.d("PUB_ERROR","Could not publish the data. Json couldn't be converted");

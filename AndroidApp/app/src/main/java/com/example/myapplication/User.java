@@ -17,28 +17,35 @@ public class User {
     private String sex;
     private int calorieCredit;
     private File userFile;
-    private static User user=null;
+
+    private static User instance;
     private int monthlyWorkouts;
     private User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
         load();
     }
-    public static User getInstance(File userFile){
-        if(user==null){
-            user=new User(userFile);
+
+    public static User getInstance(){
+        if(instance == null){
+            throw new NullPointerException();
         }
-        return user;
+        return instance;
+    }
+    public static User initialize(File userFile){
+        if(instance == null){
+            instance = new User(userFile);
+        }
+        return instance;
     }
 
-    //todo make the user start in settings to input stuff and cant leave if they don't do it
     private void defaultUser() {
         this.age = 0;
         this.height = 0;
         this.weight = 0;
         this.username = "username";
-        this.calorieCredit = 727; //A new user starts with 0 CalorieCurrency
-        monthlyWorkouts=30;//30 is the default number, so a workout per day per month
+        this.calorieCredit = 500; //A new user starts with 500 CalorieCurrency
+        this.monthlyWorkouts=30; //30 is the default number, so a workout per day per month
     }
 
     public void setUsername(String username) {
@@ -84,10 +91,6 @@ public class User {
         return this.calorieCredit;
     }
 
-    public void setCalorieCredit(int calorieCredit) {
-        this.calorieCredit = calorieCredit;
-        saveUserData();
-    }
 
     public String toString() {
         return age + "," + height + "," + weight;
@@ -130,12 +133,15 @@ public class User {
     public void setMonthlyWorkouts(int monthylWorkoutsCount) {
         this.monthlyWorkouts=monthylWorkoutsCount;
         saveUserData();
-
     }
 
     public int getMonthlyWorkouts() {
         return monthlyWorkouts;
 
+    }
+
+    public File getUserFile() {
+        return userFile;
     }
 
 
