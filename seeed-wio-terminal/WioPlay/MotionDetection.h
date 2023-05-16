@@ -1,4 +1,4 @@
-#include "LIS3DHTR.h"
+#include "LIS3DHTR.h" // accelerometer library
 LIS3DHTR<TwoWire> lis;
 
 class MotionDetection {

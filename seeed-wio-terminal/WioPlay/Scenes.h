@@ -1,5 +1,5 @@
 TFT_eSPI tft;
-#include "TFT_eSPI.h"
+#include "TFT_eSPI.h" 
 #include "RawImage.h"  // image processing library
 // #include "image.h"
 #define RIGHT_BUTTON WIO_5S_RIGHT  // Right joystick  WIO_5S_PRESS press is probably using same pins as the burndown chart
@@ -18,10 +18,11 @@ private:
   const char* prevButton = "/photos/prev.bmp";
   const char* pauseButton = "/photos/pause.bmp";
   const char* nextButton = "/photos/next.bmp";
+  const unsigned long UPDATE_INTERVAL = 1500;  // update interval in milliseconds //non blocking  delay
+  unsigned long lastUpdateTime = 0;            // time of last update  //non blocking  delay
 
 public:
-  Scenes()
-  /* : songImage(songImage) */ {
+  Scenes() {
     this->songName = songName;
   }
 
@@ -80,11 +81,15 @@ public:
   }
 
   void menuNavigationOnPress(void (*firstScene)(), void (*secondScene)()) {
-    if (digitalRead(RIGHT_BUTTON) == LOW) {
-      secondScene();
-      isOnMusicScene = true;
-    } else {
-      firstScene();
+    unsigned long currentTime = millis();
+    if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+      lastUpdateTime = currentTime;
+      if (digitalRead(RIGHT_BUTTON) == LOW) {
+        secondScene();
+        isOnMusicScene = true;
+      } else {
+        firstScene();
+      }
     }
   }
 
@@ -97,8 +102,4 @@ public:
     messageReceived = true;
   }
 
-  // void changeArtwork(DynamicJsonDocument newSongImage) {
-  //   this->songImage = newSongImage;
-  //   messageReceived = true;
-  // }
 };
