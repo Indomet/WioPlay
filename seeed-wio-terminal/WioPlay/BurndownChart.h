@@ -2,7 +2,7 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(200000, 3, 0);      // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd(20, 3, 0);      // (exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);           // (float graphUIXStartValue)
 
 #include <iostream>
@@ -50,6 +50,10 @@ public:
 
   float getTimeElapsed() {
     return burndownChartBackEnd.getTimeElapsed();
+  }
+
+  bool checkIfExerciseSettingsAreRealistic() {
+    return burndownChartBackEnd.checkIfExerciseSettingsAreRealistic();
   }
 
   void updateTimeElapsed(float duration) {
