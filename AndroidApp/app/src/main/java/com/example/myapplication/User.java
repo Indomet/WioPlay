@@ -16,18 +16,26 @@ public class User {
     private int calorieCredit;
     private int lifeTimeCalories;
     private File userFile;
-    private static User user=null;
+
+    private static User instance;
     private int monthlyWorkouts;
     private User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
         load();
     }
-    public static User getInstance(File userFile){
-        if(user==null){
-            user=new User(userFile);
+
+    public static User getInstance(){
+        if(instance == null){
+            throw new NullPointerException();
         }
-        return user;
+        return instance;
+    }
+    public static User initialize(File userFile){
+        if(instance == null){
+            instance = new User(userFile);
+        }
+        return instance;
     }
 
     //todo make the user start in settings to input stuff and cant leave if they don't do it
@@ -166,6 +174,10 @@ public class User {
     public int getMonthlyWorkouts() {
         return monthlyWorkouts;
 
+    }
+
+    public File getUserFile() {
+        return userFile;
     }
 
 

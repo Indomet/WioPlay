@@ -28,18 +28,16 @@ public class SongList {
     }
     public static SongList getInstance(){
         if(instance == null){
-            instance = new SongList();
-            return instance;
+            throw new NullPointerException();
         }
         return  instance;
     }
 
-    public static SongList getInstance(File songFile){
+    public static SongList initialize(File songFile){
         if(instance == null){
             instance = new SongList(songFile);
-            return instance;
         }
-        return  instance;
+        return instance;
     }
 
 

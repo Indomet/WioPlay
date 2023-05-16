@@ -40,7 +40,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         RecyclerView recyclerView = rootView.findViewById(R.id.songLibraryView);
         TextView userBalance = rootView.findViewById(R.id.user_balance);
 
-        userBalance.setText(Integer.toString(MainActivity.user.getCalorieCredit()));
+        userBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
         //The adapter that handles the recycler view functionalities
         adapter = new SongLibraryAdapter(recyclerView.getContext());
 
@@ -57,7 +57,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
     @Override
     public void onMessageArrived(String payload) {
-
+        Toast.makeText(rootView.getContext(), User.getInstance().getUserFile().getPath(), Toast.LENGTH_LONG).show();
         Log.d("onMusicPayloadArrived", payload);
 
         ArrayList<Song> parsedSongs = new ArrayList<>();
