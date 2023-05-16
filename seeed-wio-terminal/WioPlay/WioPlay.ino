@@ -1,9 +1,9 @@
 #include "seeed_line_chart.h"
 #include <map>
 #include <ArduinoJson.h>
-#include "Seeed_FS.h" // SD card library
+#include "Seeed_FS.h"  // SD card library
 #include "UserInformation.h"
-UserInformation userInformation(67, 175, 23, 0); // (userWeight, userHeight, userAge, isMale)
+UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, userAge, isMale)
 
 #include "MotionDetection.h"
 #include "MusicPlayer.h"
@@ -22,40 +22,41 @@ BurndownChart burndownChart;
 
 const char *calorie_pub = "Send/Calorie/Burn/Data";
 
-void setup()
-{
-  Serial.begin(9600); // Start serial communication
+void setup() {
+  Serial.begin(9600);  // Start serial communication
   setupMqtt();
   setupButton();
-  while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI))
-  { // setup sd
+  while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
 
-  burndownChart.updateGraphVizuals(); // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
+  burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
 
   // menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 }
 
-void loop()
-{
+void loop() {
   loopMqtt();
 
   // Exercise isn't complete yet: Continually read movement-values and update chart accordingly
-  if (burndownChart.isExercising())
-  {
+  if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
     buttonOnPress();
     menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
-    motionDetection.recordPreviousAcceleration(); // Read previous user-position
+    motionDetection.recordPreviousAcceleration();  // Read previous user-position
 
-    if (player.song != NULL)
-    {
-      player.playChunk();
+    if (player.song.size() > 0 && !player.hasRequested) {
+      if (player.getPosition() >= player.song.size()) {
+        Serial.println(player.getPosition());
+        client.publish("request/notes", "I need a new set of notes");
+        player.hasRequested = true;
+      } else {
+        player.playChunk();
+      }
     }
 
     burndownChart.updateTimeElapsed(player.getCurrentPauseChunkDuration());
@@ -67,19 +68,17 @@ void loop()
     // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
     // Serial.println("***********************");
 
-    movementValue = motionDetection.detectMotion(); // Read current user-position
+    movementValue = motionDetection.detectMotion();  // Read current user-position
     burndownChart.sufficientMovementInquiry(userInformation, movementValue, player.getCurrentPauseChunkDuration());
-    client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
+    //client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
 
   // Exercise is completed: Inactivate burndown chart and show panel
-  else
-  {
+  else {
     burndownChart.displayExerciseResults();
   }
 }
 
-void showBurndownChartScene()
-{
+void showBurndownChartScene() {
   burndownChart.updateGraphVizuals();
 }
