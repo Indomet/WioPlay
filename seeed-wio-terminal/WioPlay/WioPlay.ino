@@ -1,6 +1,6 @@
-#include "seeed_line_chart.h"
+#include "seeed_line_chart.h" // library for drawing the burndown chart
 #include <map>
-#include <ArduinoJson.h>
+#include <ArduinoJson.h> // json library
 #include "Seeed_FS.h"  // SD card library
 #include "UserInformation.h"
 UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, userAge, isMale)
@@ -12,6 +12,7 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 MusicPlayer player(2);
 
 #include "Scenes.h"
+Scenes scenes;
 #include "BurndownChart.h"
 #include "MqttConnection.h"
 
@@ -20,12 +21,12 @@ float movementValue;
 MotionDetection motionDetection;
 BurndownChart burndownChart;
 
-const char *calorie_pub = "Send/Calorie/Burn/Data";
+const char* calorie_pub = "Send/Calorie/Burn/Data";
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
-  setupButton();
+  scenes.setupButton();
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
@@ -33,8 +34,6 @@ void setup() {
   burndownChart.initializeUI();
 
   burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
-
-  // menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 }
 
 void loop() {
@@ -44,8 +43,8 @@ void loop() {
   if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
-    buttonOnPress();
-    menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
+    scenes.buttonOnPress();
+    scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
     bool isPlayingSong = player.isPlayingSong();
@@ -95,4 +94,8 @@ void loop() {
 
 void showBurndownChartScene() {
   burndownChart.updateGraphVizuals();
+}
+
+void showPlayerScene() {
+  scenes.playerScene();
 }
