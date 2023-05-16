@@ -50,10 +50,9 @@ public class WorkoutManager {
     private File managerFile;
 
 
-    private WorkoutManager(File managerFile,Context context) {
+    private WorkoutManager(File managerFile) {
         this.defaultWorkoutManager();
         this.managerFile = managerFile;
-        this.context=context;
         try {
             load();
         } catch (IllegalAccessException e) {
@@ -122,9 +121,16 @@ public class WorkoutManager {
 
 
     //singleton design pattern as the user only needs 1 workout manager to manage the backend logic
-    public static WorkoutManager getInstance(File managerFile,Context c){
+    public static WorkoutManager getInstance(){
         if(singleton==null){
-            singleton=new WorkoutManager(managerFile,c);
+            throw new NullPointerException();
+        }
+        return singleton;
+    }
+
+    public static WorkoutManager initialize(File managerFile){
+        if(singleton==null){
+            singleton=new WorkoutManager(managerFile);
         }
         return singleton;
     }

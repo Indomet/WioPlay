@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Environment;
 import android.os.Handler;
 
 import android.view.LayoutInflater;
@@ -70,10 +71,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private TextView timeLeft;private NewWorkoutFragment newWorkoutFragment;
 
     private boolean stopwatchRunning = false;
-    WorkoutManager workoutManager;
     private User user;
 
     private View rootView;
+
+    private WorkoutManager workoutManager;
     MaterialCalendarView calendarView;
 
 
@@ -127,16 +129,14 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
 
+        String downloadsDir = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOCUMENTS;
+        //String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json";
 
-        String managerPath = getActivity().getFilesDir().getPath() + "/workoutManager.json";
-        File managerFile = new File(managerPath);
-
-        workoutManager = WorkoutManager.getInstance(managerFile,getContext());
         BrokerConnection broker = MainActivity.brokerConnection;
         broker.addMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
-        String filePath = getActivity().getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
-        user = User.getInstance(new File(filePath));
+        user = User.getInstance();
+        workoutManager = WorkoutManager.getInstance();
 
         widgetInit();
 
@@ -199,8 +199,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     public void changeToNewWorkoutFragment(View buttonPressed) {
         newWorkoutFragment.setWorkoutType(buttonPressed.getId());
-        FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-        fm.replace(R.id.frameLayout, newWorkoutFragment).setReorderingAllowed(true).commit();
+        Util.changeFragment(newWorkoutFragment, getActivity());
     }
     public void onDateSelected(CalendarDay date) {
         FinishedWorkoutData data = workoutManager.getWorkoutDataHashMap().get(date.toString());
