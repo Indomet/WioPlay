@@ -1,6 +1,6 @@
 #include <rpcWiFi.h>
 #include <PubSubClient.h>
-// This should be created by the user to enter wifi name password and the broker for mqtt
+// WifiInformation.h file should be created by the user to enter wifi name password and the broker for mqtt
 /*
   #define SSID "Wifi-name-here"
   #define PASSWORD "Password-here"
@@ -84,6 +84,7 @@ void updateChart(char json[])
   burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
 }
 
+<<<<<<< HEAD
 void updateSongName(char json[])
 {
   DynamicJsonDocument doc(1024);
@@ -136,6 +137,16 @@ void startStreaming() {
 
 void callback(char *topic, byte *payload, unsigned int length)
 {
+=======
+
+void updateSongData(char json[]) {
+  deserializeJson(doc, json);
+  const char* songName = doc["songName"];
+  scenes.changeSongName(songName);
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+>>>>>>> main
   // tft.fillScreen(TFT_BLACK);
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -154,10 +165,15 @@ void callback(char *topic, byte *payload, unsigned int length)
   else if (strcmp(Workout_sub, topic) == 0)
   {
     updateChart(charBuf);
+<<<<<<< HEAD
   }
   else if (strcmp(Music_sub, topic) == 0)
   {
     updateSongName(charBuf);
+=======
+  } else if (strcmp(Music_sub, topic) == 0) {
+    updateSongData(charBuf);
+>>>>>>> main
   }
     else if (strcmp(Loop_trigger_sub, topic) == 0)
   {

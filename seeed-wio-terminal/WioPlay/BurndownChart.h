@@ -1,9 +1,14 @@
-#include "Arduino.h"
+// #include "Arduino.h"
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
+<<<<<<< HEAD
 BurndownChartBackEnd burndownChartBackEnd(200000, 3, 0);      // (exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);           // (float graphUIXStartValue)
+=======
+BurndownChartBackEnd burndownChartBackEnd(400, 260, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartFrontEnd burndownChartFrontEnd(20);             // (float graphUIXStartValue)
+>>>>>>> main
 
 #include <iostream>
 #include <string>
