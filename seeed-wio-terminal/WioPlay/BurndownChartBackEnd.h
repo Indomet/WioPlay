@@ -11,9 +11,13 @@ public:
 
     caloriesBurnt = 0;
     timeElapsed = 0;
-    balanceFactor = 0.08;
 
-    standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
+    // balanceFactor = 0.08;
+    balanceFactor = constrainCaloriesBurntVelocity();
+
+    // standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
+    standard = getAverageValue(new float[] {(float)(metRanges[chosenActivityIdx][0]), (float)(metRanges[chosenActivityIdx][1])});
+
     proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
     minMovement = (float)metRanges[chosenActivityIdx][0] / proportionalConstant;  // Minimal movement required for user to be considered actually doing the selected activity
     maxMovement = (float)metRanges[chosenActivityIdx][1] / proportionalConstant;  // Maximal movement boundary
@@ -53,6 +57,33 @@ public:
     } else {
       return (655.1 + (4.35 * userInformation.userWeight) + (4.7 * userInformation.userHeight) - (4.7 * userInformation.userAge)) * moveFactor;
     }
+  }
+
+  // TODO
+  // Constant values for magic values in line 52 and 54
+
+  // Conform calories burned velocity in accordance to realistic boundaries
+  float constrainCaloriesBurntVelocity()
+  {
+    // Takes into consideration: moveFactor = (movementValue / songPauseChunkDuration) * balanceFactor;
+    float controlVariable = songPauseChunkDuration / balanceFactor;
+
+    float maxValue = max(controlVariable, realisticCaloriesBurntVelocity[0]);
+    float minValue = min(controlVariable, realisticCaloriesBurntVelocity[1]);
+
+    return getAverageValue(new float[] {maxValue, minValue});
+  }
+
+  float getAverageValue(float[] values)
+  {
+    float sum = 0;
+
+    for (int i = 0; i < values.length; i++)
+    {
+      sum += values[i];
+    }
+
+    return sum / values.length;
   }
 
   // Only burn calories if user's movement-intensity corresponds with selected exercise
@@ -100,6 +131,7 @@ public:
   }
 
 private:
+  const float realisticCaloriesBurntVelocity[] {0.3, 0.9};
   float standard;
   float minMovement;  // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
   float maxMovement;  // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
