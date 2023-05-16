@@ -36,7 +36,7 @@ public class User {
         this.height = 0;
         this.weight = 0;
         this.username = "username";
-        this.calorieCredit = 727; //A new user starts with 0 CalorieCurrency
+        this.calorieCredit = 9000000; //A new user starts with 0 CalorieCurrency
         this.lifeTimeCalories = 0;
         monthlyWorkouts=30;//30 is the default number, so a workout per day per month
     }

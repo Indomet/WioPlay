@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import java.io.File;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
         //initializing the variables
         bottomNavigation = findViewById(R.id.bottomNavigationView);
         workoutFragment = new Workout_Fragment();
@@ -40,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
         changeFragment(musicFragment);
         bottomNavigation.setOnItemSelectedListener(this);
-        brokerConnection =  BrokerConnection.getInstance(getApplicationContext());
 
 
         String userPath = this.getFilesDir().getPath() + "/user.json"; //data/user/0/myapplication/files
