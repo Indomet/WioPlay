@@ -48,13 +48,8 @@ void loop() {
     menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
-
     bool isPlayingSong = player.isPlayingSong();
 
-    if (isPlayingSong && player.song != NULL)
-    {
-      player.playChunk();
-    }
 
     if (player.song.size() > 0 && !player.hasRequested) {
       if (player.getPosition() >= player.song.size()) {
@@ -69,6 +64,7 @@ void loop() {
     {
       delay(1000);
     }
+
 
     float updateDelay = isPlayingSong ? player.getCurrentPauseChunkDuration() : 1000; // FrontEnd update delay
     // burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
