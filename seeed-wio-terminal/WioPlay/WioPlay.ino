@@ -25,7 +25,7 @@ const char *calorie_pub = "Send/Calorie/Burn/Data";
 void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
-  setupButton();
+   scenes.setupButton();
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
@@ -44,8 +44,8 @@ void loop() {
   if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
-    buttonOnPress();
-    menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
+     scenes.buttonOnPress();
+    scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
     bool isPlayingSong = player.isPlayingSong();
@@ -96,3 +96,8 @@ void loop() {
 void showBurndownChartScene() {
   burndownChart.updateGraphVizuals();
 }
+
+void showPlayerScene() {
+  scenes.playerScene();
+}
+
