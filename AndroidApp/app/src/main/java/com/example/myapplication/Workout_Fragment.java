@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,8 +85,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     public void onPause() {
         super.onPause();
         //pause the stopwatch
-        Handler handler = new Handler();
         handler.removeCallbacksAndMessages(null);
+        stopwatchRunning=false;
     }
 
     @Override
@@ -96,6 +97,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     Workout_Fragment(){
         BrokerConnection broker= MainActivity.brokerConnection;
         broker.addMessageListener(this);
+        newWorkoutFragment = new NewWorkoutFragment();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -106,8 +108,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
 
         BrokerConnection broker = MainActivity.brokerConnection;
-        broker.addMessageListener(this);
-        newWorkoutFragment = new NewWorkoutFragment();
+
         user = User.getInstance();
         workoutManager = WorkoutManager.getInstance();
 
@@ -198,6 +199,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     public void onMessageArrived(String payload) {
 
         if (workoutManager.getWorkoutHasStarted()) {
+            Log.d("Calorie", "Burned");
             int integerPayload = (int)Float.parseFloat(payload);
             workoutManager.setCaloriesBurnt(integerPayload);
 
@@ -205,11 +207,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
             String calculatedTimeLeft = workoutManager.calculateTimeLeft();
             timeLeft.setText(calculatedTimeLeft);
-            int cumulativeCalorie = Integer.parseInt(payload);
-            int changeInCalories = Math.abs(cumulativeCalorie - currentCalorie);
-            currentCalorie = changeInCalories;
 
-            user.updateCredit(changeInCalories);
+            int diff = workoutManager.calculateCalDiff(integerPayload);
+            workoutManager.setCurrentCalorie(integerPayload);
+
+            user.updateCredit(diff);
             userBalance.setText(Integer.toString(user.getCalorieCredit()));
         }
 
@@ -221,9 +223,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
                     workoutManager.getType(),workoutManager.getCalorieGoal());
             workoutManager.addWorkoutData(finishedWorkout,date);
 
-
+            //this makes sure that the progress bar is
             caloriesProgressbar.setProgress(0,true);
+
             caloriesBurnt.setText("0");
+
             createPopWindow();
             workoutManager.stopWorkout();
             timeLeft.setText("0:00:00");
@@ -231,6 +235,10 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutManager.incrementMonthlyWorkouts();
             monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
             workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
+            //refresh the fragment such that the views get updated
+            workoutManager.setCurrentCalorie(0);
+            Util.changeFragment(this, getActivity());
+
         }
     }
 
@@ -240,8 +248,9 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         return WORKOUT_TOPIC;
     }
 
+
+
     public void startStopWatch() {
-        final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -263,9 +272,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             }
         });
     }
-
-
-
+    private Handler handler = new Handler();
     public void createPopWindow(){
         //create a dialog object that is the pop up window and set the layout to be the xml layout
         Dialog popUpWindow = new Dialog(getActivity());
