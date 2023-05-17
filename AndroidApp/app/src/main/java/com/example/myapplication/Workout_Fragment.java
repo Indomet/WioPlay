@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import java.util.List;
@@ -218,20 +220,10 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
         if (workoutManager.isGoalAchieved()&& workoutManager.getWorkoutHasStarted()) {
             //before anything add the workout data
-            CalendarDay date = CalendarDay.today();
-            //get the time calories burnt and the goal with the workout after its done and the type
-            FinishedWorkoutData finishedWorkout = new FinishedWorkoutData(workoutManager.getDurationInSeconds(),workoutManager.getCaloriesBurnt(),
-                    workoutManager.getType(),workoutManager.getCalorieGoal());
-            workoutManager.addWorkoutData(finishedWorkout,date);
-
-            //this makes sure that the progress bar is
-            caloriesProgressbar.setProgress(0,true);
-
-            caloriesBurnt.setText("0");
+            resetWorkoutUI();
 
             createPopWindow();
             workoutManager.stopWorkout();
-            timeLeft.setText("0:00:00");
             workoutManager.incrementTotalWorkouts();
             workoutManager.incrementMonthlyWorkouts();
             monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
@@ -241,6 +233,32 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             Util.changeFragment(this, getActivity());
 
         }
+
+        else if(workoutManager.getDurationInSeconds()<=workoutManager.getSecondsElapsed()){
+            resetWorkoutUI();
+            Toast.makeText(rootView.getContext(),"You didnt complete the workout in time ",Toast.LENGTH_LONG);
+        }
+    }
+
+    public void resetWorkoutUI(){
+        CalendarDay date = CalendarDay.today();
+        //get the time calories burnt and the goal with the workout after its done and the type
+        FinishedWorkoutData finishedWorkout = new FinishedWorkoutData(workoutManager.getDurationInSeconds(),workoutManager.getCaloriesBurnt(),
+                workoutManager.getType(),workoutManager.getCalorieGoal());
+        workoutManager.addWorkoutData(finishedWorkout,date);
+
+        //this makes sure that the progress bar is set to 0. The lib is very buggy so sometimes it updates others it doesnt
+
+        caloriesProgressbar.setProgress(0,true);
+
+        caloriesBurnt.setText("0");
+
+        workoutManager.stopWorkout();
+        timeLeft.setText("0:00:00");
+
+        workoutManager.setCurrentCalorie(0);
+        Util.changeFragment(this, getActivity());
+
     }
 
     @Override
@@ -261,11 +279,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
                 if (workoutManager.getWorkoutHasStarted()) {
                     workoutManager.incrementSecondsElapsed();
-                } else {
+                }
+                else {
                     handler.removeCallbacksAndMessages(null); // stop the handler
                     final String DEFAULT_TIME_FORMAT = "0:00:00";
                     timeElapsed.setText(DEFAULT_TIME_FORMAT);
                     stopwatchRunning = false;
+
                     return;
                 }
                 stopwatchRunning = true;
