@@ -89,6 +89,15 @@ public class SongList {
 
     private void addUnlockedSong(Song song)
     {
+        int left = 0;
+        int right = unlockedSongs.size() - 1;
+
+        while (left <= right)
+        {
+
+        }
+
+
         int insertIdx = sortSongsByTitle(song);
         unlockedSongs.add(insertIdx, song);
     }
@@ -111,5 +120,35 @@ public class SongList {
         }
 
         return 0;
+    }
+
+    private void addUnlockedSong(ArrayList<Song> unlockedSongs, Song newSong)
+    {
+        int left = 0;
+        int right = unlockedSongs.size() - 1;
+        int mid = 0;
+
+        String newSongTitle = newSong.getTitle();
+
+        while (left <= right)
+        {
+            mid = (left + right) / 2;
+            String currentTitle = unlockedSongs.get(mid).getTitle();
+
+            /*
+            boolean newSongTitleIsAlphabeticallyGreater = stringIsAlphabeticallyGreater(newSongTitle, currentTitle);
+
+            if (newSongTitleIsAlphabeticallyGreater)
+            {
+                right = mid - 1;
+            }
+            else
+            {
+                left = mid + 1;
+            }
+             */
+        }
+
+        unlockedSongs.add(mid, newSong);
     }
 }
