@@ -58,6 +58,11 @@ public:
     burndownChartFrontEnd.updateGraphVizuals(burndownChartBackEnd);
   }
 
+  void resetExercise() {
+    burndownChartBackEnd.
+    burndownChartFrontEnd.
+  }
+
 private:
   void controlNumberOfDataPointsInGraph() {
     burndownChartFrontEnd.controlNumberOfDataPointsInGraph();

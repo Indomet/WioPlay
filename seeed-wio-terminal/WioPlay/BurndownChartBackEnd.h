@@ -68,11 +68,12 @@ public:
       // Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
-
-  void changeAttributeValues(float newExerciseDuration, float newCaloriesGoal, byte newChosenActivityIdx) {
+  
+  void resetExerciseValues(float newExerciseDuration, float newCaloriesGoal, byte newChosenActivityIdx) {
     exerciseDuration = newExerciseDuration;
     caloriesGoal = newCaloriesGoal;
     chosenActivityIdx = newChosenActivityIdx;
+    timeElapsed = 0;
   }
 
   bool checkIfUserAccomplishedGoal() {
