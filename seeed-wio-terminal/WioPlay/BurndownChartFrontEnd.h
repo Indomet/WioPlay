@@ -99,9 +99,9 @@ public:
     {
       for (byte i = 0; i < numberOfGraphValues; i++)
       {
-        for (byte j = 0; j < 29; j++)
+        for (byte j = 0; j < (maxDataPoints - 1); j++)
         {
-          data[i].pop();
+          removeEarliestPoint(i);
         }        
       }
     }
@@ -111,27 +111,22 @@ public:
 
 private:
   const byte numberOfGraphValues = 2;
+  const byte maxDataPoints = 30;
+
   byte caloriesPerSecondTextCoordinates[2] = { 5, 50 };
   byte exerciseResultTextCoordinates[2] = { 15, 70 };
-  const int maxDataPoints = 30;
 
   // Don't display the data-points added earliest on the graph. Delete them to sustain the memory limit
   void removeEarliestDataPoints() {
 
     for (byte i = 0; i < numberOfGraphValues; i++) {
-      data[i].pop();  // Remove the first read variable
+      removeEarliestPoint(i);
     }
-
-    /*
-      for (byte i = 0; i < numberOfGraphValues; i++)
-      {
-        for (byte j = 0; j < 7; j++)
-        {
-          data[i].pop();
-        }        
-      }
-    */
   }
+
+    void removeEarliestPoint(int idx) {
+    data[idx].pop();
+    }
 
   void vizualiseGraphValues(BurndownChartBackEnd burndownChartBackEnd) {
     data[0].push(burndownChartBackEnd.getCaloriesBurnt());
