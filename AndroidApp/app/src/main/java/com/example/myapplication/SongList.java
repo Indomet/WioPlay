@@ -87,20 +87,18 @@ public class SongList {
         addUnlockedSong(song);
     }
 
+    /*
     private void addUnlockedSong(Song song)
     {
         int left = 0;
         int right = unlockedSongs.size() - 1;
 
-        while (left <= right)
-        {
-
-        }
 
 
         int insertIdx = sortSongsByTitle(song);
         unlockedSongs.add(insertIdx, song);
     }
+     */
 
     // Returns the index to insert the song at
     private int sortSongsByTitle(Song songToAdd)
@@ -122,7 +120,8 @@ public class SongList {
         return 0;
     }
 
-    private void addUnlockedSong(ArrayList<Song> unlockedSongs, Song newSong)
+    // Binary Search Insertion for Strings
+    private void addUnlockedSong(Song newSong)
     {
         int left = 0;
         int right = unlockedSongs.size() - 1;
@@ -135,20 +134,15 @@ public class SongList {
             mid = (left + right) / 2;
             String currentTitle = unlockedSongs.get(mid).getTitle();
 
-            /*
-            boolean newSongTitleIsAlphabeticallyGreater = stringIsAlphabeticallyGreater(newSongTitle, currentTitle);
+            boolean newSongTitleIsAlphabeticallyGreater = Util.stringIsAlphabeticallyGreater(newSongTitle, currentTitle);
 
             if (newSongTitleIsAlphabeticallyGreater)
-            {
                 right = mid - 1;
-            }
             else
-            {
                 left = mid + 1;
-            }
-             */
         }
 
+        mid = (int)Math.ceil(((left + right) /(double)2));
         unlockedSongs.add(mid, newSong);
     }
 }
