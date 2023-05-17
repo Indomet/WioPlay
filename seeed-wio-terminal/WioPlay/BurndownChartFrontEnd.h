@@ -1,7 +1,7 @@
-
-
 #define MAX_SIZE 30  // maximum size of data displayed at once in graph
 doubles data[2];
+
+bool firstWorkout = true;
 
 class BurndownChartFrontEnd {
 public:
@@ -95,13 +95,18 @@ public:
 
   void resetChart()
   {
+    if (!firstWorkout)
+    {
       for (byte i = 0; i < numberOfGraphValues; i++)
       {
-        for (byte j = 0; j < 29; j++) // maxDataPoints - 1
+        for (byte j = 0; j < 29; j++)
         {
           data[i].pop();
         }        
       }
+    }
+
+    firstWorkout = false;
   }
 
 private:
@@ -112,6 +117,7 @@ private:
 
   // Don't display the data-points added earliest on the graph. Delete them to sustain the memory limit
   void removeEarliestDataPoints() {
+
     for (byte i = 0; i < numberOfGraphValues; i++) {
       data[i].pop();  // Remove the first read variable
     }
@@ -119,7 +125,7 @@ private:
     /*
       for (byte i = 0; i < numberOfGraphValues; i++)
       {
-        for (byte j = 0; j < maxDataPoints - 1; j++)
+        for (byte j = 0; j < 7; j++)
         {
           data[i].pop();
         }        
