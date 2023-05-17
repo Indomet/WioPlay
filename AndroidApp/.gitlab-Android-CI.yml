@@ -55,7 +55,7 @@ before_script:
   - sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS}"
 
   # Not necessary, but just for surity
-  - chmod +x ./gradlew
+  - chmod +x ./AndroidApp/gradlew
 
 # Basic android and gradle stuff
 # Check linting
@@ -70,7 +70,7 @@ assembleDebug:
   interruptible: true
   stage: assembleDebug
   script:
-    - ./gradlew assembleDebug
+    - ./AndroidApp/gradlew assembleDebug
   artifacts:
     paths:
       - app/build/outputs/
@@ -80,5 +80,5 @@ debugTests:
   interruptible: true
   stage: debugTests
   script:
-    - ./gradlew -Pci --console=plain :app:connectedAndroidTest
+    - ./AndroidApp/gradlew -Pci --console=plain :app:connectedAndroidTest
 
