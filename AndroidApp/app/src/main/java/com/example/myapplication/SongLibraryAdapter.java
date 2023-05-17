@@ -110,6 +110,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
 
     private void playSong(@NonNull Song currentSong) {
+        Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         try {
@@ -126,8 +127,6 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         //Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
            BrokerConnection.getInstance().getMqttClient().publish("Music/Data/Change", currentSong.getTitle(), 0, null);
 
-
-        // TODO: Implement the logic to play the song
     }
 
     public void confirmationDialog(Song currentSong) {
