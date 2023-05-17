@@ -113,6 +113,7 @@ public class BrokerConnection extends AppCompatActivity {
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    
                     //check if the topic of the message is the subscribed topic
                     if(isConnected){ //TODO: Make separate messageListeners for each fragment
                         //Toast.makeText(context, "The message is "+ message.toString(), Toast.LENGTH_SHORT).show();
