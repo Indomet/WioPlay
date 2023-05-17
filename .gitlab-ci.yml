@@ -64,7 +64,7 @@ serverJob:
   script:
     - 'mvn $MAVEN_CLI_OPTS verify'
   after_script:
-    - 'cd ../AndroidApp'
+    - 'cd AndroidApp'
   # except:
   #   variables:
   #     - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
