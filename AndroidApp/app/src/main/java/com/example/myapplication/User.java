@@ -153,5 +153,19 @@ public class User {
     }
 
 
+    public int getAge() {
+        return age;
+    }
 
+    public void setCalorieCredit(int calorieCredit) {
+        this.calorieCredit = calorieCredit;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public String getSex() {
+        return sex;
+    }
 }
