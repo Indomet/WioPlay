@@ -1,6 +1,6 @@
 
 
-#define MAX_SIZE 5  // maximum size of data displayed at once in graph
+#define MAX_SIZE 30  // maximum size of data displayed at once in graph
 doubles data[2];
 
 class BurndownChartFrontEnd {
