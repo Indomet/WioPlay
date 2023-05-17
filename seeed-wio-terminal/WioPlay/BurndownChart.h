@@ -1,7 +1,7 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(80, 300, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd(50, 140, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);         // (float graphUIXStartValue)
 
 class BurndownChart {
@@ -59,13 +59,6 @@ public:
   void resetExercise(float newExerciseDuration, float newCaloriesGoal, int newChosenActivityIdx) {
     burndownChartBackEnd.resetExerciseValues(newExerciseDuration, newCaloriesGoal, newChosenActivityIdx);
     burndownChartFrontEnd.resetChart();
-
-    /*
-    if (tempCounter > 1)
-    {
-      burndownChartFrontEnd.resetChart();
-    }
-    */    
   }
 
 private:
