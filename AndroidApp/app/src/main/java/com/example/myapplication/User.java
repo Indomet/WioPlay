@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
+import android.graphics.Bitmap;
 import android.util.Log;
+
+import androidx.constraintlayout.utils.widget.ImageFilterView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,10 +23,15 @@ public class User {
 
     private static User instance;
     private int monthlyWorkouts;
+    ImageFilterView profilePic;
+    Bitmap map;
     private User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
         load();
+    }
+    public void setPic(ImageFilterView pic){
+        profilePic = pic;
     }
 
     public static User getInstance(){

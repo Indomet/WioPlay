@@ -34,6 +34,8 @@ public class WorkoutManager {
     private WorkoutType type;
     private final File managerFile;
 
+    private int currentCalorie;
+
 
     private WorkoutManager(File managerFile) {
         this.defaultWorkoutManager();
@@ -91,6 +93,7 @@ public class WorkoutManager {
         workoutsMap.put(WorkoutType.WALKING.getName(), 0);
         workoutsMap.put(WorkoutType.RUNNING.getName(),1);
         workoutsMap.put(WorkoutType.HIKING.getName(),2);
+        currentCalorie = 0;
     }
 
 
@@ -149,7 +152,11 @@ public class WorkoutManager {
     }
 
     public boolean isGoalAchieved() {
-        return caloriesBurnt >= calorieGoal;
+        if(caloriesBurnt >= calorieGoal){
+            caloriesBurnt = calorieGoal;
+            return true;
+        }
+        return false;
     }
     public int getCHANGE_TARGET_CALORIES_AMOUNT(){
         //final variable that declares how much the target calories the user
@@ -250,6 +257,23 @@ public class WorkoutManager {
     public void incrementMonthlyWorkouts() {
         currentMonthlyWorkoutsProgress++;
         saveManagerData();
+    }
+
+    public int getCurrentCalorie(){
+        return this.currentCalorie;
+    }
+
+    public void setCurrentCalorie(int currentCalorie){
+        this.currentCalorie = currentCalorie;
+    }
+
+    public int calculateCalDiff(int payload){
+        int cumulativeCalorie = payload;
+        if(cumulativeCalorie - currentCalorie <= 0){
+            return 0;
+        }
+        return cumulativeCalorie - currentCalorie;
+
     }
 
 }
