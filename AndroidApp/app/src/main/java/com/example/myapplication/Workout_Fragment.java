@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,6 +199,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     public void onMessageArrived(String payload) {
 
         if (workoutManager.getWorkoutHasStarted()) {
+            Log.d("Calorie", "Burned");
             int integerPayload = (int)Float.parseFloat(payload);
             workoutManager.setCaloriesBurnt(integerPayload);
 
@@ -236,7 +238,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     @Override
     public String getSubbedTopic() {
-        final String WORKOUT_TOPIC = "Send/Calorie/Burn/Data";
+        final String WORKOUT_TOPIC = "Send/Calorie/Burn/Data/MQTT";
         return WORKOUT_TOPIC;
     }
 

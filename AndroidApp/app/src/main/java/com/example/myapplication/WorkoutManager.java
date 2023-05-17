@@ -149,7 +149,11 @@ public class WorkoutManager {
     }
 
     public boolean isGoalAchieved() {
-        return caloriesBurnt >= calorieGoal;
+        if(caloriesBurnt >= calorieGoal){
+            caloriesBurnt = calorieGoal;
+            return true;
+        }
+        return false;
     }
     public int getCHANGE_TARGET_CALORIES_AMOUNT(){
         //final variable that declares how much the target calories the user
