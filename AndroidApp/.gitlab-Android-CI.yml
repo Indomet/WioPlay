@@ -68,7 +68,7 @@ before_script:
 # Make Project
 assembleDebug:
   interruptible: true
-  stage: build
+  stage: assembleDebug
   script:
     - ./gradlew assembleDebug
   artifacts:
@@ -78,7 +78,7 @@ assembleDebug:
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 debugTests:
   interruptible: true
-  stage: test
+  stage: debugTests
   script:
     - ./gradlew -Pci --console=plain :app:connectedAndroidTest
 
