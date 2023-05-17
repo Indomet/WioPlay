@@ -56,6 +56,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     private View rootView;
     private MaterialCalendarView calendarView;
+    private Handler handler = new Handler();
 
 
     @Override
@@ -272,7 +273,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             }
         });
     }
-    private Handler handler = new Handler();
+
     public void createPopWindow(){
         //create a dialog object that is the pop up window and set the layout to be the xml layout
         Dialog popUpWindow = new Dialog(getActivity());
