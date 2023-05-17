@@ -68,12 +68,21 @@ public:
       // Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
-  
+
   void resetExerciseValues(float newExerciseDuration, float newCaloriesGoal, byte newChosenActivityIdx) {
     exerciseDuration = newExerciseDuration;
     caloriesGoal = newCaloriesGoal;
     chosenActivityIdx = newChosenActivityIdx;
     timeElapsed = 0;
+    caloriesBurnt = 0;
+
+    Serial.println("******************mrjex blet******************");
+    Serial.println(timeElapsed);
+    Serial.println(caloriesGoal);
+    Serial.println(chosenActivityIdx);
+    Serial.println(exerciseDuration);
+    Serial.println(caloriesBurnt);
+    Serial.println("******************mrjex blet******************");
   }
 
   bool checkIfUserAccomplishedGoal() {

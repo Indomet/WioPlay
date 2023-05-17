@@ -71,14 +71,15 @@ void updateSettings(char json[]) {
 }
 
 void updateChart(char json[]) {
-
   DynamicJsonDocument doc(1024);
   deserializeJson(doc, json);
   float calorieGoal = doc["calorieGoal"];
   float duration = doc["durationInSeconds"];
   byte workoutType = doc["workoutType"];
 
-  burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
+  // tempCounter++;
+
+  burndownChart.resetExercise(duration, calorieGoal, workoutType);
 }
 
 void updateSongData(char json[]) {
@@ -147,7 +148,7 @@ void reconnect() {
       Serial.println("connected");
       // Once connected, publish an announcement...
       client.publish(calorie_pub, "hello world");
-      client.setBufferSize(10024);
+      client.setBufferSize(1024);
       Serial.println("Published connection message ");
       // ... and resubscribe
       client.subscribe(TOPIC_sub);
