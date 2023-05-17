@@ -8,7 +8,6 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 #include "MotionDetection.h"
 #include "MusicPlayer.h"
 
-
 MusicPlayer player(2);
 
 #include "Scenes.h"
@@ -20,7 +19,6 @@ float movementValue;
 
 MotionDetection motionDetection;
 BurndownChart burndownChart;
-
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
@@ -68,7 +66,7 @@ void loop() {
     burndownChart.updateTimeElapsed(updateDelay);
 
 
-    // TEMPORARY - Note: Commit 'future updates' statistics
+    // Note: Commit 'future updates' statistics
     // Serial.println("***********************");
     // Serial.println(burndownChart.getTimeElapsed());
     // Serial.println(burndownChart.getActualCaloriesPerSecond());
