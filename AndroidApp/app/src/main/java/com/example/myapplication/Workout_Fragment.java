@@ -85,8 +85,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     public void onPause() {
         super.onPause();
         //pause the stopwatch
-        Handler handler = new Handler();
         handler.removeCallbacksAndMessages(null);
+        stopwatchRunning=false;
     }
 
     @Override
@@ -238,12 +238,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     @Override
     public String getSubbedTopic() {
-        final String WORKOUT_TOPIC = "Send/Calorie/Burn/Data/MQTT";
+        final String WORKOUT_TOPIC = "Send/Calorie/Burn";
         return WORKOUT_TOPIC;
     }
 
+
+
     public void startStopWatch() {
-        final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -265,9 +266,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             }
         });
     }
-
-
-
+    private Handler handler = new Handler();
     public void createPopWindow(){
         //create a dialog object that is the pop up window and set the layout to be the xml layout
         Dialog popUpWindow = new Dialog(getActivity());
