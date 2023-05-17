@@ -87,29 +87,20 @@ public class SongList {
         addUnlockedSong(song);
     }
 
-    // Binary Search Insertion for Strings
+    private ArrayList<String> getAllUnlockedSongTitles()
+    {
+        ArrayList<String> titles = new ArrayList<>();
+
+        for (Song currentSong : unlockedSongs)
+            titles.add(currentSong.getTitle());
+
+        return titles;
+    }
+
     private void addUnlockedSong(Song newSong)
     {
-        int left = 0;
-        int right = unlockedSongs.size() - 1;
-        int mid = 0;
-
-        String newSongTitle = newSong.getTitle();
-
-        while (left <= right)
-        {
-            mid = (left + right) / 2;
-            String currentTitle = unlockedSongs.get(mid).getTitle();
-
-            boolean newSongTitleIsAlphabeticallyGreater = Util.stringIsAlphabeticallyGreater(newSongTitle, currentTitle);
-
-            if (newSongTitleIsAlphabeticallyGreater)
-                right = mid - 1;
-            else
-                left = mid + 1;
-        }
-
-        mid = (int)Math.ceil(((left + right) /(double)2));
-        unlockedSongs.add(mid, newSong);
+        // Transfer song titles to String list
+        int insertionIdx = Util.binarySearchInsertion(getAllUnlockedSongTitles(), newSong.getTitle());
+        unlockedSongs.add(insertionIdx, newSong);
     }
 }

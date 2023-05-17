@@ -100,4 +100,27 @@ public class Util {
             return -1;
         return 0;
     }
+
+    // Binary Search Insertion for Strings
+    public static int binarySearchInsertion(ArrayList<String> stringList, String stringToInsert)
+    {
+        int left = 0;
+        int right = stringList.size() - 1;
+        int mid;
+
+        while (left <= right)
+        {
+            mid = (left + right) / 2;
+            String currentTitle = stringList.get(mid);
+
+            boolean newSongTitleIsAlphabeticallyGreater = Util.stringIsAlphabeticallyGreater(stringToInsert, currentTitle);
+
+            if (newSongTitleIsAlphabeticallyGreater)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+
+        return (int)Math.ceil(((left + right) /(double)2));
+    }
 }
