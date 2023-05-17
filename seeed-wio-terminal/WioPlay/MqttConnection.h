@@ -77,8 +77,6 @@ void updateChart(char json[]) {
   float duration = doc["durationInSeconds"];
   byte workoutType = doc["workoutType"];
 
-  // tempCounter++;
-
   burndownChart.resetExercise(duration, calorieGoal, workoutType);
 }
 
