@@ -12,7 +12,7 @@ private:
   int tempo;
   int pauseDuration;
   int currentPauseChunkDuration;
-  bool isPaused;
+  // bool isPaused;
 
 public:
   boolean hasRequested;
@@ -121,6 +121,10 @@ public:
     this->position = 0;
     this->song = newSong;
   }
+
+public:
+bool isPaused;
+
 
 private:
   void pause()

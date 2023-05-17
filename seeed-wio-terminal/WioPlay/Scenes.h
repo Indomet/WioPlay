@@ -65,14 +65,17 @@ public:
   void buttonOnPress() {
     if (digitalRead(BUTTON_NEXT) == LOW) {
       player.nextSong();
+      client.publish("request/notes", "I need a new set of notes");
+      // client.publish("Music/Song/Buttons", "next");
     }
 
     if (digitalRead(BUTTON_PAUSE) == LOW) {
-      player.toggle();
+      player.toggle();        
     }
 
     if (digitalRead(BUTTON_PREVIOUS) == LOW) {
       player.previousSong();
+      client.publish("Music/Song/Buttons", "previous");
     }
   }
 
