@@ -69,6 +69,8 @@ before_script:
 assembleDebug:
   interruptible: true
   stage: assembleDebug
+  before_script:
+  - cd AndroidApp
   script:
     - ./AndroidApp/gradlew assembleDebug
   artifacts:
@@ -79,6 +81,8 @@ assembleDebug:
 debugTests:
   interruptible: true
   stage: debugTests
+  before_script:
+  - cd AndroidApp
   script:
     - ./AndroidApp/gradlew -Pci --console=plain :app:connectedAndroidTest
 
