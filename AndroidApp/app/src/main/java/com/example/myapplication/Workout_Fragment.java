@@ -97,6 +97,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     Workout_Fragment(){
         BrokerConnection broker= MainActivity.brokerConnection;
         broker.addMessageListener(this);
+        newWorkoutFragment = new NewWorkoutFragment();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -107,8 +108,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
 
         BrokerConnection broker = MainActivity.brokerConnection;
-        broker.addMessageListener(this);
-        newWorkoutFragment = new NewWorkoutFragment();
+
         user = User.getInstance();
         workoutManager = WorkoutManager.getInstance();
 
@@ -207,11 +207,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
             String calculatedTimeLeft = workoutManager.calculateTimeLeft();
             timeLeft.setText(calculatedTimeLeft);
-            int cumulativeCalorie = Integer.parseInt(payload);
-            int changeInCalories = Math.abs(cumulativeCalorie - currentCalorie);
-            currentCalorie = changeInCalories;
 
-            user.updateCredit(changeInCalories);
+            int diff = workoutManager.calculateCalDiff(integerPayload);
+            workoutManager.setCurrentCalorie(integerPayload);
+
+            user.updateCredit(diff);
             userBalance.setText(Integer.toString(user.getCalorieCredit()));
         }
 
@@ -224,7 +224,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutManager.addWorkoutData(finishedWorkout,date);
 
             //this makes sure that the progress bar is
-            caloriesProgressbar.setMax(100);
             caloriesProgressbar.setProgress(0,true);
 
             caloriesBurnt.setText("0");
@@ -236,7 +235,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutManager.incrementMonthlyWorkouts();
             monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
             workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
-            //refresh the fragment such that the viwes get updated
+            //refresh the fragment such that the views get updated
+            workoutManager.setCurrentCalorie(0);
             Util.changeFragment(this, getActivity());
 
         }
@@ -244,7 +244,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     @Override
     public String getSubbedTopic() {
-        final String WORKOUT_TOPIC = "Send/Calorie/Burn";
+        final String WORKOUT_TOPIC = "Send/Calorie/Burn/Data";
         return WORKOUT_TOPIC;
     }
 
