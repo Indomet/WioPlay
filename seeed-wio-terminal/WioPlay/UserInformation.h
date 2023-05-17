@@ -1,5 +1,3 @@
-#include "Arduino.h"
-
 class UserInformation {
 public:
   // Settings: Selection of physical user characteristics

@@ -1,7 +1,7 @@
-#include "seeed_line_chart.h" // library for drawing the burndown chart
-#include <map> 
-#include <ArduinoJson.h> // json library
-#include "Seeed_FS.h"  // SD card library
+#include "seeed_line_chart.h"  // library for drawing the burndown chart
+#include <map>
+#include <ArduinoJson.h>  // json library
+#include "Seeed_FS.h"     // SD card library
 #include "UserInformation.h"
 UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, userAge, isMale)
 
@@ -21,12 +21,11 @@ float movementValue;
 MotionDetection motionDetection;
 BurndownChart burndownChart;
 
-const char *calorie_pub = "Send/Calorie/Burn/Data";
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
-   scenes.setupButton();
+  scenes.setupButton();
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
@@ -34,8 +33,6 @@ void setup() {
   burndownChart.initializeUI();
 
   burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
-
-
 }
 
 void loop() {
@@ -45,7 +42,7 @@ void loop() {
   if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
-     scenes.buttonOnPress();
+    scenes.buttonOnPress();
     scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
@@ -55,19 +52,17 @@ void loop() {
     if (player.song.size() > 0 && !player.hasRequested) {
       if (player.getPosition() >= player.song.size()) {
         Serial.println(player.getPosition());
-        client.publish("request/notes", "I need a new set of notes");
+        client.publish(Request_pub, "I need a new set of notes");
         player.hasRequested = true;
       } else {
         player.playChunk();
       }
-    }
-    else
-    {
-      delay(1000);
+    } else {
+      delay(100);
     }
 
 
-    float updateDelay = isPlayingSong ? player.getCurrentPauseChunkDuration() : 1000; // FrontEnd update delay
+    float updateDelay = 100;
     // burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
 
     burndownChart.updateTimeElapsed(updateDelay);
@@ -80,7 +75,7 @@ void loop() {
     // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
     // Serial.println("***********************");
 
-    movementValue = motionDetection.detectMotion(); // Read current user-position
+    movementValue = motionDetection.detectMotion();  // Read current user-position
 
     // burndownChart.sufficientMovementInquiry(userInformation, movementValue, 1000); // player.getCurrentPauseChunkDuration() -------------> Add if-statement for this case
     burndownChart.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
@@ -101,4 +96,3 @@ void showBurndownChartScene() {
 void showPlayerScene() {
   scenes.playerScene();
 }
-
