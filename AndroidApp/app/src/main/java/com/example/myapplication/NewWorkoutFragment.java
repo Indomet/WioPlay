@@ -64,9 +64,9 @@ public class NewWorkoutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView= inflater.inflate(R.layout.fragment_new_workout, container, false);
+        workoutManager = WorkoutManager.getInstance();
         widgetInit();
 
-        workoutManager = WorkoutManager.getInstance();
         return rootView;
     }
 
