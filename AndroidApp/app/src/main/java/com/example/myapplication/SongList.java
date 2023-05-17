@@ -87,39 +87,6 @@ public class SongList {
         addUnlockedSong(song);
     }
 
-    /*
-    private void addUnlockedSong(Song song)
-    {
-        int left = 0;
-        int right = unlockedSongs.size() - 1;
-
-
-
-        int insertIdx = sortSongsByTitle(song);
-        unlockedSongs.add(insertIdx, song);
-    }
-     */
-
-    // Returns the index to insert the song at
-    private int sortSongsByTitle(Song songToAdd)
-    {
-        String titleToAdd = songToAdd.getTitle();
-
-        for (int i = unlockedSongs.size() - 1; i >= 0; i--)
-        {
-            Song currentSong = unlockedSongs.get(i);
-            String currentTitle = unlockedSongs.get(unlockedSongs.indexOf(currentSong)).getTitle();
-
-            String[] sortedTitles = Util.sortTwoStringsAlphabetically(titleToAdd, currentTitle);
-
-            // Iterate while titleToAdd hasn't reached its alphabetically correct index in 'unlockedSongs'
-            if (titleToAdd.equals(sortedTitles[1]))
-                return i;
-        }
-
-        return 0;
-    }
-
     // Binary Search Insertion for Strings
     private void addUnlockedSong(Song newSong)
     {
