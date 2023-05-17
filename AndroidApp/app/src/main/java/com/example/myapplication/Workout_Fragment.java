@@ -223,9 +223,12 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
                     workoutManager.getType(),workoutManager.getCalorieGoal());
             workoutManager.addWorkoutData(finishedWorkout,date);
 
-
+            //this makes sure that the progress bar is
+            caloriesProgressbar.setMax(100);
             caloriesProgressbar.setProgress(0,true);
+
             caloriesBurnt.setText("0");
+
             createPopWindow();
             workoutManager.stopWorkout();
             timeLeft.setText("0:00:00");
@@ -233,6 +236,9 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutManager.incrementMonthlyWorkouts();
             monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
             workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
+            //refresh the fragment such that the viwes get updated
+            Util.changeFragment(this, getActivity());
+
         }
     }
 
