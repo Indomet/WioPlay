@@ -5,9 +5,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import android.content.Context;
+import android.os.Environment;
 
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.io.File;
 
 
 /**
@@ -19,6 +22,23 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void workoutManagerIsAddingWorkoutsHistoryCorrectly(){
+        FinishedWorkoutData first = new FinishedWorkoutData(500,100,WorkoutType.RUNNING,100);
+        CalendarDay day = CalendarDay.from(2023,5,6);
+        FinishedWorkoutData second = new FinishedWorkoutData(700,200,WorkoutType.RUNNING,200);
+        String downloadsDir = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOCUMENTS;
+        String managerPath = downloadsDir + "/workoutManager.json";
+        File managerFile = new File(managerPath);
+        WorkoutManager manager = WorkoutManager.initialize(managerFile);
+        manager.addWorkoutData(first,day);
+        manager.addWorkoutData(second,day);
+        FinishedWorkoutData result = manager.getWorkoutDataHashMap().get(day);
+        assertEquals(1200,result.getDurationInSeconds());
+        assertEquals(300,result.getCaloriesBurntWithExercise());
+        assertEquals(300,result.getGoalCalories());
     }
 /*
     @Test
