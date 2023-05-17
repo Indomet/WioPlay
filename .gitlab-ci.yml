@@ -12,12 +12,14 @@
 # * Caches downloaded dependencies and plugins between invocation.
 # * Verify but don't deploy merge requests.
 # * Deploy built artifacts from master branch only.
+include: 'AndroidApp/**.yml'
+
 default:
   tags:
     - docker
 
-before_script:
-  - cd NoteParser
+# before_script:
+#   - cd NoteParser
 
 variables:
   # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
@@ -57,19 +59,21 @@ cache:
 
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-.verify:
-  stage: test
+serverJob:
+  stage: serverJob
   script:
     - 'mvn $MAVEN_CLI_OPTS verify'
+  after_script:
+    - 'cd ../AndroidApp'
   # except:
   #   variables:
   #     - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
-# Verify merge requests using JDK8
-verify:jdk8:
-  extends:
-    - .verify
 
+stages:
+  - serverJob
+  - assembleDebug
+  - debugTests
 # To deploy packages from CI, create a `ci_settings.xml` file
 # For deploying packages to GitLab's Maven Repository: See https://docs.gitlab.com/ee/user/packages/maven_repository/index.html#create-maven-packages-with-gitlab-cicd for more details.
 # Please note: The GitLab Maven Repository is currently only available in GitLab Premium / Ultimate.
