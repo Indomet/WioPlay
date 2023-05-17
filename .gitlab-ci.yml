@@ -18,9 +18,6 @@ default:
   tags:
     - docker
 
-# before_script:
-#   - cd NoteParser
-
 variables:
   # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
   MAVEN_OPTS: >-
@@ -61,10 +58,10 @@ cache:
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
 serverJob:
   stage: serverJob
+  before_script:
+  - cd NoteParser
   script:
     - 'mvn $MAVEN_CLI_OPTS verify'
-  after_script:
-    - 'cd AndroidApp'
   # except:
   #   variables:
   #     - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
