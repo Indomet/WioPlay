@@ -13,12 +13,14 @@ MusicPlayer player(2);
 #include "Scenes.h"
 Scenes scenes;
 #include "BurndownChart.h"
-#include "MqttConnection.h"
 
 float movementValue;
 
 MotionDetection motionDetection;
 BurndownChart burndownChart;
+#include "MqttConnection.h"
+
+int tempCounter = 0;
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
@@ -30,7 +32,7 @@ void setup() {
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
 
-  burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
+  // burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
 }
 
 void loop() {
