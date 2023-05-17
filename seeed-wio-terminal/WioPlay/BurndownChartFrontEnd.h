@@ -1,3 +1,5 @@
+
+
 #define MAX_SIZE 30  // maximum size of data displayed at once in graph
 doubles data[2];
 
@@ -20,8 +22,6 @@ public:
     if (data[0].size() >= MAX_SIZE) {
       removeEarliestDataPoints();
     }
-
-    // tft.fillScreen(TFT_WHITE);
   }
 
   // Update headers and graph-values in real-time
@@ -55,8 +55,6 @@ public:
     headerX.draw(&tft);  // Header height is the twice the height of the font
 
     vizualiseGraphValues(burndownChartBackEnd);
-    // data[0].push(burndownChartBackEnd.caloriesBurnt);
-    // data[1].push(burndownChartBackEnd.getExpectedValue());
 
     // Settings for the line graph
     auto content = line_chart(graphUIXStartValue, header.height());  //(x,y) where the line graph begins   auto content = line_chart(20, header.height());
@@ -70,8 +68,6 @@ public:
       .color(TFT_RED, TFT_BLUE)
       .backgroud(TFT_WHITE)
       .draw(&tft);
-
-    //tft.fillScreen(TFT_BLACK);
   }
 
   void displayExerciseResults(BurndownChartBackEnd burndownChartBackEnd) {
@@ -97,16 +93,38 @@ public:
     tft.drawString(caloriesPerSecondComparison, caloriesPerSecondTextCoordinates[0], caloriesPerSecondTextCoordinates[1]);
   }
 
+  void resetChart()
+  {
+      for (byte i = 0; i < numberOfGraphValues; i++)
+      {
+        for (byte j = 0; j < 29; j++) // maxDataPoints - 1
+        {
+          data[i].pop();
+        }        
+      }
+  }
+
 private:
   const byte numberOfGraphValues = 2;
   byte caloriesPerSecondTextCoordinates[2] = { 5, 50 };
   byte exerciseResultTextCoordinates[2] = { 15, 70 };
+  const int maxDataPoints = 30;
 
   // Don't display the data-points added earliest on the graph. Delete them to sustain the memory limit
   void removeEarliestDataPoints() {
     for (byte i = 0; i < numberOfGraphValues; i++) {
       data[i].pop();  // Remove the first read variable
     }
+
+    /*
+      for (byte i = 0; i < numberOfGraphValues; i++)
+      {
+        for (byte j = 0; j < maxDataPoints - 1; j++)
+        {
+          data[i].pop();
+        }        
+      }
+    */
   }
 
   void vizualiseGraphValues(BurndownChartBackEnd burndownChartBackEnd) {
