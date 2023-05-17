@@ -124,7 +124,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         Log.d("chunks amount", Integer.toString(MusicFragment.notes.size()));
         BrokerConnection.getInstance().getMqttClient().publish("Music/Loop", "Green light", 0, null);
         //Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
-           BrokerConnection.getInstance().getMqttClient().publish("Music/Data/Change", currentSong.getTitle(), 0, null);
+        BrokerConnection.getInstance().getMqttClient().publish("Music/Data/Change", currentSong.getTitle(), 0, null);
 
 
         // TODO: Implement the logic to play the song

@@ -17,6 +17,7 @@ const char *Music_sub = "Music/Data/Change";
 const char *TOPIC_sub = "User/Data/Change";
 const char *Workout_sub = "User/Workout/Start";
 const char *TOPIC_pub_connection = "Send/Calorie/Burn/Data";
+const char *Music_buttons_pub = "Music/Song/Buttons";
 const char *Music_notes_sub = "Music/Song/Notes";
 const char *Loop_trigger_sub = "Music/Loop";
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import info.mqtt.android.service.Ack;
+//import jdk.internal.org.jline.utils.Log;
 
 public class BrokerConnection extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class BrokerConnection extends AppCompatActivity {
     public static final String SETTINGS_CHANGE_TOPIC = "User/Data/Change";
     public static final String WORKOUT_STARTED_TOPIC = "User/Workout/Start";
 
+    public static final String SONG_BUTTON_TOPIC = "Music/Song/Buttons";
     public static final String SONG_NOTES_TOPIC = "Music/Song/Notes";
     public static final String LOCALHOST = "192.168.134.236" ; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
@@ -83,7 +85,7 @@ public class BrokerConnection extends AppCompatActivity {
                     for(MessageListener listener : observers){
                         String topic = listener.getSubbedTopic();
                         mqttClient.subscribe(topic,0, null);
-
+                        mqttClient.subscribe(SONG_BUTTON_TOPIC, 0, null);
                     }
 
                 }
@@ -124,6 +126,11 @@ public class BrokerConnection extends AppCompatActivity {
                             for(MessageListener listener : observers) {
                                 if (topic.equals(listener.getSubbedTopic())) {
                                     listener.onMessageArrived(messageMQTT);
+                                }
+
+                                if (topic.equals(SONG_BUTTON_TOPIC)) {
+                                    listener.onMessageArrived(messageMQTT);
+                                    Log.d(messageMQTT, messageMQTT);
                                 }
                             }
                         }

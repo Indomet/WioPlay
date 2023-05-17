@@ -103,7 +103,7 @@ public class SongList {
             Song currentSong = unlockedSongs.get(i);
             String currentTitle = unlockedSongs.get(unlockedSongs.indexOf(currentSong)).getTitle();
 
-            String[] sortedTitles = sortTwoStringsAlphabetically(titleToAdd, currentTitle);
+            String[] sortedTitles = Util.sortTwoStringsAlphabetically(titleToAdd, currentTitle);
 
             // Iterate while titleToAdd hasn't reached its alphabetically correct index in 'unlockedSongs'
             if (titleToAdd.equals(sortedTitles[1]))
