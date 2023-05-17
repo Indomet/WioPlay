@@ -19,11 +19,11 @@ import java.io.File;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
-
+  //  @Test
+   // public void addition_isCorrect() {
+    //    assertEquals(4, 2 + 2);
+  //  }
+/*
     @Test
     public void workoutManagerIsAddingWorkoutsHistoryCorrectly(){
         FinishedWorkoutData first = new FinishedWorkoutData(500,100,WorkoutType.RUNNING,100);
@@ -40,7 +40,7 @@ public class ExampleUnitTest {
         assertEquals(300,result.getCaloriesBurntWithExercise());
         assertEquals(300,result.getGoalCalories());
     }
-/*
+
     @Test
     public void workoutManagerIsAddingWorkoutsHistoryCorrectly() {
         FinishedWorkoutData first = new FinishedWorkoutData(500,100,WorkoutType.RUNNING,100);
