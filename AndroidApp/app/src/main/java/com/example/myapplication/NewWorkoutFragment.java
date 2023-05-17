@@ -109,6 +109,7 @@ public class NewWorkoutFragment extends Fragment {
 
         }
 
+
         else if(!calorieGoalIsValid){
             final String INVALID_CALORIES = "Please set a calorie goal above 0";
             Toast.makeText(rootView.getContext(),INVALID_CALORIES , Toast.LENGTH_SHORT).show();
