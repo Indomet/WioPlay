@@ -33,8 +33,7 @@ The purpose of Wio Play is motivating people to lose calories by effectively uti
 * Motion Detection 👟
   - Utilizes the **small form factor** of the wio terminal
 
-[**Wiki**](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/home)
-
+<!-- [**Wiki**](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/home) -->
 
 ## Streaming Music
 The idea is to have a compact device that can stream music from a source, or load it from its existing memory, that combined with a capable player and a motion detection mechanism make the **Wio Play** a handy piece of technology.
@@ -58,21 +57,17 @@ The steps described above can be seen in the sequence diagram below:
 <img src="https://lh3.googleusercontent.com/drive-viewer/AFGJ81p9zU6DBnY59_8D82sz5SMo3yR0VnWb_HecgOrcSK-aTqkYeohW5WBslyrLSCfYT-ftaoWi8t12STy1MtWIQBnjGfiJeg=s2560" />
 </div>
 
-## Technologies Used
+## Contributions
 
-- [Mosquitto Broker](https://mosquitto.org/) - For managing the MQTT clients and messages
-- [Paho Java Client](https://www.eclipse.org/paho/index.php?page=clients/java/index.php) - A java library for interacting with the MQTT protocol
-- [PubSubClient](https://github.com/knolleary/pubsubclient/releases/tag/v2.8) - An arduino library for interacting with the MQTT protocol
+The Wio Play is currently receiving contributions from the following members
 
-## Team
+|   Member        | Contributions                |                       Profile                       |
+| :-------------: | :--------------------------: | :-------------------------------------------------: |
+|     Ali         |                              |      [Click Here](https://git.chalmers.se/almuslim) |
+|     Asim        |                              | [Click Here](https://git.chalmers.se/mehmetas)      |
+|     Jackson     |                              |     [Click Here](https://git.chalmers.se/jacniy)    |
+|     Joel        |                              |     [Click Here](https://git.chalmers.se/joelmat)   |
+|     Mohamad     |                              |     [Click Here](https://git.chalmers.se/mohamadk)  |
+|     Zepei		    |                              |    [Click Here](https://git.chalmers.se/zepei)      |
 
-The Wio Play is currently being developed by the following members
 
-|   Member        |                       Profile                       |
-| :-------------: | :-------------------------------------------------: |
-|     Ali         |      [Click Here](https://git.chalmers.se/almuslim) |
-|     Asim        | [Click Here](https://git.chalmers.se/mehmetas)      |
-|     Jackson     |     [Click Here](https://git.chalmers.se/jacniy)    |
-|     Joel        |     [Click Here](https://git.chalmers.se/joelmat)   |
-|     Mohamad     |     [Click Here](https://git.chalmers.se/mohamadk)  |
-|     Zepei		  |    [Click Here](https://git.chalmers.se/zepei)      |
