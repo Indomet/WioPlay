@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -47,11 +48,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private TextView caloriesBurnt;
 
     private TextView timeElapsed;
-    private TextView timeLeft;private NewWorkoutFragment newWorkoutFragment;
+    private TextView timeLeft;
+    private NewWorkoutFragment newWorkoutFragment;
 
     private boolean stopwatchRunning = false;
     private WorkoutManager workoutManager;
     private User user;
+    private ImageView profilepicture;
 
     private View rootView;
     private MaterialCalendarView calendarView;
@@ -131,6 +134,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesBurnt = rootView.findViewById(R.id.calories_burnt_textview);
         timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
         timeLeft = rootView.findViewById(R.id.time_left_textview);
+        profilepicture= rootView.findViewById(R.id.user_picture);
         addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addHikingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addRunningWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
@@ -143,6 +147,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         int cals = workoutManager.getCaloriesBurnt();
         caloriesBurnt.setText(Integer.toString(cals));
         caloriesProgressbar.setProgress(cals,true);
+        addProfile();
 
 
 
@@ -191,6 +196,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             }
         }
     }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -359,5 +365,22 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
 
     }
+    public void addProfile(){
+        if(user.getBitmap()!=null){
+            removebackGroud();
+            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
+            profilepicture.setImageBitmap(user.getBitmap());
+        }
+        if(user.getImageUri()!=null){
+            removebackGroud();
+            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
+            profilepicture.setImageURI(user.getImageUri());
+        }
+
+    }
+    public void removebackGroud(){
+        profilepicture.setBackground(null);
+    }
+
 
 }
