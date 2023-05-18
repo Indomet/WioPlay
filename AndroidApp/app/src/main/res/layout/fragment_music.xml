@@ -60,18 +60,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/searchSongs"
-            android:layout_width="298dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:gravity="bottom"
-            android:inputType="text"
-            android:text="@string/search"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/currency_icon"
