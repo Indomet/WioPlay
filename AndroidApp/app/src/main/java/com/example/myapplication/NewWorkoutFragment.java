@@ -64,9 +64,9 @@ public class NewWorkoutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView= inflater.inflate(R.layout.fragment_new_workout, container, false);
+        workoutManager = WorkoutManager.getInstance();
         widgetInit();
 
-        workoutManager = WorkoutManager.getInstance();
         return rootView;
     }
 
@@ -108,6 +108,7 @@ public class NewWorkoutFragment extends Fragment {
             Toast.makeText(rootView.getContext(), WORKOUT_GOING_MSG, Toast.LENGTH_SHORT).show();
 
         }
+
 
         else if(!calorieGoalIsValid){
             final String INVALID_CALORIES = "Please set a calorie goal above 0";
