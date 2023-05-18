@@ -4,14 +4,15 @@
 <img src="https://egeniq.com/wp-content/uploads/2022/10/1_RimJezQmCVqfqxy4qxXfPA.gif" width="425" />
 
 # Wio Play
-
-**Music Done The Right Way**
-
 </div>
+
+**Table of Contents:**
+
+[[_TOC_]]
 
 ## Description
 
-Wio Play is a media device that can seamlessly integrate with many services to provide awesome entertainment.
+Wio Play is a media device that can seamlessly track workout progress and play music to get you motivated.
 
 ## Purpose
 
@@ -36,7 +37,20 @@ The purpose of Wio Play is motivating people to lose calories by effectively uti
 
 
 ## How It Works
-The idea is to have a compact device that can stream music from a source, or load it from its existing memory, that combined with a capable player and a motivating motion detection mechanism make the **Wio Play** a handy piece of technology.
+The idea is to have a compact device that can stream music from a source, or load it from its existing memory, that combined with a capable player and a motion detection mechanism make the **Wio Play** a handy piece of technology.
+
+### Streaming Music
+The full process of streaming a track on our service can be broken down into 3 key steps interconnected together using MQTT, the full process eventually concludes when the chosen song has been played fully on the terminal
+
+1. Pinging Terminal
+    - Happens once when the user requests to play a specific song, this will put the terminal in `Note Requesting` state 
+
+2. Requesting Notes
+    - During the `Note Requesting` state, the terminal will ask the app for more musical notes whenever the current chunk of notes has been played fully and exhausted
+
+3. Sending Notes
+    - Once the app receives a request from the terminal asking for more notes, it sends the next notes chunk in the queue back to the terminal
+
 
 ## Technologies Used
 
