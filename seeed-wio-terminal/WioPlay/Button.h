@@ -1,3 +1,7 @@
+#define BUTTON_NEXT WIO_KEY_A
+#define BUTTON_PAUSE WIO_KEY_B
+#define BUTTON_PREVIOUS WIO_KEY_C
+
 class Button {
   public:
   void setup() {

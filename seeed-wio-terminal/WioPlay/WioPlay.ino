@@ -27,8 +27,7 @@ void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
   button.setup();
-  pinMode(RIGHT_BUTTON, INPUT_PULLUP);
-  while (digitalRead(RIGHT_BUTTON) == LOW) {}
+
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }

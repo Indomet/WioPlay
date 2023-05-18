@@ -2,9 +2,8 @@ TFT_eSPI tft;
 #include "TFT_eSPI.h"
 #include "RawImage.h"              // image processing library
 #define RIGHT_BUTTON WIO_5S_RIGHT  // Right joystick  WIO_5S_PRESS press is probably using same pins as the burndown chart
-#define BUTTON_NEXT WIO_KEY_A
-#define BUTTON_PAUSE WIO_KEY_B
-#define BUTTON_PREVIOUS WIO_KEY_C
+
+
 const char* imageList[] = { "/photos/Ali.bmp", "/photos/Asim.bmp", "/photos/Zepei.bmp", "/photos/Joel.bmp", "/photos/Jackson.bmp",
                             "/photos/Mohamad.bmp", "/photos/Ali2.bmp", "/photos/Zepei2.bmp", "/photos/Asim3.bmp" };
 
@@ -47,15 +46,6 @@ public:
       tft.drawString(songName, (320 - tft.textWidth(songName)) / 2, 165 );  // display the new music name on the screen
       messageReceived = false;
     }
-  }
-
-
-  void setupButton() {
-
-
-    pinMode(BUTTON_NEXT, INPUT);
-    pinMode(BUTTON_PAUSE, INPUT);
-    pinMode(BUTTON_PREVIOUS, INPUT);
   }
 
   void menuNavigationOnPress(void (*firstScene)(), void (*secondScene)()) {
