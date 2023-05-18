@@ -65,28 +65,18 @@ public class SettingsFragment extends Fragment {
     }
 
     public void widgetInit(){
+
         saveButton = rootView.findViewById(R.id.Save_Button);
         weightEditText = rootView.findViewById(R.id.kg_edittext);
         heightEditText = rootView.findViewById(R.id.height_edittext);
         ageEditText = rootView.findViewById(R.id.age_edit_text);
         editButton=rootView.findViewById(R.id.edit_username_btn);
-
-        if(user.profilePic==null){
-            profilePicture=rootView.findViewById(R.id.user_profile_pic_settings);
-            user.profilePic = profilePicture;
-        }
-        else{
-            profilePicture = user.profilePic;
-            user.saveUserData();
-        }
-
-
-
+        profilePicture=rootView.findViewById(R.id.user_profile_pic_settings);
         usernameTextView = rootView.findViewById(R.id.settings_username_textview);
         changeProfile=rootView.findViewById(R.id.chengeProfile);
         monthlyWorkouts = rootView.findViewById(R.id.monthly_workouts_edittxt);
         usernameTextView.setText(user.getUsername());
-        profilePicture = user.profilePic;
+        //profilePicture = user.profilePic;
         saveButton.setOnClickListener(view -> publishSavedData());
 
         editButton.setOnClickListener(v -> editUserNamePopup());

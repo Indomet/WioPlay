@@ -29,17 +29,17 @@
             android:id="@+id/user_profile_pic_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@drawable/pngegg"
-            android:scaleType="fitXY"
+            android:layout_marginTop="84dp"
             android:background="@drawable/bentcorners"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/pngegg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_max="150dp"
+            app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_max="150dp"
-            android:layout_marginTop="80dp"
-            />
+            app:layout_constraintWidth_max="150dp" />
 
         <TextView
             android:id="@+id/settings_username_textview"
