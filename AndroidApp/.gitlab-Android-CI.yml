@@ -52,6 +52,9 @@ before_script:
   - sdkmanager --sdk_root=${ANDROID_HOME} "platform-tools"
   - sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS}"
 
+  - cd AndroidApp
+  - chmod +x ./gradlew
+
   # Not necessary, but just for surity
 
 
@@ -68,9 +71,6 @@ assembleDebug:
   image: gradle:8
   interruptible: true
   stage: build
-  before_script:
-  - cd AndroidApp
-  - chmod +x ./gradlew
   script:
     - ./gradlew assembleDebug
   artifacts:
@@ -82,9 +82,6 @@ debugTests:
   image: gradle:8
   interruptible: true
   stage: test
-  before_script:
-  - cd AndroidApp
-  - chmod +x ./gradlew
   script:
     - ./gradlew -Pci --console=plain :app:connectedAndroidTest
 
