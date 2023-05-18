@@ -25,6 +25,13 @@ import java.util.ArrayList;
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder> implements BrokerConnection.MessageListener {
 
     private ArrayList<Song> songsList = new ArrayList<>();
+
+    private Song currentSong;
+
+    private ArrayList<int[]> noteChunks = new ArrayList<>();
+
+    private final String NEXT_SONG_MESSAGE = "NEXT";
+    private final String PREVIOUS_SONG_MESSAGE = "PREVIOUS";
     private final Context context;
     private boolean confirm;
 
@@ -45,7 +52,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         //position is the index of the items in the recycler view
         int currentPosition = holder.getBindingAdapterPosition();
 
-        Song currentSong = songsList.get(currentPosition); //Maps each song to its position in the list
+        currentSong = songsList.get(currentPosition); //Maps each song to its position in the list
+
         Picasso.get().load(currentSong.getImageURL()).into(holder.songImage);//Loads song image from url
         holder.artistName.setText(currentSong.getArtist());
         holder.songTitle.setText(currentSong.getTitle());
@@ -119,15 +127,12 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
             throw new RuntimeException(e);
         }
 
-        MusicFragment.currentSong = currentSong;
-        MusicFragment.notes = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
-        Log.d("chunks amount", Integer.toString(MusicFragment.notes.size()));
+        noteChunks = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
+        Log.d("chunks amount", Integer.toString(noteChunks.size()));
         BrokerConnection.getInstance().getMqttClient().publish("Music/Loop", "Green light", 0, null);
         //Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
         BrokerConnection.getInstance().getMqttClient().publish("Music/Data/Change", currentSong.getTitle(), 0, null);
 
-
-        // TODO: Implement the logic to play the song
     }
 
     public void confirmationDialog(Song currentSong) {
@@ -152,14 +157,16 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     @Override
     public void onMessageArrived(String payload) {
 
+        receiveNextSong(payload);
+
         Log.d("terminal", "terminal needs chunks");
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
 
-        if(MusicFragment.notes.size() < 1) {
-            MusicFragment.notes = new ArrayList<>(Util.chunkify(MusicFragment.currentSong.getNotes(), 40));
+        if(noteChunks.size() < 1) {
+            noteChunks = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
         }
-        int[] chunk = MusicFragment.notes.remove(0);
+        int[] chunk = noteChunks.remove(0);
         try {
             String currentChunk = writer.writeValueAsString(chunk);
             BrokerConnection.getInstance().getMqttClient().publish("Music/Song/Notes", currentChunk, 0, null);
@@ -170,13 +177,28 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     }
 
+    public void receiveNextSong(String payload)
+    {
+        int index = SongList.getInstance().getCurrentSongIdx();
+        if(payload.equals(NEXT_SONG_MESSAGE)) {
+
+            if(index <= SongList.getInstance().getUnlockedSongList().size()-1){
+                SongList.getInstance().increaseSongIdx();
+                currentSong = SongList.getInstance().getUnlockedSong();
+            }
+        }else if (payload.equals(PREVIOUS_SONG_MESSAGE)){
+            if(index <= SongList.getInstance().getUnlockedSongList().size()-1){
+                SongList.getInstance().decreaseSongIdx();
+                currentSong = SongList.getInstance().getUnlockedSong();
+            }
+        }
+    }
+
     @Override
     public String getSubbedTopic() {
         return "request/notes";
     }
 
-
-//TODO Display artist name
     public class ViewHolder extends RecyclerView.ViewHolder{
     //Holds all views
         private final TextView songTitle;

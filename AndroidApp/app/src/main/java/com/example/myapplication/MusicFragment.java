@@ -27,9 +27,6 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private View rootView;
     private SongLibraryAdapter adapter;
 
-    public static Song currentSong;
-    public static ArrayList<int[]> notes = new ArrayList<>();
-
     MusicFragment(){
         BrokerConnection broker= MainActivity.brokerConnection;
         broker.addMessageListener(this);
