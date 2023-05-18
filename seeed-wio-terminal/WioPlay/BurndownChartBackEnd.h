@@ -18,7 +18,7 @@ public:
     std::string actual = std::to_string(getActualCaloriesPerSecond());
     std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
 
-    return actual + ", " + expected;
+    return  actual + "  " + expected;
   }
 
   bool isExercising() {

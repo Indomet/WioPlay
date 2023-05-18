@@ -71,4 +71,56 @@ public class Util {
         }
     }
 
+    public static boolean stringIsAlphabeticallyGreater(String string1, String string2) {
+        int minLength = Math.min(string1.length(), string2.length());
+
+        int x = -1;
+        int alphabeticalComparison = 0;
+
+        // While not able to identify any alphabetical fluctuations of the starting common substring
+        while (++x < minLength && alphabeticalComparison == 0)
+        {
+            alphabeticalComparison = compareAlphabeticalCharacterOrder(string1.charAt(x), string2.charAt(x));
+
+            if (alphabeticalComparison != 0)
+                return (alphabeticalComparison > 0) ? true : false;
+        }
+
+        // Deal with edge case where both strings starts with the same substring
+        if (string2.length() > string1.length())
+            return true;
+        return false;
+    }
+
+    private static int compareAlphabeticalCharacterOrder(char c1, char c2)
+    {
+        if (c1 < c2)
+            return 1;
+        else if (c2 < c1)
+            return -1;
+        return 0;
+    }
+
+    // Binary Search Insertion for Strings
+    public static int binarySearchInsertion(ArrayList<String> stringList, String stringToInsert)
+    {
+        int left = 0;
+        int right = stringList.size() - 1;
+        int mid;
+
+        while (left <= right)
+        {
+            mid = (left + right) / 2;
+            String currentTitle = stringList.get(mid);
+
+            boolean newSongTitleIsAlphabeticallyGreater = Util.stringIsAlphabeticallyGreater(stringToInsert, currentTitle);
+
+            if (newSongTitleIsAlphabeticallyGreater)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+
+        return (int)Math.ceil(((left + right) /(double)2));
+    }
 }

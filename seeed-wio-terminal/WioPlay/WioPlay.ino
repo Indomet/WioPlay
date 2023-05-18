@@ -15,7 +15,8 @@ MusicPlayer player(2);
 Scenes scenes;
 #include "BurndownChart.h"
 #include "MqttConnection.h"
-
+#include "Button.h"
+Button button;
 float movementValue;
 
 MotionDetection motionDetection;
@@ -25,7 +26,9 @@ BurndownChart burndownChart;
 void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
-  scenes.setupButton();
+  button.setup();
+  pinMode(RIGHT_BUTTON, INPUT_PULLUP);
+  while (digitalRead(RIGHT_BUTTON) == LOW) {}
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
@@ -42,7 +45,7 @@ void loop() {
   if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
-    scenes.buttonOnPress();
+    button.onPress();
     scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
@@ -86,7 +89,9 @@ void loop() {
   // Exercise is completed: Inactivate burndown chart and show panel
   else {
     burndownChart.displayExerciseResults();
+    delay(200); // to make the scene flicker less
   }
+  
 }
 
 void showBurndownChartScene() {

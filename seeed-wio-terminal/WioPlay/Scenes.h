@@ -33,9 +33,8 @@ public:
       tft.setTextSize(2);
 
       drawImage<uint16_t>(imageList[index], 95, 25);
-
-      tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);  // location to display music name on the screen
-      tft.println(songName);                                    // display the music name on the screen
+    
+      tft.drawString(songName, (320 - tft.textWidth(songName)) / 2, 165 );  // display the music name on the screen
 
       drawImage<uint16_t>(prevButton, 100, 200);
       drawImage<uint16_t>(pauseButton, 150, 200);
@@ -45,34 +44,18 @@ public:
     if (messageReceived) {
       drawImage<uint16_t>(imageList[index], 95, 25);                       //change the image and reprint
       tft.fillRect(0, 165, tft.width(), tft.fontHeight() * 2, TFT_WHITE);  // delete the old music name on the display
-      tft.setCursor((320 - tft.textWidth(songName)) / 2, 165);             // location to display music name on the screen
-      tft.println(songName);                                               // display the new music name on the screen
+      tft.drawString(songName, (320 - tft.textWidth(songName)) / 2, 165 );  // display the new music name on the screen
       messageReceived = false;
     }
   }
 
 
   void setupButton() {
-    pinMode(RIGHT_BUTTON, INPUT_PULLUP);
-    while (digitalRead(RIGHT_BUTTON) == LOW) {}
+
 
     pinMode(BUTTON_NEXT, INPUT);
     pinMode(BUTTON_PAUSE, INPUT);
     pinMode(BUTTON_PREVIOUS, INPUT);
-  }
-
-  void buttonOnPress() {
-    if (digitalRead(BUTTON_NEXT) == LOW) {
-      player.nextSong();
-    }
-
-    if (digitalRead(BUTTON_PAUSE) == LOW) {
-      player.toggle();
-    }
-
-    if (digitalRead(BUTTON_PREVIOUS) == LOW) {
-      player.previousSong();
-    }
   }
 
   void menuNavigationOnPress(void (*firstScene)(), void (*secondScene)()) {

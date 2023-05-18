@@ -4,9 +4,6 @@
 BurndownChartBackEnd burndownChartBackEnd(550, 300, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);         // (float graphUIXStartValue)
 
-#include <iostream>
-#include <string>
-
 class BurndownChart {
 public:
   void initializeUI() {
