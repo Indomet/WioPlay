@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +40,12 @@ public class SettingsFragment extends Fragment {
     private EditText ageEditText;
     private EditText monthlyWorkouts;
     private Spinner sexSpinner;
+
     private Dialog dialog;
 
     private ImageButton changeProfile;
     private ImageFilterView profilePicture;
+
 
     private Button editButton;
     private TextView usernameTextView;
@@ -80,6 +83,8 @@ public class SettingsFragment extends Fragment {
         sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
         changeProfile.setOnClickListener(v -> addPictureToTheBackground());
 
+        checkUserprofile();
+
         spinnerInit();
     }
 
@@ -116,6 +121,14 @@ public class SettingsFragment extends Fragment {
         Button save_btn = dialog.findViewById(R.id.popup_save_btn);
         save_btn.setOnClickListener(view -> updateUsername(editfield.getText().toString(),dialog));
         dialog.show();
+    }
+    public void checkUserprofile(){
+        if(user.getBitmap()!=null){
+            profilePicture.setImageBitmap(user.getBitmap());
+        }
+        if(user.getImageUri()!=null){
+            profilePicture.setImageURI(user.getImageUri());
+        }
     }
 
     private void updateUsername(String name, Dialog dialog) {
@@ -254,6 +267,8 @@ public class SettingsFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             profilePicture.setImageURI(imageUri);// adding the image from gallery to the imageview
+            user.setImageUri(imageUri);
+            user.setBitmap(null);
             dialog.dismiss();// close the dialod
 
 
@@ -262,6 +277,8 @@ public class SettingsFragment extends Fragment {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");// creating a bitmap from the image from camera
             profilePicture.setImageBitmap(imageBitmap); //adding the camera from gallery to the imageview
+            user.setBitmap(imageBitmap);
+            user.setImageUri(null);
             dialog.dismiss();// close the dialod
 
 
