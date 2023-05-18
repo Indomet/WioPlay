@@ -12,20 +12,19 @@ public:
     caloriesBurnt = 0;
     timeElapsed = 0;
 
-    balanceFactor = constrainCaloriesBurntVelocity(0.08, 1000); // Note: Create variable for 'originalUpdateDelay' --> Delay used when song not playing  and 'targetBalanceFactor'
+    balanceFactor = constrainCaloriesBurntVelocity(0.08, 1000);  // Note: Create variable for 'originalUpdateDelay' --> Delay used when song not playing  and 'targetBalanceFactor'
     calorieVariableBoundaries();
   }
 
   // Returns a string comparing the actual calories burnt per second with the expected
   std::string displayCalorieStatistics() {
-  std::string actual = std::to_string(getActualCaloriesPerSecond());
-  std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
+    std::string actual = std::to_string(getActualCaloriesPerSecond());
+    std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
 
     return actual + ", " + expected;
   }
 
-  bool isExercising()
-  {
+  bool isExercising() {
     return convertMilliToSeconds(timeElapsed) < exerciseDuration;
   }
 
@@ -34,7 +33,7 @@ public:
   }
 
   float getExpectedValue() {
-    return  (convertMilliToSeconds(timeElapsed) / exerciseDuration) * caloriesGoal;
+    return (convertMilliToSeconds(timeElapsed) / exerciseDuration) * caloriesGoal;
   }
 
   // Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
@@ -43,11 +42,10 @@ public:
   {
     movementValue = getMETValue(movementValue);
     float moveFactor = (movementValue / updateDelay) * balanceFactor;
-  
+
     int sexIdx = userInformation.isMale ? 0 : 1;
 
-    return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.userWeight) +
-    (sexCalorieConstants[sexIdx][2] * userInformation.userHeight) - (sexCalorieConstants[sexIdx][3] * userInformation.userAge)) * moveFactor;
+    return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.userWeight) + (sexCalorieConstants[sexIdx][2] * userInformation.userHeight) - (sexCalorieConstants[sexIdx][3] * userInformation.userAge)) * moveFactor;
   }
 
   bool checkIfExerciseSettingsAreRealistic()
@@ -58,17 +56,15 @@ public:
      return exerciseTypeAndCaloriesRelation <= realisticExerciseSettingsComparisonFactor;
   }
 
-  float convertMilliToSeconds(float milli)
-  {
+  float convertMilliToSeconds(float milli) {
     return milli / 1000;
   }
 
   // Conform calories burned velocity in accordance to realistic boundaries
-  float constrainCaloriesBurntVelocity(float balanceFactor, float updateValue)
-  {
+  float constrainCaloriesBurntVelocity(float balanceFactor, float updateValue) {
     // float controlVariable = 1 / balanceFactor; // ((songPauseChunkDuration + 1) * 1000) / balanceFactor;
     float controlVariable = (balanceFactor * 100) / updateValue;
-    
+
     float minValue = min(controlVariable, realisticCaloriesBurntVelocity[0]);
     float maxValue = max(controlVariable, realisticCaloriesBurntVelocity[1]);
 
@@ -120,13 +116,12 @@ public:
     timeElapsed += duration;
   }
 
-  float getSecondsLeft()
-  {
+  float getSecondsLeft() {
     float secondsLeft = exerciseDuration - convertMilliToSeconds(timeElapsed);
   }
 
 private:
-  const float realisticCaloriesBurntVelocity[2] {0.0025, 0.0065};
+  const float realisticCaloriesBurntVelocity[2]{ 0.0025, 0.0065 };
   const float realisticExerciseSettingsComparisonFactor = 0.5;
 
   float standard;
@@ -144,9 +139,9 @@ private:
   float caloriesBurnt;
 
 
-  float sexCalorieConstants[2][4] {
-    {66, 6.2, 12.7, 6.76},      // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
-    {655.1, 4.35, 4.7, 4.65}    // Female: {startConstant, weightConstant, heightConstant, ageConstant}
+  float sexCalorieConstants[2][4]{
+    { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
+    { 655.1, 4.35, 4.7, 4.65 }  // Female: {startConstant, weightConstant, heightConstant, ageConstant}
   };
 
   // Note: Row[i] is equivalent to the (i)th activity
@@ -170,17 +165,15 @@ private:
     return movementValue * proportionalConstant;
   }
 
-  float getCaloriesLeft()
-  {
+  float getCaloriesLeft() {
     return max(0, caloriesGoal - caloriesBurnt);
-  }  
+  }
 
   bool userIsMovingFastEnough(float movementValue) {
     return movementValue >= minMovement;
   }
 
-  void calorieVariableBoundaries()
-  {
+  void calorieVariableBoundaries() {
     standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
     proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
     minMovement = (float)metRanges[chosenActivityIdx][0] / proportionalConstant;  // Minimal movement required for user to be considered actually doing the selected activity

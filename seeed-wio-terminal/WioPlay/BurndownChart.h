@@ -14,8 +14,7 @@ public:
     burndownChartFrontEnd.initializeUI();
   }
 
-  void displayExerciseResults()
-  {
+  void displayExerciseResults() {
     burndownChartFrontEnd.displayExerciseResults(burndownChartBackEnd);
   }
 
