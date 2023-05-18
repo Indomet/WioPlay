@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +20,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 public class MusicFragment extends Fragment implements BrokerConnection.MessageListener{
 
 
     private View rootView;
+    private SongList songList;
     private SongLibraryAdapter adapter;
+    private EditText searchSongs;
 
     public static Song currentSong;
     public static ArrayList<int[]> notes = new ArrayList<>();
@@ -42,6 +48,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         RecyclerView recyclerView = rootView.findViewById(R.id.songLibraryView);
         TextView userBalance = rootView.findViewById(R.id.user_balance);
+        searchSongs=rootView.findViewById(R.id.searchSongs);
+        searchSongs.setOnClickListener(v -> searchRelatedSongs());
 
         userBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
         //The adapter that handles the recycler view functionalities
@@ -55,6 +63,14 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
                     false));
         //Linearly displays a single line of items vertically
         BrokerConnection.getInstance().addMessageListener(adapter);
+
+        songList=SongList.getInstance();
+        if(songList.getSongList()!=null){
+            sortList(songList.getSongList());
+        }
+
+
+
         return rootView;
     }
 
@@ -73,6 +89,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         songs.elements().forEachRemaining(node -> { //Iterates over each song in the payload containing a list of song objects
             parsedSongs.add(parseSong(node, mapper));
         });
+        sortList(parsedSongs);
         adapter.setSongsList(parsedSongs);
     }
 
@@ -97,6 +114,78 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         return new Song(title, artist, durationInSeconds, cost, imageURL, false, notes, tempo);
     }
+    public ArrayList<Song> sortList(ArrayList<Song> list){
+        Collections.sort(list, Comparator.comparing(Song::getTitle));
+        return list;
+
+    }
+    public  int findBestMatchIndex(List<Song> sortedList, String targetString) {
+        int low = 0;
+        int high = sortedList.size() - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int comparison = sortedList.get(mid).getTitle().compareTo(targetString);
+
+            if (comparison == 0) {
+                return mid; // Found an exact match
+            } else if (comparison < 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return high; // No exact match found, return the index for the best match
+    }
+
+
+    public ArrayList<Song> searchResult(List<Song> sortedList, String target){
+
+        int mid = findBestMatchIndex(sortedList,target);
+
+        ArrayList<Song> myList=new ArrayList<>();
+
+        int counter=0;
+
+        while ( mid >= 0 && sortedList.get(mid).getTitle().charAt(0)==target.charAt(0)){
+            myList.add(sortedList.get(mid));
+            mid--;
+            counter++;
+
+        }
+
+        mid=mid+counter+1;
+
+        while (mid<(sortedList.size()) && sortedList.get(mid).getTitle().charAt(0)==target.charAt(0)){
+            myList.add(sortedList.get(mid));
+            mid++;
+        }
+        //checking just in case the find best match was somewhat wrong.
+
+        for (Song songs: sortedList) {
+            if(!myList.contains(songs) && songs.getTitle().charAt(0)!=target.charAt(0)){
+                myList.add(songs);
+            }
+        }
+
+        return myList;
+
+    }
+    public void searchRelatedSongs(){
+        if(searchSongs.getText().toString()!=null){
+            String target= searchSongs.getText().toString();
+            songList.setList(searchResult(songList.getSongList(),target));
+        }
+
+
+
+    }
+
+
+
+
+
 
 
 }
