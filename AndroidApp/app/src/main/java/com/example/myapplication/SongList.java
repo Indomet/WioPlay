@@ -114,17 +114,17 @@ public class SongList {
         unlockedSongList.add(insertionIdx, newSong);
     }
 
-    public int increaseSongIdx() {
-        return (currentSongIdx + 1) % unlockedSongList.size();
+    public void increaseSongIdx() {
+        currentSongIdx = (currentSongIdx + 1) % unlockedSongList.size();
     }
 
-    public int decreaseSongIdx() {
-        return (currentSongIdx - 1) % unlockedSongList.size();
-    }
+    public void decreaseSongIdx() {
+        if(currentSongIdx-1 < 0){
+            currentSongIdx = unlockedSongList.size() - 1;
+        }else{
+            currentSongIdx--;
+        }
 
-
-    public Song getUnlockedSong() {
-        return unlockedSongList.get(currentSongIdx);
     }
 
     public ArrayList<Song> getUnlockedSongList(){
@@ -134,4 +134,5 @@ public class SongList {
     public int getCurrentSongIdx() {
         return currentSongIdx;
     }
+
 }
