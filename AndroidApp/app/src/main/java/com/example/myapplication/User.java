@@ -29,16 +29,13 @@ public class User {
 
     private static User instance;
     private int monthlyWorkouts;
-    ImageFilterView profilePic;
-    Bitmap map;
+
     private User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
         load();
     }
-    public void setPic(ImageFilterView pic){
-        profilePic = pic;
-    }
+
 
     public static User getInstance(){
         if(instance == null){
