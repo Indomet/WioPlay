@@ -13,7 +13,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="6dp"
-        android:background="@drawable/camera1" />
+        android:background="@drawable/png_camera" />
 
     <ImageButton
         android:id="@+id/galleryImageview"

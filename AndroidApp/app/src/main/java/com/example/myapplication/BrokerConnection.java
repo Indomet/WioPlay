@@ -26,7 +26,7 @@ public class BrokerConnection extends AppCompatActivity {
     public static final String SONG_NOTES_TOPIC = "Music/Song/Notes";
     public static final String LOCALHOST = "192.168.227.80" ; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
-    public static final String CLIENT_ID = "Android Phone";   // the app client ID name
+    public static final String CLIENT_ID = "Androidghfkhg Phone";   // the app client ID name
     public static final int QOS = 0;    // quality of service
 
     private boolean isConnected = false;
@@ -115,6 +115,7 @@ public class BrokerConnection extends AppCompatActivity {
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    
                     //check if the topic of the message is the subscribed topic
                     if(isConnected){ //TODO: Make separate messageListeners for each fragment
                         //Toast.makeText(context, "The message is "+ message.toString(), Toast.LENGTH_SHORT).show();
