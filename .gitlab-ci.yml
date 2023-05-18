@@ -12,7 +12,7 @@
 # * Caches downloaded dependencies and plugins between invocation.
 # * Verify but don't deploy merge requests.
 # * Deploy built artifacts from master branch only.
-include: 'AndroidApp/**.yml'
+include: '/AndroidApp/.gitlab-Android-CI.yml'
 
 default:
   tags:
