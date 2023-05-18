@@ -1,7 +1,7 @@
-#include "seeed_line_chart.h" // library for drawing the burndown chart
-#include <map> 
-#include <ArduinoJson.h> // json library
-#include "Seeed_FS.h"  // SD card library
+#include "seeed_line_chart.h"  // library for drawing the burndown chart
+#include <map>
+#include <ArduinoJson.h>  // json library
+#include "Seeed_FS.h"     // SD card library
 #include "UserInformation.h"
 UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, userAge, isMale)
 
@@ -25,7 +25,7 @@ const char *calorie_pub = "Send/Calorie/Burn/Data";
 void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
-   scenes.setupButton();
+  scenes.setupButton();
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
@@ -46,34 +46,29 @@ void loop() {
   if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
-     scenes.buttonOnPress();
+    scenes.buttonOnPress();
     scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
     bool isPlayingSong = player.isPlayingSong();
 
 
-    if (player.song.size() > 0 && !player.isPaused)
-    {
-      if (player.getPosition() >= player.song.size())
-      {
-        client.publish("request/notes", "I need a new set of notes");
-      }
-      else
-      {
+    if (player.song.size() > 0 && !player.hasRequested) {
+      if (player.getPosition() >= player.song.size()) {
+        Serial.println(player.getPosition());
+        client.publish(Request_pub, "I need a new set of notes");
+        player.hasRequested = true;
+      } else {
         player.playChunk();
       }
-    }
-    else
-    {
-      delay(1000);
+    } else {
+      delay(100);
     }
 
 
+    float updateDelay = 100;
+    // burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
 
-
-    float updateDelay = isPlayingSong ? player.getCurrentPauseChunkDuration() : 1000;
-    // float updateDelay = 1000;
     burndownChart.updateTimeElapsed(updateDelay);
 
 
@@ -103,4 +98,3 @@ void showBurndownChartScene() {
 void showPlayerScene() {
   scenes.playerScene();
 }
-

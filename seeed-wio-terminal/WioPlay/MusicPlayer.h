@@ -1,8 +1,4 @@
-#include "pitches.h"
-// #include "themes.h"
-
-class MusicPlayer
-{
+class MusicPlayer {
 
   static const int GENERIC_DURATION = 1000 / 5;
   static const int CHUNK_SIZE = 5;
@@ -17,8 +13,8 @@ private:
 public:
   boolean hasRequested;
   DynamicJsonDocument song;
-  MusicPlayer(float tempo) : song(song)
-  {
+  MusicPlayer(float tempo)
+    : song(song) {
     this->tempo = tempo;
     this->position = 0;
     this->isPaused = false;
@@ -28,11 +24,9 @@ public:
   }
 
 private:
-  void play(int position)
-  {
+  void play(int position) {
 
-    if (song[position] != 0 && !this->isPaused)
-    {
+    if (song[position] != 0 && !this->isPaused) {
       tone(1, song[position], GENERIC_DURATION);
     }
 
@@ -41,13 +35,11 @@ private:
   }
 
 public:
-  void playChunk()
-  {
+  void playChunk() {
 
     currentPauseChunkDuration = 0;
     int limit = min(this->position + CHUNK_SIZE, this->song.size());
-    for (int i = this->position; i < limit; i++)
-    {
+    for (int i = this->position; i < limit; i++) {
       Serial.println(i);
       play(i);
       // registerIncreasedChunkDuration();
@@ -56,14 +48,12 @@ public:
   }
 
 public:
-  int getPosition()
-  {
+  int getPosition() {
     return this->position;
   }
 
 public:
-  void nextSong()
-  {
+  void nextSong() {
     // this->position = 0;
 
     // songIdx++;
@@ -77,8 +67,7 @@ public:
   }
 
 public:
-  void previousSong()
-  {
+  void previousSong() {
     // this->position = 0;
 
     // songIdx--;
@@ -92,32 +81,27 @@ public:
   }
 
 public:
-  void registerIncreasedChunkDuration()
-  {
+  void registerIncreasedChunkDuration() {
     currentPauseChunkDuration += pauseDuration;
   }
 
 public:
-  bool isPlayingSong()
-  {
+  bool isPlayingSong() {
     return this->position != 0;
   }
 
 public:
-  float getCurrentPauseChunkDuration()
-  {
+  float getCurrentPauseChunkDuration() {
     return currentPauseChunkDuration;
   }
 
 public:
-  void toggle()
-  {
+  void toggle() {
     this->isPaused ? this->resume() : this->pause();
   }
 
 public:
-  void changeSong(DynamicJsonDocument newSong)
-  {
+  void changeSong(DynamicJsonDocument newSong) {
     this->position = 0;
     this->song = newSong;
   }
@@ -127,14 +111,12 @@ bool isPaused;
 
 
 private:
-  void pause()
-  {
+  void pause() {
     this->isPaused = true;
   }
 
 private:
-  void resume()
-  {
+  void resume() {
     this->isPaused = false;
   }
 };
