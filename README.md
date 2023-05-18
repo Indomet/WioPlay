@@ -13,16 +13,27 @@
 
 Wio Play is a media device that can seamlessly integrate with many services to provide awesome entertainment.
 
+## Purpose
+
+The purpose of Wio Play is motivating people to lose calories by effectively utilising the terminal's components and the user experience of the android app
+
+
+## Benefits
+
+* Large Song Library 🎵
+   - **50+** **songs** currently available
+
+* Maintainbility 🔄
+   - Songs are automatically **maintained on the server**
+
+* Media Storage 💾
+  - Downloaded songs are **cached on the app**
+
+* Motion Detection 👟
+  - Utilizes the **small form factor** of the wio terminal
 
 [**Wiki**](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/home)
 
-## Features
-- On Demand Streaming 🎵
-- Playlist Creation 📃
-- Media Storage 💾
-- Motion Detection 🏃‍♂️
-- Clean & Robust Code ✨
-- Unlock Songs with Earned Calorie Currency 🔓
 
 ## How It Works
 The idea is to have a compact device that can stream music from a source, or load it from its existing memory, that combined with a capable player and a motivating motion detection mechanism make the **Wio Play** a handy piece of technology.
