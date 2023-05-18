@@ -52,7 +52,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         //position is the index of the items in the recycler view
         int currentPosition = holder.getBindingAdapterPosition();
 
-        currentSong = songsList.get(currentPosition); //Maps each song to its position in the list
+        Song currentSong = songsList.get(currentPosition); //Maps each song to its position in the list
 
         Picasso.get().load(currentSong.getImageURL()).into(holder.songImage);//Loads song image from url
         holder.artistName.setText(currentSong.getArtist());
@@ -118,6 +118,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
 
     private void playSong(@NonNull Song currentSong) {
+        Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         try {
@@ -177,22 +178,25 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     }
 
-    public void receiveNextSong(String payload)
+    public void receiveNextSong(@NonNull String payload)
     {
-        int index = SongList.getInstance().getCurrentSongIdx();
+        if (payload.equals(PREVIOUS_SONG_MESSAGE)){
+            SongList.getInstance().decreaseSongIdx();
+            currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
+            Toast.makeText(context, "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() , Toast.LENGTH_SHORT).show();
+
+    }
         if(payload.equals(NEXT_SONG_MESSAGE)) {
 
-            if(index <= SongList.getInstance().getUnlockedSongList().size()-1){
-                SongList.getInstance().increaseSongIdx();
-                currentSong = SongList.getInstance().getUnlockedSong();
-            }
-        }else if (payload.equals(PREVIOUS_SONG_MESSAGE)){
-            if(index <= SongList.getInstance().getUnlockedSongList().size()-1){
-                SongList.getInstance().decreaseSongIdx();
-                currentSong = SongList.getInstance().getUnlockedSong();
-            }
+            SongList.getInstance().increaseSongIdx();
+            currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
+            Toast.makeText(context, "Next song is  " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx(), Toast.LENGTH_SHORT).show();
+
         }
+
     }
+
+
 
     @Override
     public String getSubbedTopic() {
