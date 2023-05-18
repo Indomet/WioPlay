@@ -1,6 +1,3 @@
-#include <iostream>
-#include <algorithm>
-
 class BurndownChartBackEnd  // Has the responsibility of dealing with logic and functionality of the burndown chart
 {
 public:
@@ -21,7 +18,7 @@ public:
     std::string actual = std::to_string(getActualCaloriesPerSecond());
     std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
 
-    return actual + ", " + expected;
+    return  actual + "  " + expected;
   }
 
   bool isExercising() {
@@ -46,14 +43,6 @@ public:
     int sexIdx = userInformation.isMale ? 0 : 1;
 
     return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.userWeight) + (sexCalorieConstants[sexIdx][2] * userInformation.userHeight) - (sexCalorieConstants[sexIdx][3] * userInformation.userAge)) * moveFactor;
-  }
-
-  bool checkIfExerciseSettingsAreRealistic()
-  {
-     float expectedCaloriesPerSecond = getGeneralExpectedCaloriesPerSecond();
-     float exerciseTypeAndCaloriesRelation = expectedCaloriesPerSecond / (chosenActivityIdx + 1);
-
-     return exerciseTypeAndCaloriesRelation <= realisticExerciseSettingsComparisonFactor;
   }
 
   float convertMilliToSeconds(float milli) {
@@ -95,7 +84,7 @@ public:
     return caloriesBurnt / convertMilliToSeconds(timeElapsed);
   }
 
-  // Expected calories to burn per second from current calories burnt to reach goal (real-time updating)
+  // Expected calories to burn per second from current calories burnt to reach goal
   float getExpectedCaloriesPerSecond() {
     float caloriesLeft = getCaloriesLeft();
     float secondsLeft = getSecondsLeft();
@@ -103,7 +92,6 @@ public:
     return caloriesLeft / secondsLeft;
   }
 
-  // Get the calories per second to burn in order to accomplish the calorie goal within the exercise duration
   float getGeneralExpectedCaloriesPerSecond() {
     return caloriesGoal / exerciseDuration;
   }
@@ -122,15 +110,11 @@ public:
 
 private:
   const float realisticCaloriesBurntVelocity[2]{ 0.0025, 0.0065 };
-  const float realisticExerciseSettingsComparisonFactor = 0.5;
-
   float standard;
   float minMovement;  // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
   float maxMovement;  // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
   float proportionalConstant;
-
-  // Note for developers: It's important that the intensity of the activities increases as the this index does, to preserve the beneficial formula used in 'checkIfExerciseSettingsAreRealistic()'
-  byte chosenActivityIdx;       // 0 = Walking, 1 = Hiking, 2 = Running
+  byte chosenActivityIdx;  // 0 = Walking
   float balanceFactor;
   float timeElapsed;
 
