@@ -1,12 +1,8 @@
-#include "Arduino.h"
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(130, 6, 0);      // (exerciseDuration, caloriesGoal, chosenActivityIdx)
-BurndownChartFrontEnd burndownChartFrontEnd(20);           // (float graphUIXStartValue)
-
-#include <iostream>
-#include <string>
+BurndownChartBackEnd burndownChartBackEnd(550, 300, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartFrontEnd burndownChartFrontEnd(20);         // (float graphUIXStartValue)
 
 class BurndownChart {
 public:
@@ -49,10 +45,6 @@ public:
 
   float getTimeElapsed() {
     return burndownChartBackEnd.getTimeElapsed();
-  }
-
-  bool checkIfExerciseSettingsAreRealistic() {
-    return burndownChartBackEnd.checkIfExerciseSettingsAreRealistic();
   }
 
   void updateTimeElapsed(float duration) {

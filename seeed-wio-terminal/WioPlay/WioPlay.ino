@@ -8,24 +8,27 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 #include "MotionDetection.h"
 #include "MusicPlayer.h"
 
+
 MusicPlayer player(2);
 
 #include "Scenes.h"
 Scenes scenes;
 #include "BurndownChart.h"
 #include "MqttConnection.h"
-
+#include "Button.h"
+Button button;
 float movementValue;
 
 MotionDetection motionDetection;
 BurndownChart burndownChart;
 
-const char *calorie_pub = "Send/Calorie/Burn/Data";
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
-  scenes.setupButton();
+  button.setup();
+  pinMode(RIGHT_BUTTON, INPUT_PULLUP);
+  while (digitalRead(RIGHT_BUTTON) == LOW) {}
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
@@ -33,10 +36,6 @@ void setup() {
   burndownChart.initializeUI();
 
   burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
-
-  if (!burndownChart.checkIfExerciseSettingsAreRealistic()) {
-    Serial.println("Exercise settings are not realistic! Consider changing exercise type to a more passive one, or/and lower the calorie-goal and increase length of exercise");
-  }
 }
 
 void loop() {
@@ -46,7 +45,7 @@ void loop() {
   if (burndownChart.isExercising()) {
 
     burndownChart.controlConstraints();
-    scenes.buttonOnPress();
+    button.onPress();
     scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
@@ -79,7 +78,9 @@ void loop() {
     // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
     // Serial.println("***********************");
 
-    movementValue = motionDetection.detectMotion();
+    movementValue = motionDetection.detectMotion();  // Read current user-position
+
+    // burndownChart.sufficientMovementInquiry(userInformation, movementValue, 1000); // player.getCurrentPauseChunkDuration() -------------> Add if-statement for this case
     burndownChart.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
 
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
@@ -88,7 +89,9 @@ void loop() {
   // Exercise is completed: Inactivate burndown chart and show panel
   else {
     burndownChart.displayExerciseResults();
+    delay(200); // to make the scene flicker less
   }
+  
 }
 
 void showBurndownChartScene() {

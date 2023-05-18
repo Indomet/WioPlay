@@ -75,33 +75,32 @@ public:
   }
 
   void displayExerciseResults(BurndownChartBackEnd burndownChartBackEnd) {
-    tft.setTextSize(3);
-
-    displayCalorieSecondComparison(burndownChartBackEnd);
-
+    tft.setTextSize(2);
+    
     // User completed goal
     if (burndownChartBackEnd.checkIfUserAccomplishedGoal()) {
-      tft.fillScreen(TFT_GREEN);
-      tft.drawString("Accomplished goal!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+      goal = "Accomplished goal!";                                 
     }
 
-    // User didn't attain the set goal
+    // User didn't complete set goal
     else {
       tft.fillScreen(TFT_RED);
-      tft.drawString("Menu here!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+      goal = "Goal not acomplished!";
     }
+    tft.drawString(goal, (320 - tft.textWidth(goal)) / 2, 120);
+    displayCalorieSecondComparison(burndownChartBackEnd);
   }
 
   void displayCalorieSecondComparison(BurndownChartBackEnd burndownChartBackEnd) {
     String caloriesPerSecondComparison = String(burndownChartBackEnd.displayCalorieStatistics().c_str());
-    tft.drawString(caloriesPerSecondComparison, caloriesPerSecondTextCoordinates[0], caloriesPerSecondTextCoordinates[1]);
+    tft.drawString("Actual:   Expected: ", (320 - tft.textWidth(caloriesPerSecondComparison)) / 2, 80);
+    tft.drawString(caloriesPerSecondComparison, (320 - tft.textWidth(caloriesPerSecondComparison)) / 2, 100);
   }
 
 private:
   const byte numberOfGraphValues = 2;
-  byte caloriesPerSecondTextCoordinates[2] = { 5, 50 };
-  byte exerciseResultTextCoordinates[2] = { 15, 70 };
-
+  String goal;
+  
   // Don't display the data-points added earliest on the graph. Delete them to sustain the memory limit
   void removeEarliestDataPoints() {
     for (byte i = 0; i < numberOfGraphValues; i++) {

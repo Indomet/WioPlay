@@ -16,8 +16,7 @@ const char *server = my_IPv4;     // MQTT Broker URL
 const char *Music_sub = "Music/Data/Change";
 const char *TOPIC_sub = "User/Data/Change";
 const char *Workout_sub = "User/Workout/Start";
-const char *TOPIC_pub_connection = "Send/Calorie/Burn/Data";
-const char *Music_buttons_pub = "Music/Song/Buttons";
+const char *calorie_pub = "Send/Calorie/Burn/Data";
 const char *Music_notes_sub = "Music/Song/Notes";
 const char *Loop_trigger_sub = "Music/Loop";
 const char *Request_pub = "request/notes";
@@ -34,8 +33,7 @@ void setup_wifi() {
   delay(10);
 
   tft.setTextSize(2);
-  tft.setCursor((320 - tft.textWidth("Connecting to Wi-Fi..")) / 2, 120);
-  tft.print("Connecting to Wi-Fi..");
+  tft.drawString("Connecting to Wi-Fi..", (320 - tft.textWidth("Connecting to Wi-Fi..")) / 2, 120);
 
   Serial.println();
   Serial.print("Connecting to ");
@@ -51,8 +49,7 @@ void setup_wifi() {
   Serial.println("WiFi connected");
 
   tft.fillScreen(TFT_BLACK);
-  tft.setCursor((320 - tft.textWidth("Connected!")) / 2, 120);
-  tft.print("Connected!");
+  tft.drawString("Connected!", (320 - tft.textWidth("Connected!")) / 2, 120);
 
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());  // Display Local IP Address
@@ -148,7 +145,7 @@ void reconnect() {
       Serial.println("connected");
       // Once connected, publish an announcement...
       client.publish(calorie_pub, "hello world");
-      client.setBufferSize(10024);
+      client.setBufferSize(1024);
       Serial.println("Published connection message ");
       // ... and resubscribe
       client.subscribe(TOPIC_sub);
