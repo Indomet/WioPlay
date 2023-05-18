@@ -67,7 +67,7 @@ before_script:
 assembleDebug:
   image: gradle:8
   interruptible: true
-  stage: assembleDebug
+  stage: build
   before_script:
   - cd AndroidApp
   - chmod +x ./gradlew
@@ -81,7 +81,7 @@ assembleDebug:
 debugTests:
   image: gradle:8
   interruptible: true
-  stage: debugTests
+  stage: test
   before_script:
   - cd AndroidApp
   - chmod +x ./gradlew
