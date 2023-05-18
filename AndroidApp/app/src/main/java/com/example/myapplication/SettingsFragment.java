@@ -76,7 +76,6 @@ public class SettingsFragment extends Fragment {
         changeProfile=rootView.findViewById(R.id.chengeProfile);
         monthlyWorkouts = rootView.findViewById(R.id.monthly_workouts_edittxt);
         usernameTextView.setText(user.getUsername());
-        //profilePicture = user.profilePic;
         saveButton.setOnClickListener(view -> publishSavedData());
 
         editButton.setOnClickListener(v -> editUserNamePopup());
