@@ -66,7 +66,7 @@ public:
     if (digitalRead(BUTTON_NEXT) == LOW) {
       player.nextSong();
       client.publish("request/notes", "I need a new set of notes");
-      // client.publish("Music/Song/Buttons", "next");
+      client.publish("Music/Song/Buttons", "NEXT");
     }
 
     if (digitalRead(BUTTON_PAUSE) == LOW) {
@@ -75,7 +75,7 @@ public:
 
     if (digitalRead(BUTTON_PREVIOUS) == LOW) {
       player.previousSong();
-      client.publish("Music/Song/Buttons", "previous");
+      client.publish("Music/Song/Buttons", "PREVIOUS");
     }
   }
 

@@ -10,11 +10,11 @@ import java.util.ArrayList;
 
 public class SongList {
     private ArrayList<Song> songList;
-    private ArrayList<Song> unlockedSongs;
+    private ArrayList<Song> unlockedSongList;
     private File songFile;
 
     private static SongList instance;
-    private static int currentSongIdx = 0;
+    private int currentSongIdx = 0;
 
     private SongList(){} //Jackson library requires a default empty constructor
 
@@ -41,7 +41,7 @@ public class SongList {
 
     private void defaultList(){
         this.songList = new ArrayList<>();
-        this.unlockedSongs = new ArrayList<>();
+        this.unlockedSongList = new ArrayList<>();
     }
 
     public ArrayList<Song> getSongList(){
@@ -54,6 +54,12 @@ public class SongList {
         saveSongList();
     }
 
+    public void setUnlockedSongList(ArrayList<Song> unlockedSongList){
+        this.unlockedSongList = unlockedSongList;
+        saveSongList();
+    }
+
+
     public void loadData(){
         try{
             ObjectMapper mapper = new ObjectMapper();
@@ -61,7 +67,10 @@ public class SongList {
 
             //Must specify the deserialization class type
             ArrayList<Song> loadedList = mapper.convertValue(node.get("songList"), new TypeReference<ArrayList<Song>>(){});
+            ArrayList<Song> loadedUnlockedList = mapper.convertValue(node.get("unlockedSongList"), new TypeReference<ArrayList<Song>>(){});
             this.setList(loadedList);
+            this.setUnlockedSongList(loadedUnlockedList);
+
         }catch (IOException e){
             saveSongList();
             loadData();
@@ -83,15 +92,16 @@ public class SongList {
 
     public void unlockSong(Song song) {
         this.songList.get(this.songList.indexOf(song)).setUnlocked(true);
-        saveSongList();
         addUnlockedSong(song);
+        saveSongList();
+
     }
 
     private ArrayList<String> getAllUnlockedSongTitles()
     {
         ArrayList<String> titles = new ArrayList<>();
 
-        for (Song currentSong : unlockedSongs)
+        for (Song currentSong : unlockedSongList)
             titles.add(currentSong.getTitle());
 
         return titles;
@@ -101,6 +111,27 @@ public class SongList {
     {
         // Transfer song titles to String list
         int insertionIdx = Util.binarySearchInsertion(getAllUnlockedSongTitles(), newSong.getTitle());
-        unlockedSongs.add(insertionIdx, newSong);
+        unlockedSongList.add(insertionIdx, newSong);
+    }
+
+    public int increaseSongIdx() {
+        return (currentSongIdx + 1) % unlockedSongList.size();
+    }
+
+    public int decreaseSongIdx() {
+        return (currentSongIdx - 1) % unlockedSongList.size();
+    }
+
+
+    public Song getUnlockedSong() {
+        return unlockedSongList.get(currentSongIdx);
+    }
+
+    public ArrayList<Song> getUnlockedSongList(){
+        return unlockedSongList;
+    }
+
+    public int getCurrentSongIdx() {
+        return currentSongIdx;
     }
 }
