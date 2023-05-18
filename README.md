@@ -36,10 +36,10 @@ The purpose of Wio Play is motivating people to lose calories by effectively uti
 [**Wiki**](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/home)
 
 
-## How It Works
+## Streaming Music
 The idea is to have a compact device that can stream music from a source, or load it from its existing memory, that combined with a capable player and a motion detection mechanism make the **Wio Play** a handy piece of technology.
 
-### Streaming Music
+### Proccess
 The full process of streaming a track on our service can be broken down into 3 key steps interconnected together using MQTT, the full process eventually concludes when the chosen song has been played fully on the terminal
 
 1. Pinging Terminal
@@ -51,6 +51,12 @@ The full process of streaming a track on our service can be broken down into 3 k
 3. Sending Notes
     - Once the app receives a request from the terminal asking for more notes, it sends the next notes chunk in the queue back to the terminal
 
+### Diagram
+The steps described above can be seen in the sequence diagram below:
+<div align="center">
+<br />
+<img src="https://lh3.googleusercontent.com/drive-viewer/AFGJ81p9zU6DBnY59_8D82sz5SMo3yR0VnWb_HecgOrcSK-aTqkYeohW5WBslyrLSCfYT-ftaoWi8t12STy1MtWIQBnjGfiJeg=s2560" />
+</div>
 
 ## Technologies Used
 
