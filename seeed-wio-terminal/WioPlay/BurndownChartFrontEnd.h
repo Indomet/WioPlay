@@ -1,6 +1,4 @@
-
-
-#define MAX_SIZE 20  // maximum size of data displayed at once in graph
+#define MAX_SIZE 30  // maximum size of data displayed at once in graph
 doubles data[2];
 
 class BurndownChartFrontEnd {
@@ -77,27 +75,27 @@ public:
   }
 
   void displayExerciseResults(BurndownChartBackEnd burndownChartBackEnd) {
-  tft.setTextSize(3);
+    tft.setTextSize(3);
 
-  displayCalorieSecondComparison(burndownChartBackEnd);
+    displayCalorieSecondComparison(burndownChartBackEnd);
 
-  // User completed goal
-  if (burndownChartBackEnd.checkIfUserAccomplishedGoal()) {
-    tft.fillScreen(TFT_GREEN);
-    tft.drawString("Accomplished goal!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+    // User completed goal
+    if (burndownChartBackEnd.checkIfUserAccomplishedGoal()) {
+      tft.fillScreen(TFT_GREEN);
+      tft.drawString("Accomplished goal!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+    }
+
+    // User didn't attain the set goal
+    else {
+      tft.fillScreen(TFT_RED);
+      tft.drawString("Menu here!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+    }
   }
 
-  // User didn't attain the set goal
-  else {
-    tft.fillScreen(TFT_RED);
-    tft.drawString("Menu here!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+  void displayCalorieSecondComparison(BurndownChartBackEnd burndownChartBackEnd) {
+    String caloriesPerSecondComparison = String(burndownChartBackEnd.displayCalorieStatistics().c_str());
+    tft.drawString(caloriesPerSecondComparison, caloriesPerSecondTextCoordinates[0], caloriesPerSecondTextCoordinates[1]);
   }
-}
-
-void displayCalorieSecondComparison(BurndownChartBackEnd burndownChartBackEnd) {
-  String caloriesPerSecondComparison = String(burndownChartBackEnd.displayCalorieStatistics().c_str());
-  tft.drawString(caloriesPerSecondComparison, caloriesPerSecondTextCoordinates[0], caloriesPerSecondTextCoordinates[1]);
-}
 
 private:
   const byte numberOfGraphValues = 2;
