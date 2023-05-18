@@ -8,7 +8,7 @@ private:
   int tempo;
   int pauseDuration;
   int currentPauseChunkDuration;
-  // bool isPaused;
+  bool isPaused;
 
 public:
   boolean hasRequested;
@@ -53,34 +53,6 @@ public:
   }
 
 public:
-  void nextSong() {
-    // this->position = 0;
-
-    // songIdx++;
-
-    // if (songIdx == sizeof(allSongs)/sizeof(int))
-    // {
-    //   songIdx = 0;
-    // }
-
-    // this->song = allSongs[songIdx];
-  }
-
-public:
-  void previousSong() {
-    // this->position = 0;
-
-    // songIdx--;
-
-    // if (songIdx < 0)
-    // {
-    //   songIdx = sizeof(allSongs)/sizeof(int) - 1;
-    // }
-
-    // this->song = allSongs[songIdx];
-  }
-
-public:
   void registerIncreasedChunkDuration() {
     currentPauseChunkDuration += pauseDuration;
   }
@@ -105,10 +77,6 @@ public:
     this->position = 0;
     this->song = newSong;
   }
-
-public:
-bool isPaused;
-
 
 private:
   void pause() {
