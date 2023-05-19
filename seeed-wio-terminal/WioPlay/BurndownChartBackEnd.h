@@ -1,5 +1,4 @@
-class BurndownChartBackEnd
-{
+class BurndownChartBackEnd {
 public:
   BurndownChartBackEnd(float exerciseDuration, float caloriesGoal, byte chosenActivityIdx) {
     this->exerciseDuration = exerciseDuration;
@@ -19,7 +18,7 @@ public:
     std::string actual = std::to_string(getActualCaloriesPerSecond());
     std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
 
-    return  actual + "  " + expected;
+    return actual + "  " + expected;
   }
 
   /*
@@ -30,8 +29,7 @@ public:
   */
 
   // Check if the user is exercising with a variable associated with MQTT
-  bool isExercising()
-  {
+  bool isExercising() {
     return isWorkingOut;
   }
 
@@ -72,8 +70,7 @@ public:
   void sufficientMovementInquiry(UserInformation userInformation, float movementValue) {
     if (userIsMovingFastEnough(movementValue)) {
       caloriesBurnt += burnCalories(userInformation, movementValue);
-    }
-    else {
+    } else {
       Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
@@ -132,16 +129,17 @@ public:
 private:
   const float realisticCaloriesBurntVelocity[2]{ 0.0025, 0.0065 };
 
-  const float sexCalorieConstants[2][4] {
-   { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
-   { 655.1, 4.35, 4.7, 4.65 }  // Female: {startConstant, weightConstant, heightConstant, ageConstant}
+  const float sexCalorieConstants[2][4]{
+    { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
+    { 655.1, 4.35, 4.7, 4.65 }  // Female: {startConstant, weightConstant, heightConstant, ageConstant}
   };
 
   // Notes:
   // * Row[i] is equivalent to the (i)th activity
   // * Retrieve standard-value by getting the average of min and max value
   // The minimal and maximal met-values for each physical activity
-  const byte metRanges[3][2] = { // Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
+  const byte metRanges[3][2] = {
+    // Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
     { 3, 6 },   // Walking
     { 9, 23 },  // Running
     { 5, 8 }    // Hiking
@@ -158,8 +156,8 @@ private:
   const float updateDelay = 100;
 
   float standard;
-  float minMovement;    // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
-  float maxMovement;    // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
+  float minMovement;  // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
+  float maxMovement;  // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
   float proportionalConstant;
 
   byte chosenActivityIdx;
