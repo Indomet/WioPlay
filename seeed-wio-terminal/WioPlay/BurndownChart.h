@@ -1,7 +1,7 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(50, 140, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd(300, 30, 0);   // (exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);         // (float graphUIXStartValue)
 
 class BurndownChart {
@@ -19,6 +19,10 @@ public:
     return burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond();
   }
 
+  float getUpdateDelay() {
+    return burndownChartBackEnd.getUpdateDelay();
+  }
+
   float getActualCaloriesPerSecond() {
     return burndownChartBackEnd.getActualCaloriesPerSecond();
   }
@@ -27,12 +31,19 @@ public:
     return burndownChartBackEnd.getExpectedCaloriesPerSecond();
   }
 
+  /*
+  // Note: Previous implementation that works as intended without MQTT
+  bool isExercising() {
+    return burndownChartBackEnd.isExercising();
+  }
+  */
+
   bool isExercising() {
     return burndownChartBackEnd.isExercising();
   }
 
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float updateDelay) {
-    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue) {
+    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue);
   }
 
   // Constrain dynamic variables in front-end and back-end in real-time
@@ -48,8 +59,8 @@ public:
     return burndownChartBackEnd.getTimeElapsed();
   }
 
-  void updateTimeElapsed(float duration) {
-    burndownChartBackEnd.updateTimeElapsed(duration);
+  void updateTimeElapsed() {
+    burndownChartBackEnd.updateTimeElapsed();
   }
 
   void updateGraphVizuals() {
