@@ -18,8 +18,8 @@ public:
     return burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond();
   }
 
-  float getUpdateValue() {
-    return burndownChartBackEnd.getUpdateValue();
+  float getUpdateDelay() {
+    return burndownChartBackEnd.getUpdateDelay();
   }
 
   float getActualCaloriesPerSecond() {
@@ -34,8 +34,8 @@ public:
     return burndownChartBackEnd.isExercising();
   }
 
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float updateDelay) {
-    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue) {
+    burndownChartBackEnd.sufficientMovementInquiry(userInformation, movementValue);
   }
 
   // Constrain dynamic variables in front-end and back-end in real-time
@@ -51,8 +51,8 @@ public:
     return burndownChartBackEnd.getTimeElapsed();
   }
 
-  void updateTimeElapsed(float duration) {
-    burndownChartBackEnd.updateTimeElapsed(duration);
+  void updateTimeElapsed() {
+    burndownChartBackEnd.updateTimeElapsed();
   }
 
   void updateGraphVizuals() {

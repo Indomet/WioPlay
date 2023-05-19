@@ -13,6 +13,13 @@ public:
     calculateCalorieVariableBoundaries();
   }
 
+    // TEMPORARY - Note: Commit 'future updates' statistics
+    // Serial.println("***********************");
+    // Serial.println(burndownChart.getTimeElapsed());
+    // Serial.println(burndownChart.getActualCaloriesPerSecond());
+    // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
+    // Serial.println("***********************");
+
   // Returns a string comparing the actual calories burnt per second with the expected
   std::string displayCalorieStatistics() {
     std::string actual = std::to_string(getActualCaloriesPerSecond());
@@ -35,7 +42,7 @@ public:
 
   // Formula reference: "Calculating daily calorie burn", https://www.medicalnewstoday.com/articles/319731
   // Takes into consideration the inputted user characteristics and how much the user has moved since last update of the burndown chart to calculate calories burnt
-  float burnCalories(UserInformation userInformation, float movementValue, float updateDelay)  // Burn calories based on the movement-value
+  float burnCalories(UserInformation userInformation, float movementValue)  // Burn calories based on the movement-value
   {
     movementValue = getMETValue(movementValue);
     float moveFactor = (movementValue / (updateDelay * 75)) * balanceFactor;
@@ -59,12 +66,11 @@ public:
   }
 
   // Only burn calories if user's movement-intensity corresponds with selected exercise
-  void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float updateDelay) {
+  void sufficientMovementInquiry(UserInformation userInformation, float movementValue) {
     if (userIsMovingFastEnough(movementValue)) {
-      caloriesBurnt += burnCalories(userInformation, movementValue, updateDelay);
+      caloriesBurnt += burnCalories(userInformation, movementValue);
     }
-    else
-    {
+    else {
       Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
@@ -100,33 +106,33 @@ public:
     return timeElapsed;
   }
 
-  void updateTimeElapsed(float duration) {
-    timeElapsed += duration;
+  void updateTimeElapsed() {
+    timeElapsed += updateDelay;
   }
 
   float getSecondsLeft() {
     return exerciseDuration - convertMilliToSeconds(timeElapsed);
   }
 
-  float getUpdateValue() {
-    return updateValue;
+  float getUpdateDelay() {
+    return updateDelay;
   }
 
 private:
   const float realisticCaloriesBurntVelocity[2]{ 0.0025, 0.0065 };
   const float targetBalanceFactor = 0.08;
-  const float updateValue = 100;
+  const float updateDelay = 100;
 
   float standard;
-  float minMovement;  // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
-  float maxMovement;  // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
+  float minMovement;    // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
+  float maxMovement;    // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
   float proportionalConstant;
   byte chosenActivityIdx;
   float balanceFactor;
   float timeElapsed;
 
-  float exerciseDuration;  // 30 (Seconds)
-  float caloriesGoal;      // 100 --> Put in 'ExerciseSettings'
+  float exerciseDuration;
+  float caloriesGoal;
   double caloriesBurnt;
 
 
@@ -135,11 +141,11 @@ private:
     { 655.1, 4.35, 4.7, 4.65 }  // Female: {startConstant, weightConstant, heightConstant, ageConstant}
   };
 
-  // Note: Row[i] is equivalent to the (i)th activity
-  // Note: Retrieve standard-value by getting the average of min and max value
+  // Notes:
+  // * Row[i] is equivalent to the (i)th activity
+  // * Retrieve standard-value by getting the average of min and max value
   // The minimal and maximal met-values for each physical activity
-  // Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
-  const byte metRanges[3][2] = {
+  const byte metRanges[3][2] = { // Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
     { 3, 6 },   // Walking
     { 9, 23 },  // Running
     { 5, 8 }    // Hiking

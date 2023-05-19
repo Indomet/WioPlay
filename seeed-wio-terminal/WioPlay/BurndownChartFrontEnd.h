@@ -20,8 +20,6 @@ public:
     if (data[0].size() >= MAX_SIZE) {
       removeEarliestDataPoints();
     }
-
-    // tft.fillScreen(TFT_WHITE);
   }
 
   // Update headers and graph-values in real-time
@@ -55,8 +53,6 @@ public:
     headerX.draw(&tft);  // Header height is the twice the height of the font
 
     vizualiseGraphValues(burndownChartBackEnd);
-    // data[0].push(burndownChartBackEnd.caloriesBurnt);
-    // data[1].push(burndownChartBackEnd.getExpectedValue());
 
     // Settings for the line graph
     auto content = line_chart(graphUIXStartValue, header.height());  //(x,y) where the line graph begins   auto content = line_chart(20, header.height());
@@ -70,8 +66,6 @@ public:
       .color(TFT_RED, TFT_BLUE)
       .backgroud(TFT_WHITE)
       .draw(&tft);
-
-    //tft.fillScreen(TFT_BLACK);
   }
 
   void displayExerciseResults(BurndownChartBackEnd burndownChartBackEnd) {
