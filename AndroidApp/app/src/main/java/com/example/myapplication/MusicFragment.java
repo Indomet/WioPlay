@@ -33,7 +33,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private SongLibraryAdapter adapter;
 
     MusicFragment(){
-        BrokerConnection broker= MainActivity.brokerConnection;
+        BrokerConnection broker = BrokerConnection.getInstance();
         broker.addMessageListener(this);
     }
     @Override
