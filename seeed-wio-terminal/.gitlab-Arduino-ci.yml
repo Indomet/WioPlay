@@ -1,0 +1,32 @@
+name: Arduino CI
+
+stages:
+  - build
+
+variables:
+  ARDUINO_CORE_URL: "https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json"
+
+build-sketch:
+  stage: build
+  image: ubuntu:20.04
+  script:
+    - apt-get update && apt-get install -y python3 python3-pip
+    - pip3 install pyserial
+    - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
+    - arduino-cli config init --additional-urls "${ARDUINO_CORE_URL}"
+    - arduino-cli core update-index
+    - arduino-cli core install Seeeduino:samd
+    - arduino-cli lib install "ArduinoJson"
+    - arduino-cli lib install "Seeed_Arduino_LIS3DHTR"
+    - arduino-cli lib install "PubSubClient"
+    - arduino-cli lib install "Seeed_Arduino_FS"
+    - arduino-cli lib install "Seeed_Arduino_LineChart"
+    - arduino-cli lib install "Seeed_Arduino_mbedtls"
+    - arduino-cli lib install "Seeed_Arduino_rpcUnified"
+    - arduino-cli lib install "Seeed_Arduino_rpcWiFi"
+    - arduino-cli lib install "Seeed_Arduino_SFUD"
+    - git clone https://github.com/0015/TP_Arduino_DigitalRain_Anim.git libraries/Digital_Rain_Animation
+    - git clone https://github.com/mikeputnam/Arduino_Pitches.git libraries/pitches
+    - wget -O libraries/RawImage.h "https://files.seeedstudio.com/wiki/Wio-Terminal/res/RawImage.h"
+    - git clone https://github.com/Bodmer/TFT_eSPI.git libraries/TFT_eSPI
+    - arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino
