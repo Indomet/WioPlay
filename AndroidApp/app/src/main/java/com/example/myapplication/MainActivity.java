@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     //This field is set to the singleton getInstance method then the same reference is used
     //elsewhere ein other classes
-    public static BrokerConnection brokerConnection;
+    private BrokerConnection brokerConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         SongList.initialize(songFile);
 
         WorkoutManager.initialize(managerFile);
+
     }
 
     @Override   //This method checks which fragment was selected by the user
