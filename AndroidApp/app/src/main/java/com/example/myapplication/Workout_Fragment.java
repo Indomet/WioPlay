@@ -13,13 +13,17 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import java.util.List;
@@ -47,14 +51,17 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private TextView caloriesBurnt;
 
     private TextView timeElapsed;
-    private TextView timeLeft;private NewWorkoutFragment newWorkoutFragment;
+    private TextView timeLeft;
+    private NewWorkoutFragment newWorkoutFragment;
 
     private boolean stopwatchRunning = false;
     private WorkoutManager workoutManager;
     private User user;
+    private ImageView profilepicture;
 
     private View rootView;
     private MaterialCalendarView calendarView;
+    private Handler handler = new Handler();
 
 
     @Override
@@ -84,8 +91,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     public void onPause() {
         super.onPause();
         //pause the stopwatch
-        Handler handler = new Handler();
         handler.removeCallbacksAndMessages(null);
+        stopwatchRunning=false;
     }
 
     @Override
@@ -94,8 +101,9 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     }
 
     Workout_Fragment(){
-        BrokerConnection broker= MainActivity.brokerConnection;
+        BrokerConnection broker = BrokerConnection.getInstance();
         broker.addMessageListener(this);
+        newWorkoutFragment = new NewWorkoutFragment();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -105,9 +113,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
 
-        BrokerConnection broker = MainActivity.brokerConnection;
-        broker.addMessageListener(this);
-        newWorkoutFragment = new NewWorkoutFragment();
+        BrokerConnection broker = BrokerConnection.getInstance();
+
         user = User.getInstance();
         workoutManager = WorkoutManager.getInstance();
 
@@ -131,6 +138,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesBurnt = rootView.findViewById(R.id.calories_burnt_textview);
         timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
         timeLeft = rootView.findViewById(R.id.time_left_textview);
+        profilepicture= rootView.findViewById(R.id.user_picture);
         addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addHikingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addRunningWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
@@ -143,6 +151,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         int cals = workoutManager.getCaloriesBurnt();
         caloriesBurnt.setText(Integer.toString(cals));
         caloriesProgressbar.setProgress(cals,true);
+        addProfile();
 
 
 
@@ -193,11 +202,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     }
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageArrived(String payload) {
 
         if (workoutManager.getWorkoutHasStarted()) {
+            Log.d("Calorie", "Burned");
             int integerPayload = (int)Float.parseFloat(payload);
             workoutManager.setCaloriesBurnt(integerPayload);
 
@@ -205,33 +216,51 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
             String calculatedTimeLeft = workoutManager.calculateTimeLeft();
             timeLeft.setText(calculatedTimeLeft);
-            int cumulativeCalorie = Integer.parseInt(payload);
-            int changeInCalories = Math.abs(cumulativeCalorie - currentCalorie);
-            currentCalorie = changeInCalories;
 
-            user.updateCredit(changeInCalories);
+            int diff = workoutManager.calculateCalDiff(integerPayload);
+            workoutManager.setCurrentCalorie(integerPayload);
+
+            user.updateCredit(diff);
             userBalance.setText(Integer.toString(user.getCalorieCredit()));
         }
 
         if (workoutManager.isGoalAchieved()&& workoutManager.getWorkoutHasStarted()) {
             //before anything add the workout data
-            CalendarDay date = CalendarDay.today();
-            //get the time calories burnt and the goal with the workout after its done and the type
-            FinishedWorkoutData finishedWorkout = new FinishedWorkoutData(workoutManager.getDurationInSeconds(),workoutManager.getCaloriesBurnt(),
-                    workoutManager.getType(),workoutManager.getCalorieGoal());
-            workoutManager.addWorkoutData(finishedWorkout,date);
-
-
-            caloriesProgressbar.setProgress(0,true);
-            caloriesBurnt.setText("0");
             createPopWindow();
+            resetWorkoutUI();
             workoutManager.stopWorkout();
-            timeLeft.setText("0:00:00");
             workoutManager.incrementTotalWorkouts();
             workoutManager.incrementMonthlyWorkouts();
             monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
             workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
+            //refresh the fragment such that the views get updated
+            workoutManager.setCurrentCalorie(0);
+            Util.changeFragment(this, getActivity());
+
         }
+
+
+    }
+
+    public void resetWorkoutUI(){
+        CalendarDay date = CalendarDay.today();
+        //get the time calories burnt and the goal with the workout after its done and the type
+        FinishedWorkoutData finishedWorkout = new FinishedWorkoutData(workoutManager.getDurationInSeconds(),workoutManager.getCaloriesBurnt(),
+                workoutManager.getType(),workoutManager.getCalorieGoal());
+        workoutManager.addWorkoutData(finishedWorkout,date);
+
+        //this makes sure that the progress bar is set to 0. The lib is very buggy so sometimes it updates others it doesnt
+        caloriesProgressbar.setMax(100);
+        caloriesProgressbar.setProgress(0,true);
+
+        caloriesBurnt.setText("0");
+
+        workoutManager.stopWorkout();
+        timeLeft.setText("0:00:00");
+
+        workoutManager.setCurrentCalorie(0);
+        Util.changeFragment(this, getActivity());
+
     }
 
     @Override
@@ -240,8 +269,9 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         return WORKOUT_TOPIC;
     }
 
+
+
     public void startStopWatch() {
-        final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -249,13 +279,18 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
                 String time = Util.formatHoursMinsSecs(workoutManager.getSecondsElapsed());
                 timeElapsed.setText(time);
 
-                if (workoutManager.getWorkoutHasStarted()) {
+                if(workoutManager.getDurationInSeconds()<=workoutManager.getSecondsElapsed()){
+                    resetWorkoutUI();
+                    BrokerConnection.getInstance().getMqttClient().publish("stop/workout", "stop", BrokerConnection.QOS, null);
+                    Toast.makeText(rootView.getContext(),"You didn't complete the workout in time ",Toast.LENGTH_LONG);
+                } else if (workoutManager.getWorkoutHasStarted()) {
                     workoutManager.incrementSecondsElapsed();
                 } else {
                     handler.removeCallbacksAndMessages(null); // stop the handler
                     final String DEFAULT_TIME_FORMAT = "0:00:00";
                     timeElapsed.setText(DEFAULT_TIME_FORMAT);
                     stopwatchRunning = false;
+
                     return;
                 }
                 stopwatchRunning = true;
@@ -263,8 +298,6 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             }
         });
     }
-
-
 
     public void createPopWindow(){
         //create a dialog object that is the pop up window and set the layout to be the xml layout
@@ -359,5 +392,22 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
 
     }
+    public void addProfile(){
+        if(user.getBitmap()!=null){
+            removebackGroud();
+            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
+            profilepicture.setImageBitmap(user.getBitmap());
+        }
+        if(user.getImageUri()!=null){
+            removebackGroud();
+            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
+            profilepicture.setImageURI(user.getImageUri());
+        }
+
+    }
+    public void removebackGroud(){
+        profilepicture.setBackground(null);
+    }
+
 
 }

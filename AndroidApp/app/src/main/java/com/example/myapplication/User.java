@@ -1,6 +1,11 @@
 package com.example.myapplication;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.graphics.Bitmap;
 import android.util.Log;
+
+import androidx.constraintlayout.utils.widget.ImageFilterView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +18,10 @@ public class User {
     private String username;
     private int age;
     private float height;
+
+    private Bitmap bitmap;
+
+    private Uri imageUri;
     private float weight;
     private String sex;
     private int calorieCredit;
@@ -20,11 +29,13 @@ public class User {
 
     private static User instance;
     private int monthlyWorkouts;
+
     private User(File userFile) {
         this.defaultUser();
         this.userFile = userFile;
         load();
     }
+
 
     public static User getInstance(){
         if(instance == null){
@@ -46,6 +57,8 @@ public class User {
         this.username = "username";
         this.calorieCredit = 500; //A new user starts with 500 CalorieCurrency
         this.monthlyWorkouts=30; //30 is the default number, so a workout per day per month
+        bitmap=null;
+        imageUri=null;
     }
 
     public void setUsername(String username) {
@@ -72,6 +85,19 @@ public class User {
         this.weight = weight;
         saveUserData();
     }
+    public void setBitmap(Bitmap bitmap){
+        this.bitmap=bitmap;
+    }
+    public Bitmap getBitmap(){
+        return this.bitmap;
+    }
+    public void setImageUri (Uri imageUri){
+        this.imageUri=imageUri;
+    }
+    public Uri getImageUri(){
+        return this.imageUri;
+    }
+
 
 
     public void setSex(String sex) {
@@ -145,5 +171,19 @@ public class User {
     }
 
 
+    public int getAge() {
+        return age;
+    }
 
+    public void setCalorieCredit(int calorieCredit) {
+        this.calorieCredit = calorieCredit;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public String getSex() {
+        return sex;
+    }
 }

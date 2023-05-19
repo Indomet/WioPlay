@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,19 +20,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 public class MusicFragment extends Fragment implements BrokerConnection.MessageListener{
 
 
     private View rootView;
+    private SongList songList;
     private SongLibraryAdapter adapter;
 
-    public static Song currentSong;
-    public static ArrayList<int[]> notes = new ArrayList<>();
-
     MusicFragment(){
-        BrokerConnection broker= MainActivity.brokerConnection;
+        BrokerConnection broker = BrokerConnection.getInstance();
         broker.addMessageListener(this);
     }
     @Override
@@ -55,6 +57,10 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
                     false));
         //Linearly displays a single line of items vertically
         BrokerConnection.getInstance().addMessageListener(adapter);
+
+        songList=SongList.getInstance();
+        sortList(songList.getSongList());
+
         return rootView;
     }
 
@@ -73,7 +79,9 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         songs.elements().forEachRemaining(node -> { //Iterates over each song in the payload containing a list of song objects
             parsedSongs.add(parseSong(node, mapper));
         });
+        sortList(parsedSongs);
         adapter.setSongsList(parsedSongs);
+        SongList.getInstance().setUnlockedSongList(new ArrayList<>()); //Make sure that the unlocked list does not have duplicates.
     }
 
 
@@ -97,6 +105,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         return new Song(title, artist, durationInSeconds, cost, imageURL, false, notes, tempo);
     }
-
-
+    public ArrayList<Song> sortList(ArrayList<Song> list){
+        Collections.sort(list, Comparator.comparing(Song::getTitle));
+        return list;
+    }
 }
