@@ -133,7 +133,7 @@ public class NewWorkoutFragment extends Fragment {
             try {
                 String json = Util.objectToJSON(workoutManager);
                 Util.changeFragment(new Workout_Fragment(), getActivity());
-                MainActivity.brokerConnection.getMqttClient().publish(BrokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager), BrokerConnection.QOS,null);
+                BrokerConnection.getInstance().getMqttClient().publish(BrokerConnection.WORKOUT_STARTED_TOPIC,Util.objectToJSON(workoutManager), BrokerConnection.QOS,null);
             } catch (IllegalAccessException e) {
                 Log.d("PUB_ERROR","Could not publish the data. Json couldn't be converted");
             }
