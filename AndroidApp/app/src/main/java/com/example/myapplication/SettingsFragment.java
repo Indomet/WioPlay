@@ -172,11 +172,11 @@ public class SettingsFragment extends Fragment {
         }
 
         try {
-            MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
-                    , Util.objectToJSON(user)
-                    , MainActivity.brokerConnection.QOS, null);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        BrokerConnection.getInstance().getMqttClient().publish(BrokerConnection.getInstance().SETTINGS_CHANGE_TOPIC
+         ,Util.objectToJSON(user)
+         ,BrokerConnection.getInstance().QOS, null);
+         } catch (IllegalAccessException e) {
+         e.printStackTrace();
         }
     }
 
