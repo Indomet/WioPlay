@@ -2,10 +2,12 @@
 LIS3DHTR<TwoWire> lis;
 
 class MotionDetection {
-public:
+
+private:
   float current_x, current_y, current_z;  //Initialize variables to store accelerometer values
   float prev_x, prev_y, prev_z;
 
+public:
   void startAccelerator() {
     lis.begin(Wire1);  //Start accelerometer
 
@@ -18,11 +20,13 @@ public:
     lis.setFullScaleRange(LIS3DHTR_RANGE_2G);       //Scale range (2g up to 16g)
   }
 
+public:
   void recordPreviousAcceleration() {
 
     lis.getAcceleration(&prev_x, &prev_y, &prev_z);
   }
 
+public:
   float detectMotion() {
     lis.getAcceleration(&current_x, &current_y, &current_z);
 
@@ -30,6 +34,7 @@ public:
     return getMovementValue(diff_x, diff_y, diff_z);
   }
 
+private:
   float getMovementValue(float x, float y, float z)  // diff_x,y,z values
   {
     return x + y + z;
