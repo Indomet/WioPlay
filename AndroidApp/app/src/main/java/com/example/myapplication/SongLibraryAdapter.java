@@ -128,7 +128,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
             throw new RuntimeException(e);
         }
 
-        noteChunks = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
+        createNewSongChunks();
+
         Log.d("chunks amount", Integer.toString(noteChunks.size()));
         BrokerConnection.getInstance().getMqttClient().publish("Music/Loop", "Green light", 0, null);
         //Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
@@ -165,7 +166,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
 
         if(noteChunks.size() < 1) {
-            noteChunks = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
+            createNewSongChunks();
         }
         int[] chunk = noteChunks.remove(0);
         try {
@@ -174,26 +175,29 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
-
+    private void createNewSongChunks()
+    {
+        noteChunks = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
     }
 
     public void receiveNextSong(@NonNull String payload)
     {
-        if (payload.equals(PREVIOUS_SONG_MESSAGE)){
+        if (payload.equals(PREVIOUS_SONG_MESSAGE))
+        {
             SongList.getInstance().decreaseSongIdx();
             currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
             Toast.makeText(context, "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() , Toast.LENGTH_SHORT).show();
-
-    }
-        if(payload.equals(NEXT_SONG_MESSAGE)) {
-
+            createNewSongChunks();
+        }
+        else if (payload.equals(NEXT_SONG_MESSAGE))
+        {
             SongList.getInstance().increaseSongIdx();
             currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
             Toast.makeText(context, "Next song is  " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx(), Toast.LENGTH_SHORT).show();
-
+            createNewSongChunks();
         }
-
     }
 
 
