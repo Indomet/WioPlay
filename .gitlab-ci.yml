@@ -56,16 +56,22 @@ cache:
 
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-serverJob:
+parserBuild:
   stage: build
   before_script:
   - cd NoteParser
   script:
-    - 'mvn $MAVEN_CLI_OPTS verify'
+    - 'mvn $MAVEN_CLI_OPTS install'
   # except:
   #   variables:
   #     - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
+parserTest:
+  stage: test
+  before_script:
+  - cd NoteParser
+  script:
+    - 'mvn $MAVEN_CLI_OPTS test'
 
 # To deploy packages from CI, create a `ci_settings.xml` file
 # For deploying packages to GitLab's Maven Repository: See https://docs.gitlab.com/ee/user/packages/maven_repository/index.html#create-maven-packages-with-gitlab-cicd for more details.
