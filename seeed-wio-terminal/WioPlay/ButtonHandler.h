@@ -18,19 +18,46 @@ public:
   }
 
 public:
-  void onPress() {
-    if (digitalRead(BUTTON_NEXT) == LOW) {
+void onPress() {
+  // Check if button A is pressed
+  if (digitalRead(BUTTON_NEXT) == LOW) {
+    // Wait for button to be released
+    do {
+      delay(10);  // Wait for a short time
+    } while (digitalRead(BUTTON_NEXT) == LOW);
+
+    // play music when button A is pressed
       client.publish(Request_pub, "NEXT");
-    }
+    Serial.println("a");
 
-    if (digitalRead(BUTTON_PAUSE) == LOW) {
-      player.toggle();
-    }
-
-    if (digitalRead(BUTTON_PREVIOUS) == LOW) {
-      client.publish(Request_pub, "PREVIOUS");
-    }
   }
+
+  // Check if button B is pressed
+  if (digitalRead(BUTTON_PAUSE) == LOW) {
+    // Wait for button to be released
+    do {
+      delay(10);  // Wait for a short time
+    } while (digitalRead(BUTTON_PAUSE) == LOW);
+
+    // play music when button B is pressed
+ player.toggle();
+    Serial.println("b");
+
+  }
+
+  // Check if button C is pressed
+  if (digitalRead(BUTTON_PREVIOUS) == LOW) {
+    // Wait for button to be released
+    do {
+      delay(10);  // Wait for a short time
+    } while (digitalRead(BUTTON_PREVIOUS) == LOW);
+
+    //play music when button C is pressed
+      client.publish(Request_pub, "PREVIOUS");
+    Serial.println("c");
+
+  }
+}
 
   void menuNavigationOnPress(void (*firstScene)(), void (*secondScene)()) {
     unsigned long currentTime = millis();
