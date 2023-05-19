@@ -101,7 +101,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     }
 
     Workout_Fragment(){
-        BrokerConnection broker= MainActivity.brokerConnection;
+        BrokerConnection broker = BrokerConnection.getInstance();
         broker.addMessageListener(this);
         newWorkoutFragment = new NewWorkoutFragment();
     }
@@ -113,7 +113,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
 
-        BrokerConnection broker = MainActivity.brokerConnection;
+        BrokerConnection broker = BrokerConnection.getInstance();
 
         user = User.getInstance();
         workoutManager = WorkoutManager.getInstance();
@@ -226,9 +226,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
         if (workoutManager.isGoalAchieved()&& workoutManager.getWorkoutHasStarted()) {
             //before anything add the workout data
-            resetWorkoutUI();
-
             createPopWindow();
+            resetWorkoutUI();
             workoutManager.stopWorkout();
             workoutManager.incrementTotalWorkouts();
             workoutManager.incrementMonthlyWorkouts();
@@ -240,10 +239,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
         }
 
-        else if(workoutManager.getDurationInSeconds()<=workoutManager.getSecondsElapsed()){
-            resetWorkoutUI();
-            Toast.makeText(rootView.getContext(),"You didnt complete the workout in time ",Toast.LENGTH_LONG);
-        }
+
     }
 
     public void resetWorkoutUI(){
@@ -254,7 +250,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         workoutManager.addWorkoutData(finishedWorkout,date);
 
         //this makes sure that the progress bar is set to 0. The lib is very buggy so sometimes it updates others it doesnt
-
+        caloriesProgressbar.setMax(100);
         caloriesProgressbar.setProgress(0,true);
 
         caloriesBurnt.setText("0");
@@ -283,10 +279,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
                 String time = Util.formatHoursMinsSecs(workoutManager.getSecondsElapsed());
                 timeElapsed.setText(time);
 
-                if (workoutManager.getWorkoutHasStarted()) {
+                if(workoutManager.getDurationInSeconds()<=workoutManager.getSecondsElapsed()){
+                    resetWorkoutUI();
+                    BrokerConnection.getInstance().getMqttClient().publish("stop/workout", "stop", BrokerConnection.QOS, null);
+                    Toast.makeText(rootView.getContext(),"You didn't complete the workout in time ",Toast.LENGTH_LONG);
+                } else if (workoutManager.getWorkoutHasStarted()) {
                     workoutManager.incrementSecondsElapsed();
-                }
-                else {
+                } else {
                     handler.removeCallbacksAndMessages(null); // stop the handler
                     final String DEFAULT_TIME_FORMAT = "0:00:00";
                     timeElapsed.setText(DEFAULT_TIME_FORMAT);
