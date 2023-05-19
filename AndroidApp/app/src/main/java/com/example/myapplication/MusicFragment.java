@@ -40,11 +40,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private SongLibraryAdapter adapter;
     private EditText searchSongs;
 
-    public static Song currentSong;
-    public static ArrayList<int[]> notes = new ArrayList<>();
-
     MusicFragment(){
-        BrokerConnection broker= MainActivity.brokerConnection;
+        BrokerConnection broker = BrokerConnection.getInstance();
         broker.addMessageListener(this);
     }
     @Override
@@ -97,6 +94,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         adapter.setSongsList(sortList(parsedSongs));
         //adapter.setSongsList(parsedSongs);
         adapter.setSongsList(parsedSongs);
+        SongList.getInstance().setUnlockedSongList(new ArrayList<>()); //Make sure that the unlocked list does not have duplicates.
     }
 
 
