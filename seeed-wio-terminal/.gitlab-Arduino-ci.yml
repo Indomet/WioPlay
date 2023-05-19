@@ -1,3 +1,6 @@
+before_script:
+  - apt-get update && apt-get install -y curl
+
 variables:
   ARDUINO_CORE_URL: "https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json"
 
