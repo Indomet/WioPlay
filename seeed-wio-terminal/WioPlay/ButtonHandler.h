@@ -40,9 +40,8 @@ void onPress() {
     } while (digitalRead(BUTTON_PAUSE) == LOW);
 
     // play music when button B is pressed
- player.toggle();
+    player.toggle();
     Serial.println("b");
-
   }
 
   // Check if button C is pressed
@@ -55,7 +54,6 @@ void onPress() {
     //play music when button C is pressed
       client.publish(Request_pub, "PREVIOUS");
     Serial.println("c");
-
   }
 }
 
