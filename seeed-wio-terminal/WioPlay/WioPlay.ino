@@ -40,7 +40,7 @@ void loop() {
   loopMqtt();
 
   // Exercise isn't complete yet: Continually read movement-values and update chart accordingly
-  if (burndownChart.isExercising()) {
+  if (burndownChart.isExercising()) { // burndownChart.isExercising()
 
     burndownChart.controlConstraints();
     button.onPress();
@@ -49,7 +49,7 @@ void loop() {
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
     runMusicPlayer();
     registerChartValues();
-    
+
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
 

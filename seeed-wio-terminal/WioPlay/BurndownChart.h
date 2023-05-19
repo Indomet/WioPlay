@@ -30,6 +30,13 @@ public:
     return burndownChartBackEnd.getExpectedCaloriesPerSecond();
   }
 
+  /*
+  // Note: Previous implementation that works as intended without MQTT
+  bool isExercising() {
+    return burndownChartBackEnd.isExercising();
+  }
+  */
+
   bool isExercising() {
     return burndownChartBackEnd.isExercising();
   }
