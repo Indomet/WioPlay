@@ -139,8 +139,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
     startStreaming();
   } else if (strcmp(Music_notes_sub, topic) == 0) {
     updateSong(charBuf);
-  }
-  else if (strcmp(WorkoutStop_sub, topic) == 0) {
+  } else if (strcmp(WorkoutStop_sub, topic) == 0) {
     stopWorkout(charBuf);
   }
 }
