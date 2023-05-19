@@ -69,14 +69,13 @@ void updateSettings(char json[]) {
 }
 
 void updateChart(char json[]) {
-
   DynamicJsonDocument doc(1024);
   deserializeJson(doc, json);
   float calorieGoal = doc["calorieGoal"];
   float duration = doc["durationInSeconds"];
   byte workoutType = doc["workoutType"];
 
-  burndownChartBackEnd.changeAttributeValues(duration, calorieGoal, workoutType);
+  burndownChart.resetExercise(duration, calorieGoal, workoutType);
 }
 
 void updateSongData(char json[]) {
