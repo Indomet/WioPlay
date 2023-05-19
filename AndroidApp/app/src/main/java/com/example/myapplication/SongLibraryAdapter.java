@@ -173,23 +173,28 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     public void receiveNextSong(@NonNull String payload)
     {
+        if(SongList.getInstance().getUnlockedSongList().size() == 0){
+            Toast.makeText(context, "No unlocked songs", Toast.LENGTH_SHORT).show();
+            Log.d("Request", "No unlocked songs");
+        }else{
+            if(payload.equals(NEXT_SONG_MESSAGE)) {
 
-        if(payload.equals(NEXT_SONG_MESSAGE)) {
+                SongList.getInstance().increaseSongIdx();
+                currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
+                updateNoteChunk();
+                Toast.makeText(context, "Next song is  " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+                Log.d("Request", "Next song is  " + currentSong.getTitle() + " index is " + SongList.getInstance().getCurrentSongIdx());
+            }
+            if (payload.equals(PREVIOUS_SONG_MESSAGE)){
+                SongList.getInstance().decreaseSongIdx();
+                currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
+                updateNoteChunk();
+                Toast.makeText(context, "Previous song is " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+                Log.d("Request", "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() );
 
-            SongList.getInstance().increaseSongIdx();
-            currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
-            updateNoteChunk();
-            Toast.makeText(context, "Next song is  " + currentSong.getTitle() + " index is " + SongList.getInstance().getCurrentSongIdx(), Toast.LENGTH_SHORT).show();
-            Log.d("Request", "Next song is  " + currentSong.getTitle() + " index is " + SongList.getInstance().getCurrentSongIdx());
+            }
         }
-        if (payload.equals(PREVIOUS_SONG_MESSAGE)){
-            SongList.getInstance().decreaseSongIdx();
-            currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
-            updateNoteChunk();
-            Toast.makeText(context, "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() , Toast.LENGTH_SHORT).show();
-            Log.d("Request", "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() );
 
-        }
     }
 
     private void updateNoteChunk(){
