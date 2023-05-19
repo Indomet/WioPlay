@@ -255,21 +255,21 @@ public class SettingsFragment extends Fragment {
         ImageView galleryImageview = dialog.findViewById(R.id.galleryImageview);
         ImageView cameraImageView = dialog.findViewById(R.id.cameraImageView);
         TextView pictureClosebtn = dialog.findViewById(R.id.pictureClosebtn);
-        galleryImageview.setOnClickListener(v -> Galleryscource());
-        cameraImageView.setOnClickListener(v -> cameracource());
+        galleryImageview.setOnClickListener(v -> gallerySource());
+        cameraImageView.setOnClickListener(v -> cameraSource());
         pictureClosebtn.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
 
-    public void Galleryscource() {
-        // getting an image from gallery
+    public void gallerySource() {
+
         Intent galleryPicture = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryPicture, PICK_IMAGE_REQUEST);
 
 
     }
 
-    public void cameracource() {
+    public void cameraSource() {
         // getting an image from camera
         Intent cameraPicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraPicture, TAKE_PICTURE_REQUEST);

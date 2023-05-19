@@ -7,12 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Environment;
-import android.renderscript.Allocation;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +50,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         TextView userBalance = rootView.findViewById(R.id.user_balance);
         searchSongs= rootView.findViewById(R.id.searchSongs);
         searchSongs.setOnClickListener(v -> orderTheListOfSongs());
-        //searchSongs.addTextChangedListener(textWatcher);
+
 
 
         userBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
@@ -71,7 +67,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         BrokerConnection.getInstance().addMessageListener(adapter);
 
         songList=SongList.getInstance();
-        //sortList(songList.getSongList());
+
 
         return rootView;
     }
@@ -129,99 +125,11 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         return list;
     }
 
-    /*public void orderTheListOfSongs(){
 
-        if(searchSongs.getText().toString().equals("Search")){
-            searchSongs.setText("");
-        }else if(!searchSongs.getText().toString().isEmpty()){
-        String target= searchSongs.getText().toString().toLowerCase();
-        sortList(SongList.getInstance().getSongList());
-
-        ArrayList<Song> list = searchResult(SongList.getInstance().getSongList(), target);
-        SongList.getInstance().setList(list);
-
-
-        Toast.makeText(getContext(),"It is reached",Toast.LENGTH_LONG).show();
-        Song song= SongList.getInstance().getSongList().get(0);
-        Toast.makeText(getContext(),song.getTitle(),Toast.LENGTH_LONG).show();
-
-        adapter.setSongsList(list);
-
-        } //else searchSongs.setText("");
-    } */
-
-
-
-
-    /*
-
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            if(searchSongs.getText().toString().isEmpty()){
-                searchSongs.setText("");
-            }
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(searchSongs.getText().toString().equals("search")){
-                searchSongs.setText("");
-            }
-            orderTheListOfSongs();
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if(searchSongs.getText().toString().isEmpty()){
-                searchSongs.setText("");
-            }
-
-        }
-    };*/
-
-
-    public ArrayList<Song> searchResult(List<Song> sortedList, String target){
-
-        int mid = findBestMatchIndex(sortedList,target);
-
-        ArrayList<Song> myList=new ArrayList<>();
-
-        int counter=0;
-
-
-
-        while ( mid >= 0 && sortedList.get(mid).getTitle().charAt(0)==target.charAt(0)){
-            myList.add(sortedList.get(mid));
-            mid--;
-            counter++;
-
-        }
-
-        mid=mid+counter+1;
-
-        while (mid<(sortedList.size()) && sortedList.get(mid).getTitle().charAt(0)==target.charAt(0)){
-            myList.add(sortedList.get(mid));
-            mid++;
-        }
-
-        for (Song songs: sortedList) {
-            if(!myList.contains(songs) && songs.getTitle().charAt(0)!=target.charAt(0)){
-                myList.add(songs);
-               // Toast.makeText(this.getContext(),"Find match index is reached",Toast.LENGTH_LONG).show();
-            }
-        }
-
-
-        return myList;
-
-    }
     public  int findBestMatchIndex(List<Song> sortedList, String targetString) {
         int low = 0;
         int high = sortedList.size() - 1;
-        //Toast.makeText(this.getContext(),"Find match index is reached",Toast.LENGTH_LONG).show();
+
 
         while (low <= high) {
             int mid = (low + high) / 2;
@@ -241,8 +149,6 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         return high; // No exact match found, return the index for the best match
     }
 
-    // maybe the reason it is not working might be that the songs are starting with an emplty
-    //string.
 
     public void orderTheListOfSongs(){
 
