@@ -1,7 +1,7 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(550, 300, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartBackEnd burndownChartBackEnd(10, 5, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
 BurndownChartFrontEnd burndownChartFrontEnd(20);         // (float graphUIXStartValue)
 
 class BurndownChart {
@@ -16,6 +16,10 @@ public:
 
   float getGeneralExpectedCaloriesPerSecond() {
     return burndownChartBackEnd.getGeneralExpectedCaloriesPerSecond();
+  }
+
+  float getUpdateValue() {
+    return burndownChartBackEnd.getUpdateValue();
   }
 
   float getActualCaloriesPerSecond() {
