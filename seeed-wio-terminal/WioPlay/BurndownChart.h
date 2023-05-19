@@ -5,6 +5,7 @@ BurndownChartBackEnd burndownChartBackEnd(300, 30, 0);   // (exerciseDuration, c
 BurndownChartFrontEnd burndownChartFrontEnd(20);         // (float graphUIXStartValue)
 
 class BurndownChart {
+
 public:
   void initializeUI() {
     burndownChartFrontEnd.initializeUI();
@@ -64,6 +65,11 @@ public:
 
   void updateGraphVizuals() {
     burndownChartFrontEnd.updateGraphVizuals(burndownChartBackEnd);
+  }
+
+  void resetExercise(float newExerciseDuration, float newCaloriesGoal, int newChosenActivityIdx) {
+    burndownChartBackEnd.resetExerciseValues(newExerciseDuration, newCaloriesGoal, newChosenActivityIdx);
+    burndownChartFrontEnd.resetChart();
   }
 
 private:

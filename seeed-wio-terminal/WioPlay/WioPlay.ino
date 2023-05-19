@@ -14,13 +14,14 @@ MusicPlayer player(2);
 #include "Scenes.h"
 Scenes scenes;
 #include "BurndownChart.h"
-#include "MqttConnection.h"
-#include "ButtonHandler.h"
-ButtonHandler button;
+
 float movementValue;
 
 MotionDetection motionDetection;
 BurndownChart burndownChart;
+#include "MqttConnection.h"
+
+int tempCounter = 0;
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
@@ -33,7 +34,8 @@ void setup() {
 
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
-  burndownChart.updateGraphVizuals(); //this is here to start burndownchart in the background
+
+  // burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
 }
 
 void loop() {
@@ -47,8 +49,39 @@ void loop() {
     button.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
-    runMusicPlayer();
-    registerChartValues();
+    bool isPlayingSong = player.isPlayingSong();
+
+
+    if (player.song.size() > 0 && !player.hasRequested) {
+      if (player.getPosition() >= player.song.size()) {
+        Serial.println(player.getPosition());
+        client.publish(Request_pub, "I need a new set of notes");
+        player.hasRequested = true;
+      } else {
+        player.playChunk();
+      }
+    } else {
+      delay(100);
+    }
+
+
+    float updateDelay = 100;
+    // burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
+
+    burndownChart.updateTimeElapsed(updateDelay);
+
+
+    // Note: Commit 'future updates' statistics
+    // Serial.println("***********************");
+    // Serial.println(burndownChart.getTimeElapsed());
+    // Serial.println(burndownChart.getActualCaloriesPerSecond());
+    // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
+    // Serial.println("***********************");
+
+    movementValue = motionDetection.detectMotion();  // Read current user-position
+
+    // burndownChart.sufficientMovementInquiry(userInformation, movementValue, 1000); // player.getCurrentPauseChunkDuration() -------------> Add if-statement for this case
+    burndownChart.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
 
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }

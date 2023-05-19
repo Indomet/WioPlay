@@ -1,6 +1,8 @@
 #define MAX_SIZE 30  // maximum size of data displayed at once in graph
 doubles data[2];
 
+bool firstWorkout = true;
+
 class BurndownChartFrontEnd {
 public:
   float graphUIXStartValue;  // X-coordinate in terminal for the graph to start at
@@ -91,16 +93,40 @@ public:
     tft.drawString(caloriesPerSecondComparison, (320 - tft.textWidth(caloriesPerSecondComparison)) / 2, 100);
   }
 
+  void resetChart()
+  {
+    if (!firstWorkout)
+    {
+      for (byte i = 0; i < numberOfGraphValues; i++)
+      {
+        for (byte j = 0; j < (maxDataPoints - 1); j++)
+        {
+          removeEarliestPoint(i);
+        }        
+      }
+    }
+
+    firstWorkout = false;
+  }
+
 private:
   const byte numberOfGraphValues = 2;
-  String goal;
-  
+  const byte maxDataPoints = 30;
+
+  byte caloriesPerSecondTextCoordinates[2] = { 5, 50 };
+  byte exerciseResultTextCoordinates[2] = { 15, 70 };
+
   // Don't display the data-points added earliest on the graph. Delete them to sustain the memory limit
   void removeEarliestDataPoints() {
+
     for (byte i = 0; i < numberOfGraphValues; i++) {
-      data[i].pop();  // Remove the first read variable
+      removeEarliestPoint(i);
     }
   }
+
+    void removeEarliestPoint(int idx) {
+    data[idx].pop();
+    }
 
   void vizualiseGraphValues(BurndownChartBackEnd burndownChartBackEnd) {
     data[0].push(burndownChartBackEnd.getCaloriesBurnt());
