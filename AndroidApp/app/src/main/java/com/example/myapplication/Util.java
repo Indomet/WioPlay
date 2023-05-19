@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -70,5 +72,35 @@ public class Util {
 
         }
     }
+    static class KeywordComparator implements Comparator<Song> {
+        private String keyword;
+
+        public KeywordComparator(String keyword) {
+            this.keyword = keyword.toLowerCase();
+        }
+
+        @Override
+        public int compare(Song s1, Song s2) {
+            // Convert strings to lowercase for case-insensitive comparison
+            String lowerS1 = s1.getTitle().toLowerCase();
+            String lowerS2 = s2.getTitle().toLowerCase();
+
+            // Check if the keyword is present in each string
+            boolean s1ContainsKeyword = lowerS1.contains(keyword);
+            boolean s2ContainsKeyword = lowerS2.contains(keyword);
+
+            if (s1ContainsKeyword && !s2ContainsKeyword) {
+                return -1; // s1 comes before s2
+            } else if (!s1ContainsKeyword && s2ContainsKeyword) {
+                return 1; // s1 comes after s2
+            } else {
+                return s1.getTitle().compareTo(s2.getTitle()); // no preference based on the keyword, sort alphabetically
+            }
+        }
+    }
+
+
+// WHEN TEXT CHANGES
+
 
 }

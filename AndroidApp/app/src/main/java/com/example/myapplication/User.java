@@ -87,12 +87,14 @@ public class User {
     }
     public void setBitmap(Bitmap bitmap){
         this.bitmap=bitmap;
+        imageUri=null;
     }
     public Bitmap getBitmap(){
         return this.bitmap;
     }
     public void setImageUri (Uri imageUri){
         this.imageUri=imageUri;
+        bitmap=null;
     }
     public Uri getImageUri(){
         return this.imageUri;
