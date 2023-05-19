@@ -106,14 +106,13 @@ public class Util {
     {
         int left = 0;
         int right = stringList.size() - 1;
-        int mid;
 
         while (left <= right)
         {
-            mid = (left + right) / 2;
+            int mid = (left + right) / 2;
             String currentTitle = stringList.get(mid);
 
-            boolean newSongTitleIsAlphabeticallyGreater = Util.stringIsAlphabeticallyGreater(stringToInsert, currentTitle);
+            boolean newSongTitleIsAlphabeticallyGreater = stringIsAlphabeticallyGreater(stringToInsert, currentTitle);
 
             if (newSongTitleIsAlphabeticallyGreater)
                 right = mid - 1;

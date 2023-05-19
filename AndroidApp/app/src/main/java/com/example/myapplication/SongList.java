@@ -97,6 +97,7 @@ public class SongList {
 
     }
 
+    // Transfer song titles to String list
     private ArrayList<String> getAllUnlockedSongTitles()
     {
         ArrayList<String> titles = new ArrayList<>();
@@ -109,7 +110,6 @@ public class SongList {
 
     private void addUnlockedSong(Song newSong)
     {
-        // Transfer song titles to String list
         int insertionIdx = Util.binarySearchInsertion(getAllUnlockedSongTitles(), newSong.getTitle());
         unlockedSongList.add(insertionIdx, newSong);
     }
