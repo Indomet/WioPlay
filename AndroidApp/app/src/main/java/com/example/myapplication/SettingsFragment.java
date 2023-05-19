@@ -159,9 +159,9 @@ public class SettingsFragment extends Fragment {
         }
 
         try {
-        MainActivity.brokerConnection.getMqttClient().publish(MainActivity.brokerConnection.SETTINGS_CHANGE_TOPIC
+        BrokerConnection.getInstance().getMqttClient().publish(BrokerConnection.getInstance().SETTINGS_CHANGE_TOPIC
          ,Util.objectToJSON(user)
-         ,MainActivity.brokerConnection.QOS, null);
+         ,BrokerConnection.getInstance().QOS, null);
          } catch (IllegalAccessException e) {
          e.printStackTrace();
         }
