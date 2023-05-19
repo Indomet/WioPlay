@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private View rootView;
     private SongList songList;
     private SongLibraryAdapter adapter;
+    private EditText searchSongs;
 
     public static Song currentSong;
     public static ArrayList<int[]> notes = new ArrayList<>();
@@ -47,6 +51,10 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         RecyclerView recyclerView = rootView.findViewById(R.id.songLibraryView);
         TextView userBalance = rootView.findViewById(R.id.user_balance);
+        searchSongs= rootView.findViewById(R.id.searchSongs);
+        searchSongs.setOnClickListener(v -> orderTheListOfSongs());
+        //searchSongs.addTextChangedListener(textWatcher);
+
 
         userBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
         //The adapter that handles the recycler view functionalities
@@ -62,7 +70,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         BrokerConnection.getInstance().addMessageListener(adapter);
 
         songList=SongList.getInstance();
-        sortList(songList.getSongList());
+        //sortList(songList.getSongList());
 
         return rootView;
     }
@@ -82,7 +90,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         songs.elements().forEachRemaining(node -> { //Iterates over each song in the payload containing a list of song objects
             parsedSongs.add(parseSong(node, mapper));
         });
-        sortList(parsedSongs);
+        adapter.setSongsList(sortList(parsedSongs));
+        //adapter.setSongsList(parsedSongs);
         adapter.setSongsList(parsedSongs);
     }
 
@@ -108,7 +117,122 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         return new Song(title, artist, durationInSeconds, cost, imageURL, false, notes, tempo);
     }
     public ArrayList<Song> sortList(ArrayList<Song> list){
-        Collections.sort(list, Comparator.comparing(Song::getTitle));
+        Collections.sort(list, new Comparator<Song>() {
+            @Override
+            public int compare(Song o1, Song o2) {
+
+                return o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase());
+            }
+        });
         return list;
     }
+
+    public void orderTheListOfSongs(){
+
+        if(searchSongs.getText().toString().equals("Search")){
+            searchSongs.setText("");
+        }
+
+        if(!searchSongs.getText().toString().isEmpty()){
+        String target= searchSongs.getText().toString().toLowerCase();
+        sortList(SongList.getInstance().getSongList());
+
+        ArrayList<Song> list = searchResult(SongList.getInstance().getSongList(), target);
+        SongList.getInstance().setList(list);
+
+        adapter.setSongsList(list);
+
+        } else searchSongs.setText("");
+    }
+
+
+
+
+    /*
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            if(searchSongs.getText().toString().isEmpty()){
+                searchSongs.setText("");
+            }
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if(searchSongs.getText().toString().equals("search")){
+                searchSongs.setText("");
+            }
+            orderTheListOfSongs();
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(searchSongs.getText().toString().isEmpty()){
+                searchSongs.setText("");
+            }
+
+        }
+    };*/
+
+
+    public ArrayList<Song> searchResult(List<Song> sortedList, String target){
+
+        int mid = findBestMatchIndex(sortedList,target);
+
+        ArrayList<Song> myList=new ArrayList<>();
+
+        int counter=0;
+
+        while ( mid >= 0 && sortedList.get(mid).getTitle().charAt(0)==target.charAt(0)){
+            myList.add(sortedList.get(mid));
+            mid--;
+            counter++;
+
+        }
+
+        mid=mid+counter+1;
+
+        while (mid<(sortedList.size()) && sortedList.get(mid).getTitle().charAt(0)==target.charAt(0)){
+            myList.add(sortedList.get(mid));
+            mid++;
+        }
+
+        for (Song songs: sortedList) {
+            if(!myList.contains(songs) && songs.getTitle().charAt(0)!=target.charAt(0)){
+                myList.add(songs);
+               // Toast.makeText(this.getContext(),"Find match index is reached",Toast.LENGTH_LONG).show();
+            }
+        }
+
+
+        return myList;
+
+    }
+    public  int findBestMatchIndex(List<Song> sortedList, String targetString) {
+        int low = 0;
+        int high = sortedList.size() - 1;
+        //Toast.makeText(this.getContext(),"Find match index is reached",Toast.LENGTH_LONG).show();
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int comparison = sortedList.get(mid).getTitle().compareTo(targetString);
+
+
+
+            if (comparison == 0) {
+                return mid; // Found an exact match
+            } else if (comparison < 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return high; // No exact match found, return the index for the best match
+    }
+
+
 }
