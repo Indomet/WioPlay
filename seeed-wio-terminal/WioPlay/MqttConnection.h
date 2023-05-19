@@ -20,7 +20,7 @@ const char *calorie_pub = "Send/Calorie/Burn/Data";
 const char *Music_notes_sub = "Music/Song/Notes";
 const char *Loop_trigger_sub = "Music/Loop";
 const char *Request_pub = "request/notes";
-
+const char *WorkoutStop_sub = "stop/workout";
 
 WiFiClient wioClient;
 PubSubClient client(wioClient);
@@ -33,8 +33,7 @@ void setup_wifi() {
   delay(10);
 
   tft.setTextSize(2);
-  tft.setCursor((320 - tft.textWidth("Connecting to Wi-Fi..")) / 2, 120);
-  tft.print("Connecting to Wi-Fi..");
+  tft.drawString("Connecting to Wi-Fi..", (320 - tft.textWidth("Connecting to Wi-Fi..")) / 2, 120);
 
   Serial.println();
   Serial.print("Connecting to ");
@@ -50,8 +49,7 @@ void setup_wifi() {
   Serial.println("WiFi connected");
 
   tft.fillScreen(TFT_BLACK);
-  tft.setCursor((320 - tft.textWidth("Connected!")) / 2, 120);
-  tft.print("Connected!");
+  tft.drawString("Connected!", (320 - tft.textWidth("Connected!")) / 2, 120);
 
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());  // Display Local IP Address
@@ -85,9 +83,18 @@ void updateSongData(char json[]) {
   scenes.changeSongName(json);
 }
 
+void stopWorkout(char json[]) {
+
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, json);
+  int stop = doc["stop"];
+
+  burndownChartBackEnd.setIsWorkingOut(false);
+  Serial.println(stop);
+}
+
 
 void updateSong(char json[]) {
-
   Serial.println("switching chunk");
 
   DynamicJsonDocument doc(JSON_ARRAY_SIZE(40));
@@ -133,6 +140,9 @@ void callback(char *topic, byte *payload, unsigned int length) {
   } else if (strcmp(Music_notes_sub, topic) == 0) {
     updateSong(charBuf);
   }
+  else if (strcmp(WorkoutStop_sub, topic) == 0) {
+    stopWorkout(charBuf);
+  }
 }
 
 void reconnect() {
@@ -165,10 +175,13 @@ void reconnect() {
       Serial.print("Subcribed to: ");
       Serial.println(Music_notes_sub);
 
-
       client.subscribe(Loop_trigger_sub);
       Serial.print("Subcribed to: ");
       Serial.println(Loop_trigger_sub);
+
+      client.subscribe(WorkoutStop_sub);
+      Serial.print("Subcribed to: ");
+      Serial.println(WorkoutStop_sub);
 
     } else {
       Serial.print("failed, rc=");
@@ -191,7 +204,6 @@ void setupMqtt() {
 }
 
 void loopMqtt() {
-
   if (!client.connected()) {
     reconnect();
   }

@@ -71,26 +71,26 @@ public:
   }
 
   void displayExerciseResults(BurndownChartBackEnd burndownChartBackEnd) {
-    tft.setTextSize(3);
-
-    displayCalorieSecondComparison(burndownChartBackEnd);
-
+    tft.setTextSize(2);
+    
     // User completed goal
     if (burndownChartBackEnd.checkIfUserAccomplishedGoal()) {
-      tft.fillScreen(TFT_GREEN);
-      tft.drawString("Accomplished goal!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+      goal = "Accomplished goal!";                                 
     }
 
-    // User didn't attain the set goal
+    // User didn't complete set goal
     else {
       tft.fillScreen(TFT_RED);
-      tft.drawString("Menu here!", exerciseResultTextCoordinates[0], exerciseResultTextCoordinates[1]);
+      goal = "Goal not acomplished!";
     }
+    tft.drawString(goal, (320 - tft.textWidth(goal)) / 2, 120);
+    displayCalorieSecondComparison(burndownChartBackEnd);
   }
 
   void displayCalorieSecondComparison(BurndownChartBackEnd burndownChartBackEnd) {
     String caloriesPerSecondComparison = String(burndownChartBackEnd.displayCalorieStatistics().c_str());
-    tft.drawString(caloriesPerSecondComparison, caloriesPerSecondTextCoordinates[0], caloriesPerSecondTextCoordinates[1]);
+    tft.drawString("Actual:   Expected: ", (320 - tft.textWidth(caloriesPerSecondComparison)) / 2, 80);
+    tft.drawString(caloriesPerSecondComparison, (320 - tft.textWidth(caloriesPerSecondComparison)) / 2, 100);
   }
 
   void resetChart()

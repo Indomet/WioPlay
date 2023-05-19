@@ -25,6 +25,13 @@ import java.util.ArrayList;
 public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.ViewHolder> implements BrokerConnection.MessageListener {
 
     private ArrayList<Song> songsList = new ArrayList<>();
+
+    private Song currentSong;
+
+    private ArrayList<int[]> noteChunks = new ArrayList<>();
+
+    private final String NEXT_SONG_MESSAGE = "NEXT";
+    private final String PREVIOUS_SONG_MESSAGE = "PREVIOUS";
     private final Context context;
     private boolean confirm;
 
@@ -45,7 +52,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         //position is the index of the items in the recycler view
         int currentPosition = holder.getBindingAdapterPosition();
 
-        Song currentSong = songsList.get(currentPosition); //Maps each song to its position in the list
+        Song currentSong = songsList.get(currentPosition); //Maps each song to its position in the list, each instance is its own card in the recycler view.
+
         Picasso.get().load(currentSong.getImageURL()).into(holder.songImage);//Loads song image from url
         holder.artistName.setText(currentSong.getArtist());
         holder.songTitle.setText(currentSong.getTitle());
@@ -64,6 +72,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     }
 
     public void validateSong(Song currentSong){
+        this.currentSong = currentSong;
         if(currentSong.isUnlocked()){
             playSong(currentSong);
         }else{
@@ -110,24 +119,14 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
 
     private void playSong(@NonNull Song currentSong) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
-        try {
-            String notes = writer.writeValueAsString(currentSong.getNotes());
-            BrokerConnection.getInstance().getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, notes, 0, null);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
 
-        MusicFragment.currentSong = currentSong;
-        MusicFragment.notes = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
-        Log.d("chunks amount", Integer.toString(MusicFragment.notes.size()));
+        updateNoteChunk();
+        Log.d("chunks amount", Integer.toString(noteChunks.size()));
         BrokerConnection.getInstance().getMqttClient().publish("Music/Loop", "Green light", 0, null);
         //Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
-           BrokerConnection.getInstance().getMqttClient().publish("Music/Data/Change", currentSong.getTitle(), 0, null);
+        BrokerConnection.getInstance().getMqttClient().publish("Music/Data/Change", currentSong.getTitle(), 0, null);
 
-
-        // TODO: Implement the logic to play the song
     }
 
     public void confirmationDialog(Song currentSong) {
@@ -152,14 +151,16 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     @Override
     public void onMessageArrived(String payload) {
 
+        receiveNextSong(payload);
+
         Log.d("terminal", "terminal needs chunks");
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
 
-        if(MusicFragment.notes.size() < 1) {
-            MusicFragment.notes = new ArrayList<>(Util.chunkify(MusicFragment.currentSong.getNotes(), 40));
+        if(noteChunks.size() < 1) {
+            updateNoteChunk();
         }
-        int[] chunk = MusicFragment.notes.remove(0);
+        int[] chunk = noteChunks.remove(0);
         try {
             String currentChunk = writer.writeValueAsString(chunk);
             BrokerConnection.getInstance().getMqttClient().publish("Music/Song/Notes", currentChunk, 0, null);
@@ -170,13 +171,41 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     }
 
+    public void receiveNextSong(@NonNull String payload)
+    {
+        if(SongList.getInstance().getUnlockedSongList().size() == 0){
+            Toast.makeText(context, "No unlocked songs", Toast.LENGTH_SHORT).show();
+            Log.d("Request", "No unlocked songs");
+        }else{
+            if(payload.equals(NEXT_SONG_MESSAGE)) {
+
+                SongList.getInstance().increaseSongIdx();
+                currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
+                updateNoteChunk();
+                Toast.makeText(context, "Next song is  " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+                Log.d("Request", "Next song is  " + currentSong.getTitle() + " index is " + SongList.getInstance().getCurrentSongIdx());
+            }
+            if (payload.equals(PREVIOUS_SONG_MESSAGE)){
+                SongList.getInstance().decreaseSongIdx();
+                currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
+                updateNoteChunk();
+                Toast.makeText(context, "Previous song is " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
+                Log.d("Request", "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() );
+
+            }
+        }
+
+    }
+
+    private void updateNoteChunk(){
+        noteChunks = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
+    }
+
     @Override
     public String getSubbedTopic() {
         return "request/notes";
     }
 
-
-//TODO Display artist name
     public class ViewHolder extends RecyclerView.ViewHolder{
     //Holds all views
         private final TextView songTitle;
