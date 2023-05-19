@@ -32,9 +32,6 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     private SongList songList;
     private SongLibraryAdapter adapter;
 
-    public static Song currentSong;
-    public static ArrayList<int[]> notes = new ArrayList<>();
-
     MusicFragment(){
         BrokerConnection broker= MainActivity.brokerConnection;
         broker.addMessageListener(this);
@@ -84,6 +81,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         });
         sortList(parsedSongs);
         adapter.setSongsList(parsedSongs);
+        SongList.getInstance().setUnlockedSongList(new ArrayList<>()); //Make sure that the unlocked list does not have duplicates.
     }
 
 
