@@ -8,6 +8,7 @@ public:
 
     caloriesBurnt = 0;
     timeElapsed = 0;
+    isWorkingOut = true;
 
     balanceFactor = constrainCaloriesBurntVelocity(targetBalanceFactor, 1000);
     calculateCalorieVariableBoundaries();
@@ -64,7 +65,7 @@ public:
       caloriesBurnt += burnCalories(userInformation, movementValue);
     }
     else {
-      Serial.println("You are not exercising hard enough for the selected exercise!");
+      // Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
 
@@ -72,6 +73,7 @@ public:
     exerciseDuration = newExerciseDuration;
     caloriesGoal = newCaloriesGoal;
     chosenActivityIdx = newChosenActivityIdx;
+    isWorkingOut = true;
   }
 
   bool checkIfUserAccomplishedGoal() {
@@ -111,6 +113,10 @@ public:
 
   float getUpdateDelay() {
     return updateDelay;
+  }
+
+  void setIsWorkingOut(bool isWorkingOut) {
+    this->isWorkingOut = isWorkingOut;
   }
 
 private:
@@ -153,6 +159,7 @@ private:
   float exerciseDuration;
   float caloriesGoal;
   double caloriesBurnt;
+  bool isWorkingOut;
 
   float getMETValue(float movementValue) {
     return movementValue * proportionalConstant;
