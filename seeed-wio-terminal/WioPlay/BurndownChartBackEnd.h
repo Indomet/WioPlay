@@ -1,4 +1,4 @@
-class BurndownChartBackEnd  // Has the responsibility of dealing with logic and functionality of the burndown chart
+class BurndownChartBackEnd
 {
 public:
   BurndownChartBackEnd(float exerciseDuration, float caloriesGoal, byte chosenActivityIdx) {
@@ -12,13 +12,6 @@ public:
     balanceFactor = constrainCaloriesBurntVelocity(targetBalanceFactor, 1000);
     calculateCalorieVariableBoundaries();
   }
-
-    // TEMPORARY - Note: Commit 'future updates' statistics
-    // Serial.println("***********************");
-    // Serial.println(burndownChart.getTimeElapsed());
-    // Serial.println(burndownChart.getActualCaloriesPerSecond());
-    // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
-    // Serial.println("***********************");
 
   // Returns a string comparing the actual calories burnt per second with the expected
   std::string displayCalorieStatistics() {
@@ -45,7 +38,7 @@ public:
   float burnCalories(UserInformation userInformation, float movementValue)  // Burn calories based on the movement-value
   {
     movementValue = getMETValue(movementValue);
-    float moveFactor = (movementValue / (updateDelay * 75)) * balanceFactor;
+    float moveFactor = (movementValue / (pow(updateDelay, 2))) * balanceFactor;
 
     int sexIdx = userInformation.isMale ? 0 : 1;
     return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.userWeight) + (sexCalorieConstants[sexIdx][2] * userInformation.userHeight) - (sexCalorieConstants[sexIdx][3] * userInformation.userAge)) * moveFactor;
@@ -90,7 +83,8 @@ public:
     return caloriesBurnt / convertMilliToSeconds(timeElapsed);
   }
 
-  // Expected calories to burn per second from current calories burnt to reach goal
+  // FUTURE / Out-of-scope update:
+  // Returns expected calories to burn per second from current calories burnt to reach goal (real-time updating)
   float getExpectedCaloriesPerSecond() {
     float caloriesLeft = getCaloriesLeft();
     float secondsLeft = getSecondsLeft();
@@ -98,6 +92,7 @@ public:
     return caloriesLeft / secondsLeft;
   }
 
+  // Returns the calories to burn per second during the entire workout to reach the calorie goal
   float getGeneralExpectedCaloriesPerSecond() {
     return caloriesGoal / exerciseDuration;
   }
@@ -120,25 +115,10 @@ public:
 
 private:
   const float realisticCaloriesBurntVelocity[2]{ 0.0025, 0.0065 };
-  const float targetBalanceFactor = 0.08;
-  const float updateDelay = 100;
 
-  float standard;
-  float minMovement;    // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
-  float maxMovement;    // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
-  float proportionalConstant;
-  byte chosenActivityIdx;
-  float balanceFactor;
-  float timeElapsed;
-
-  float exerciseDuration;
-  float caloriesGoal;
-  double caloriesBurnt;
-
-
-  const float sexCalorieConstants[2][4]{
-    { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
-    { 655.1, 4.35, 4.7, 4.65 }  // Female: {startConstant, weightConstant, heightConstant, ageConstant}
+  const float sexCalorieConstants[2][4] {
+   { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
+   { 655.1, 4.35, 4.7, 4.65 }  // Female: {startConstant, weightConstant, heightConstant, ageConstant}
   };
 
   // Notes:
@@ -157,6 +137,22 @@ private:
     3,    // Running
     1.5   // Hiking
   };
+
+  const float targetBalanceFactor = 0.08;
+  const float updateDelay = 100;
+
+  float standard;
+  float minMovement;    // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
+  float maxMovement;    // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
+  float proportionalConstant;
+
+  byte chosenActivityIdx;
+  float balanceFactor;
+  float timeElapsed;
+
+  float exerciseDuration;
+  float caloriesGoal;
+  double caloriesBurnt;
 
   float getMETValue(float movementValue) {
     return movementValue * proportionalConstant;
