@@ -84,14 +84,6 @@ public:
     chosenActivityIdx = newChosenActivityIdx;
     timeElapsed = 0;
     caloriesBurnt = 0;
-
-    Serial.println("******************mrjex blet******************");
-    Serial.println(timeElapsed);
-    Serial.println(caloriesGoal);
-    Serial.println(chosenActivityIdx);
-    Serial.println(exerciseDuration);
-    Serial.println(caloriesBurnt);
-    Serial.println("******************mrjex blet******************");
   }
 
   bool checkIfUserAccomplishedGoal() {
