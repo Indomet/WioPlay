@@ -36,7 +36,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     public static ArrayList<int[]> notes = new ArrayList<>();
 
     MusicFragment(){
-        BrokerConnection broker= MainActivity.brokerConnection;
+        BrokerConnection broker = BrokerConnection.getInstance();
         broker.addMessageListener(this);
     }
     @Override
