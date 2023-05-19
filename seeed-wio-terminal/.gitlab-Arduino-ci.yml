@@ -1,6 +1,3 @@
-stages:
-  - build
-
 variables:
   ARDUINO_CORE_URL: "https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json"
 
