@@ -58,11 +58,6 @@ public:
   }
 
 public:
-  bool isPlayingSong() {
-    return this->position != 0;
-  }
-
-public:
   float getCurrentPauseChunkDuration() {
     return currentPauseChunkDuration;
   }
