@@ -20,7 +20,7 @@ BurndownChart burndownChart;
 #include "MqttConnection.h"
 #include "ButtonHandler.h"
 ButtonHandler button;
-float movementValue;
+
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
@@ -32,9 +32,9 @@ void setup() {
   }
 
   motionDetection.startAccelerator();
-  burndownChart.initializeUI(); //this is here to start burndownchart in the background
-  
-  burndownChart.updateGraphVizuals(); //this is here to start burndownchart in the background
+  burndownChart.initializeUI();  //this is here to start burndownchart in the background
+
+  burndownChart.updateGraphVizuals();  //this is here to start burndownchart in the background
 }
 
 void loop() {
@@ -48,23 +48,13 @@ void loop() {
     button.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
-    
-    if (player.song.size() > 0 && !player.hasRequested) {
-      if (player.getPosition() >= player.song.size()) {
-        Serial.println(player.getPosition());
-        client.publish(Request_pub, "I need a new set of notes");
-        player.hasRequested = true;
-      } else {
-        player.playChunk();
-      }
-    } else {
-      delay(burndownChart.getUpdateDelay());
-    }
+
+    runMusicPlayer();
 
     burndownChart.updateTimeElapsed();
 
     movementValue = motionDetection.detectMotion();  // Read current user-position
-    
+
     burndownChart.sufficientMovementInquiry(userInformation, movementValue);
 
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
@@ -73,26 +63,22 @@ void loop() {
   // Exercise is completed: Inactivate burndown chart and show panel
   else {
     burndownChart.displayExerciseResults();
-    delay(200); // to make the scene flicker less
+    delay(200);  // to make the scene flicker less
   }
 }
 
-void registerChartValues()
-{
+void registerChartValues() {
   burndownChart.updateTimeElapsed();
-  movementValue = motionDetection.detectMotion();  // Read current user-position
-  burndownChart.sufficientMovementInquiry(userInformation, movementValue);
+  burndownChart.sufficientMovementInquiry(userInformation, motionDetection.detectMotion());
 }
 
-void requestNewNotes()
-{
+void requestNewNotes() {
   Serial.println(player.getPosition());
   client.publish(Request_pub, "I need a new set of notes");
   player.hasRequested = true;
 }
 
-void runMusicPlayer()
-{
+void runMusicPlayer() {
   if (player.song.size() > 0 && !player.hasRequested) {
     if (player.getPosition() >= player.song.size()) {
       requestNewNotes();
