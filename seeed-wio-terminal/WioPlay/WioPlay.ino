@@ -8,7 +8,6 @@ UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, us
 #include "MotionDetection.h"
 #include "MusicPlayer.h"
 
-
 MusicPlayer player(2);
 
 #include "Scenes.h"
@@ -21,7 +20,6 @@ BurndownChart burndownChart;
 #include "ButtonHandler.h"
 ButtonHandler button;
 
-
 void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
@@ -33,7 +31,6 @@ void setup() {
 
   motionDetection.startAccelerator();
   burndownChart.initializeUI();  //this is here to start burndownchart in the background
-
   burndownChart.updateGraphVizuals();  //this is here to start burndownchart in the background
 }
 
@@ -50,12 +47,7 @@ void loop() {
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
 
     runMusicPlayer();
-
-    burndownChart.updateTimeElapsed();
-
-    movementValue = motionDetection.detectMotion();  // Read current user-position
-
-    burndownChart.sufficientMovementInquiry(userInformation, movementValue);
+    registerChartValues();
 
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
