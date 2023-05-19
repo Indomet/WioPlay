@@ -13,7 +13,7 @@
 # * Verify but don't deploy merge requests.
 # * Deploy built artifacts from master branch only.
 include: '/AndroidApp/.gitlab-Android-CI.yml'
-include: '/seeed-wio-terminal/.gitlab-Arduino-ci'
+include: '/seeed-wio-terminal/.gitlab-Arduino-ci.yml'
 
 default:
   tags:
