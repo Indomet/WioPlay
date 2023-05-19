@@ -52,7 +52,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         //position is the index of the items in the recycler view
         int currentPosition = holder.getBindingAdapterPosition();
 
-        Song currentSong = songsList.get(currentPosition); //Maps each song to its position in the list
+        Song currentSong = songsList.get(currentPosition); //Maps each song to its position in the list, each instance is its own card in the recycler view.
 
         Picasso.get().load(currentSong.getImageURL()).into(holder.songImage);//Loads song image from url
         holder.artistName.setText(currentSong.getArtist());
@@ -72,6 +72,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     }
 
     public void validateSong(Song currentSong){
+        this.currentSong = currentSong;
         if(currentSong.isUnlocked()){
             playSong(currentSong);
         }else{
@@ -119,17 +120,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
 
     private void playSong(@NonNull Song currentSong) {
         Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
-        try {
-            String notes = writer.writeValueAsString(currentSong.getNotes());
-            BrokerConnection.getInstance().getMqttClient().publish(BrokerConnection.SONG_NOTES_TOPIC, notes, 0, null);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        createNewSongChunks();
-
+        updateNoteChunk();
         Log.d("chunks amount", Integer.toString(noteChunks.size()));
         BrokerConnection.getInstance().getMqttClient().publish("Music/Loop", "Green light", 0, null);
         //Toast.makeText(context, "Playing " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
@@ -166,7 +158,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
 
         if(noteChunks.size() < 1) {
-            createNewSongChunks();
+            updateNoteChunk();
         }
         int[] chunk = noteChunks.remove(0);
         try {
@@ -175,32 +167,34 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    private void createNewSongChunks()
-    {
-        noteChunks = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
+
     }
 
     public void receiveNextSong(@NonNull String payload)
     {
-        if (payload.equals(PREVIOUS_SONG_MESSAGE))
-        {
-            SongList.getInstance().decreaseSongIdx();
-            currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
-            Toast.makeText(context, "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() , Toast.LENGTH_SHORT).show();
-            createNewSongChunks();
-        }
-        else if (payload.equals(NEXT_SONG_MESSAGE))
-        {
+
+        if(payload.equals(NEXT_SONG_MESSAGE)) {
+
             SongList.getInstance().increaseSongIdx();
             currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
-            Toast.makeText(context, "Next song is  " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx(), Toast.LENGTH_SHORT).show();
-            createNewSongChunks();
+            updateNoteChunk();
+            Toast.makeText(context, "Next song is  " + currentSong.getTitle() + " index is " + SongList.getInstance().getCurrentSongIdx(), Toast.LENGTH_SHORT).show();
+            Log.d("Request", "Next song is  " + currentSong.getTitle() + " index is " + SongList.getInstance().getCurrentSongIdx());
+        }
+        if (payload.equals(PREVIOUS_SONG_MESSAGE)){
+            SongList.getInstance().decreaseSongIdx();
+            currentSong = SongList.getInstance().getUnlockedSongList().get(SongList.getInstance().getCurrentSongIdx());
+            updateNoteChunk();
+            Toast.makeText(context, "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() , Toast.LENGTH_SHORT).show();
+            Log.d("Request", "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() );
+
         }
     }
 
-
+    private void updateNoteChunk(){
+        noteChunks = new ArrayList<>(Util.chunkify(currentSong.getNotes(), 40));
+    }
 
     @Override
     public String getSubbedTopic() {

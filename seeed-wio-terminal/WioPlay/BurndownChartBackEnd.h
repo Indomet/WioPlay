@@ -10,7 +10,7 @@ public:
     timeElapsed = 0;
 
     balanceFactor = constrainCaloriesBurntVelocity(0.08, 1000);  // Note: Create variable for 'originalUpdateDelay' --> Delay used when song not playing  and 'targetBalanceFactor'
-    calorieVariableBoundaries();
+    calculateCalorieVariableBoundaries();
   }
 
   // Returns a string comparing the actual calories burnt per second with the expected
@@ -38,10 +38,9 @@ public:
   float burnCalories(UserInformation userInformation, float movementValue, float updateDelay)  // Burn calories based on the movement-value
   {
     movementValue = getMETValue(movementValue);
-    float moveFactor = (movementValue / updateDelay) * balanceFactor;
+    float moveFactor = (movementValue / (updateDelay * 50)) * balanceFactor;
 
     int sexIdx = userInformation.isMale ? 0 : 1;
-
     return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.userWeight) + (sexCalorieConstants[sexIdx][2] * userInformation.userHeight) - (sexCalorieConstants[sexIdx][3] * userInformation.userAge)) * moveFactor;
   }
 
@@ -50,22 +49,24 @@ public:
   }
 
   // Conform calories burned velocity in accordance to realistic boundaries
-  float constrainCaloriesBurntVelocity(float balanceFactor, float updateValue) {
+  double constrainCaloriesBurntVelocity(double balanceFactor, double updateValue) {
     // float controlVariable = 1 / balanceFactor; // ((songPauseChunkDuration + 1) * 1000) / balanceFactor;
     float controlVariable = (balanceFactor * 100) / updateValue;
 
-    float minValue = min(controlVariable, realisticCaloriesBurntVelocity[0]);
-    float maxValue = max(controlVariable, realisticCaloriesBurntVelocity[1]);
+    double minValue = min(controlVariable, realisticCaloriesBurntVelocity[0]); // min(0.008, 0.0025)
+    double maxValue = max(controlVariable, realisticCaloriesBurntVelocity[1]); // max(0.008, 0.0065) // (0.0025 + 0.008) / 2 = 0.00525
 
-    return minValue + maxValue;
+    return (minValue + maxValue) / 2;
   }
 
   // Only burn calories if user's movement-intensity corresponds with selected exercise
   void sufficientMovementInquiry(UserInformation userInformation, float movementValue, float updateDelay) {
     if (userIsMovingFastEnough(movementValue)) {
       caloriesBurnt += burnCalories(userInformation, movementValue, updateDelay);
-    } else {
-      // Serial.println("You are not exercising hard enough for the selected exercise!");
+    }
+    else
+    {
+      Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
 
@@ -120,7 +121,7 @@ private:
 
   float exerciseDuration;  // 30 (Seconds)
   float caloriesGoal;      // 100 --> Put in 'ExerciseSettings'
-  float caloriesBurnt;
+  double caloriesBurnt;
 
 
   float sexCalorieConstants[2][4]{
@@ -157,7 +158,7 @@ private:
     return movementValue >= minMovement;
   }
 
-  void calorieVariableBoundaries() {
+  void calculateCalorieVariableBoundaries() {
     standard = (float)(metRanges[chosenActivityIdx][0] + metRanges[chosenActivityIdx][1]) / 2;  // Average of the min and max MET-Values of chosen activity
     proportionalConstant = standard / standardMovementValues[chosenActivityIdx];
     minMovement = (float)metRanges[chosenActivityIdx][0] / proportionalConstant;  // Minimal movement required for user to be considered actually doing the selected activity
