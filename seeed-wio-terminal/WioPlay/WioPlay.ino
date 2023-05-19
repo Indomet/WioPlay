@@ -15,8 +15,8 @@ MusicPlayer player(2);
 Scenes scenes;
 #include "BurndownChart.h"
 #include "MqttConnection.h"
-#include "Button.h"
-Button button;
+#include "ButtonHandler.h"
+ButtonHandler button;
 float movementValue;
 
 MotionDetection motionDetection;
@@ -27,15 +27,14 @@ void setup() {
   Serial.begin(9600);  // Start serial communication
   setupMqtt();
   button.setup();
-  pinMode(RIGHT_BUTTON, INPUT_PULLUP);
-  while (digitalRead(RIGHT_BUTTON) == LOW) {}
+
   while (!SD.begin(SDCARD_SS_PIN, SDCARD_SPI)) {  // setup sd
     Serial.print("ERROR sd card not recognized");
   }
   motionDetection.startAccelerator();
   burndownChart.initializeUI();
 
-  burndownChart.updateGraphVizuals();  // menuNavigationOnPress(showBurndownChartScene, showPlayerScene); //this is here to start burndownchart in the background
+  burndownChart.updateGraphVizuals(); //this is here to start burndownchart in the background
 }
 
 void loop() {
@@ -46,7 +45,7 @@ void loop() {
 
     burndownChart.controlConstraints();
     button.onPress();
-    scenes.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
+    button.menuNavigationOnPress(showPlayerScene, showBurndownChartScene);
 
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
     bool isPlayingSong = player.isPlayingSong();
@@ -64,9 +63,7 @@ void loop() {
       delay(100);
     }
 
-
     float updateDelay = 100;
-    // burndownChart.updateTimeElapsed(1000); // player.getCurrentPauseChunkDuration()
 
     burndownChart.updateTimeElapsed(updateDelay);
 
@@ -80,7 +77,6 @@ void loop() {
 
     movementValue = motionDetection.detectMotion();  // Read current user-position
 
-    // burndownChart.sufficientMovementInquiry(userInformation, movementValue, 1000); // player.getCurrentPauseChunkDuration() -------------> Add if-statement for this case
     burndownChart.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
 
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
