@@ -1,5 +1,4 @@
 #include "seeed_line_chart.h"  // library for drawing the burndown chart
-#include <map>
 #include <ArduinoJson.h>  // json library
 #include "Seeed_FS.h"     // SD card library
 #include "UserInformation.h"
