@@ -19,8 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import java.util.List;
@@ -48,11 +51,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     private TextView caloriesBurnt;
 
     private TextView timeElapsed;
-    private TextView timeLeft;private NewWorkoutFragment newWorkoutFragment;
+    private TextView timeLeft;
+    private NewWorkoutFragment newWorkoutFragment;
 
     private boolean stopwatchRunning = false;
     private WorkoutManager workoutManager;
     private User user;
+    private ImageView profilepicture;
 
     private View rootView;
     private MaterialCalendarView calendarView;
@@ -133,6 +138,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesBurnt = rootView.findViewById(R.id.calories_burnt_textview);
         timeElapsed = rootView.findViewById(R.id.stopwatch_textview);
         timeLeft = rootView.findViewById(R.id.time_left_textview);
+        profilepicture= rootView.findViewById(R.id.user_picture);
         addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addHikingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addRunningWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
@@ -145,6 +151,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         int cals = workoutManager.getCaloriesBurnt();
         caloriesBurnt.setText(Integer.toString(cals));
         caloriesProgressbar.setProgress(cals,true);
+        addProfile();
 
 
 
@@ -195,6 +202,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     }
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageArrived(String payload) {
@@ -218,20 +226,10 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
         if (workoutManager.isGoalAchieved()&& workoutManager.getWorkoutHasStarted()) {
             //before anything add the workout data
-            CalendarDay date = CalendarDay.today();
-            //get the time calories burnt and the goal with the workout after its done and the type
-            FinishedWorkoutData finishedWorkout = new FinishedWorkoutData(workoutManager.getDurationInSeconds(),workoutManager.getCaloriesBurnt(),
-                    workoutManager.getType(),workoutManager.getCalorieGoal());
-            workoutManager.addWorkoutData(finishedWorkout,date);
-
-            //this makes sure that the progress bar is
-            caloriesProgressbar.setProgress(0,true);
-
-            caloriesBurnt.setText("0");
+            resetWorkoutUI();
 
             createPopWindow();
             workoutManager.stopWorkout();
-            timeLeft.setText("0:00:00");
             workoutManager.incrementTotalWorkouts();
             workoutManager.incrementMonthlyWorkouts();
             monthlyWorkoutsProgressbar.setProgress(workoutManager.getCurrentMonthlyWorkoutsProgress(),true);
@@ -241,6 +239,32 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             Util.changeFragment(this, getActivity());
 
         }
+
+        else if(workoutManager.getDurationInSeconds()<=workoutManager.getSecondsElapsed()){
+            resetWorkoutUI();
+            Toast.makeText(rootView.getContext(),"You didnt complete the workout in time ",Toast.LENGTH_LONG);
+        }
+    }
+
+    public void resetWorkoutUI(){
+        CalendarDay date = CalendarDay.today();
+        //get the time calories burnt and the goal with the workout after its done and the type
+        FinishedWorkoutData finishedWorkout = new FinishedWorkoutData(workoutManager.getDurationInSeconds(),workoutManager.getCaloriesBurnt(),
+                workoutManager.getType(),workoutManager.getCalorieGoal());
+        workoutManager.addWorkoutData(finishedWorkout,date);
+
+        //this makes sure that the progress bar is set to 0. The lib is very buggy so sometimes it updates others it doesnt
+
+        caloriesProgressbar.setProgress(0,true);
+
+        caloriesBurnt.setText("0");
+
+        workoutManager.stopWorkout();
+        timeLeft.setText("0:00:00");
+
+        workoutManager.setCurrentCalorie(0);
+        Util.changeFragment(this, getActivity());
+
     }
 
     @Override
@@ -261,11 +285,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
                 if (workoutManager.getWorkoutHasStarted()) {
                     workoutManager.incrementSecondsElapsed();
-                } else {
+                }
+                else {
                     handler.removeCallbacksAndMessages(null); // stop the handler
                     final String DEFAULT_TIME_FORMAT = "0:00:00";
                     timeElapsed.setText(DEFAULT_TIME_FORMAT);
                     stopwatchRunning = false;
+
                     return;
                 }
                 stopwatchRunning = true;
@@ -367,5 +393,22 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
 
     }
+    public void addProfile(){
+        if(user.getBitmap()!=null){
+            removebackGroud();
+            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
+            profilepicture.setImageBitmap(user.getBitmap());
+        }
+        if(user.getImageUri()!=null){
+            removebackGroud();
+            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
+            profilepicture.setImageURI(user.getImageUri());
+        }
+
+    }
+    public void removebackGroud(){
+        profilepicture.setBackground(null);
+    }
+
 
 }

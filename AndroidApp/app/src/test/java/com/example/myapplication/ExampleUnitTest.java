@@ -56,17 +56,7 @@ public class ExampleUnitTest {
         assertEquals(300,result.getGoalCalories());
     }
 
-    @Test
-    public void workoutManagercalculateTimeElapsedWorks() {
-        WorkoutManager manager = WorkoutManager.getInstance();
-        //should be 1 hour 20 mins
-        int seconds = 4800;
-        manager.setSecondsElapsed(seconds);
-        String formattedTime = manager.calculateTimeElapsed();
-        assertEquals("01:20:00",formattedTime);
-    }
 
- */
 
 
 
