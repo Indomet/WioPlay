@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         SongList.initialize(songFile);
 
         WorkoutManager.initialize(managerFile);
+
     }
 
     @Override   //This method checks which fragment was selected by the user

@@ -99,7 +99,7 @@ To install the Android app on your personal device, please make sure to have [_A
 - At the top of the screen, make sure to select your device
 - Click the run icon, while making sure the phone is open. A popup should appear asking for permission to install the app, press yes. Now the phone can be unplugged from the computer and the app will function as a normal Android application.
 
-//insert images
+<img src="https://i.imgur.com/OiqdqAr.png" width="425" />
 
 #### Wio terminal
 Compiling and uploading the arduino code to your Wio Terminal.
@@ -116,7 +116,6 @@ The noteparser backend server is needed for the first time setup of the system, 
 
 - Add installation steps
 
-//insert images
 
 ### Using the system
 After completing the installation process, you can start using the system by first launching the note parser and the android app. The app should automatically send a message to the server and receive all the available songs, as well as storing them to the phone's storage at /Documents. the three files created should be songList.json, user.json, and workoutManager.json.
