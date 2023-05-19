@@ -67,7 +67,7 @@ before_script:
 #     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
 
 # Make Project
-assembleDebug:
+androidBuild:
   image: gradle:8
   interruptible: true
   stage: build
@@ -78,10 +78,10 @@ assembleDebug:
       - app/build/outputs/
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
-debugTests:
+androidTest:
   image: gradle:8
   interruptible: true
   stage: test
   script:
-    - ./gradlew -Pci --console=plain :app:connectedAndroidTest
+    - ./gradlew -Pci --console=plain :app:testDebug
 
