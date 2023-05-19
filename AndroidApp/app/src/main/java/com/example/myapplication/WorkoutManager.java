@@ -213,6 +213,7 @@ public class WorkoutManager {
             data.setCaloriesBurntWithExercise(workout.getCaloriesBurntWithExercise()+data.getCaloriesBurntWithExercise());
             data.setDurationInSeconds(workout.getDurationInSeconds()+data.getDurationInSeconds());
             workoutDataHashMap.put(date.toString(),data);
+
         }
         else{
             workoutDataHashMap.put(date.toString(),workout);
