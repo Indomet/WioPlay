@@ -22,7 +22,6 @@ const char *Loop_trigger_sub = "Music/Loop";
 const char *Request_pub = "request/notes";
 const char *WorkoutStop_sub = "stop/workout";
 
-
 WiFiClient wioClient;
 PubSubClient client(wioClient);
 long lastMsg = 0;
@@ -206,7 +205,6 @@ void setupMqtt() {
 }
 
 void loopMqtt() {
-
   if (!client.connected()) {
     reconnect();
   }

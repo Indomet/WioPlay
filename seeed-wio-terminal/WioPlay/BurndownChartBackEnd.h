@@ -22,8 +22,17 @@ public:
     return  actual + "  " + expected;
   }
 
+  /*
+  // Note: We used this previously when our only intention was to make it work without MQTT connection
   bool isExercising() {
     return convertMilliToSeconds(timeElapsed) < exerciseDuration;
+  }
+  */
+
+  // Check if the user is exercising with a variable associated with MQTT
+  bool isExercising()
+  {
+    return isWorkingOut;
   }
 
   float getCaloriesBurnt() {
@@ -65,7 +74,7 @@ public:
       caloriesBurnt += burnCalories(userInformation, movementValue);
     }
     else {
-      // Serial.println("You are not exercising hard enough for the selected exercise!");
+      Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
 
