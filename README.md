@@ -70,4 +70,69 @@ The Wio Play is currently receiving contributions from the following members
 |     Mohamad     |                              |     [Click Here](https://git.chalmers.se/mohamadk)  |
 |     Zepei		    |                              |    [Click Here](https://git.chalmers.se/zepei)      |
 
+## User Manual
+This manual aims to guide the user step by step in the installation stage, setup, and how to use the system.
+### Installation
+The system cosists of 3 main components, the Android application, the wio terminal, and the noteparser backend server that is responsible for providing the song library. All three components must be set up correctly in order for the system to properly function.
+
+### Software needed
+- Java SDK
+- Android Studio Flamingo or newer
+- Arduino IDE
+- An online/local MQTT broker
+
+### Hardware needed
+- Computer connected to wifi
+- Android phone running minimum API 30
+- Wio terminal & battery pack attachment
+- grove speaker module & 4pin connection wire
+
+### Important
+[- Make sure that all three compoenents are connected to the same MQTT broker -] 
+
+**Please start by cloning the latest source code from main branch on to your local machine.**
+#### Android app
+To install the Android app on your personal device, please make sure to have [_Android Studio Flamingo or newer_](https://developer.android.com/studio) installed on your machine.
+
+- Navigate to the File menu, then open the project from the AndroidApp folder.
+- Connect your device to the computer.
+- At the top of the screen, make sure to select your device
+- Click the run icon, while making sure the phone is open. A popup should appear asking for permission to install the app, press yes. Now the phone can be unplugged from the computer and the app will function as a normal Android application.
+
+//insert images
+
+#### Wio terminal
+Compiling and uploading the arduino code to your Wio Terminal.
+- In the Arduino IDE, navigate to: **group-10-dit113-v23-mini-project-systems-development/seeed-wio-terminal/WioPlay** and open the folder.
+- Connected the Wio Seeed Terminal to your computer.
+- Compile and upload the sketch to the Wio Seeed Terminal.
+- If you have the battery pack attached, now it is safe to unplug, otherwise please attach the battery pack.
+- plug in the grove speaker to one of the 4 pin ports on the Wio Seeed Terminal.
+
+//Insert images
+
+#### Note Parser 
+The noteparser backend server is needed for the first time setup of the system, its purpose is to send the entire song library to the app through MQTT. After first time setup this is no longer needed, except when the user deletes the app and wants to reinstall the system.
+
+- Add installation steps
+
+//insert images
+
+### Using the system
+After completing the installation process, you can start using the system by first launching the note parser and the android app. The app should automatically send a message to the server and receive all the available songs, as well as storing them to the phone's storage at /Documents. the three files created should be songList.json, user.json, and workoutManager.json.
+
+After that, turn on the Wio terminal, if you are a first time user, you must navigate to the settings page in the app and enter your information, which is used to provide you with your personal workout data. Then navigate to the workout page and pick a workout you would like to do, choose the calorie goal and duration, and press start.
+
+As you exercise while holding the Wio terminal, it will detect your movements and calculate the amount of calories you are burning, in the bottom of the workout page, you can see real time statistics of the calories burnt, which will also be converted to a 1:1 ratio into calorie credits. 
+
+In the music library page, you can spend the calorie credits you earned from burning calories to unlock new songs. After unlocking a song, a play button will appear for that specific song, by pressing it, the Wio terminal will begin to play that song.
+
+While exercising, you can press and hold the joystick to view the real-time burn-down chart, which shows your current calorie burning rate as well as the estimated line which you should try and keep up with in order to reach your calorie goal within the workout duration.
+
+While playing music, you can use the left and right button to cycle through all the songs that you currently have unlocked, and the middle button to pause/resume the song.
+
+All progress and user data is kept until the app is deleted from the phone.
+
+Have fun!
+
 
