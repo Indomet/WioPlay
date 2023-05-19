@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
+import android.renderscript.Allocation;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,6 +24,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -127,23 +131,26 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         return list;
     }
 
-    public void orderTheListOfSongs(){
+    /*public void orderTheListOfSongs(){
 
         if(searchSongs.getText().toString().equals("Search")){
             searchSongs.setText("");
-        }
-
-        if(!searchSongs.getText().toString().isEmpty()){
+        }else if(!searchSongs.getText().toString().isEmpty()){
         String target= searchSongs.getText().toString().toLowerCase();
         sortList(SongList.getInstance().getSongList());
 
         ArrayList<Song> list = searchResult(SongList.getInstance().getSongList(), target);
         SongList.getInstance().setList(list);
 
+
+        Toast.makeText(getContext(),"It is reached",Toast.LENGTH_LONG).show();
+        Song song= SongList.getInstance().getSongList().get(0);
+        Toast.makeText(getContext(),song.getTitle(),Toast.LENGTH_LONG).show();
+
         adapter.setSongsList(list);
 
-        } else searchSongs.setText("");
-    }
+        } //else searchSongs.setText("");
+    } */
 
 
 
@@ -185,6 +192,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         ArrayList<Song> myList=new ArrayList<>();
 
         int counter=0;
+
+
 
         while ( mid >= 0 && sortedList.get(mid).getTitle().charAt(0)==target.charAt(0)){
             myList.add(sortedList.get(mid));
@@ -233,6 +242,31 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         return high; // No exact match found, return the index for the best match
     }
+
+    // maybe the reason it is not working might be that the songs are starting with an emplty
+    //string.
+
+    public void orderTheListOfSongs(){
+
+        if(searchSongs.getText().toString().equals("Search")){
+            searchSongs.setText("");
+        }
+
+        if(!searchSongs.getText().toString().isEmpty()){
+
+            String target= searchSongs.getText().toString().toLowerCase();
+            sortList(SongList.getInstance().getSongList());
+            ArrayList<Song> list = SongList.getInstance().getSongList();
+            Collections.sort(list, new Util.KeywordComparator(target));
+            SongList.getInstance().setList(list);
+
+            adapter.setSongsList(list);
+
+        } else searchSongs.setText("");
+    }
+
+
+
 
 
 }
