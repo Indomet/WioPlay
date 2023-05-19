@@ -48,8 +48,8 @@ public:
     movementValue = getMETValue(movementValue);
     float moveFactor = (movementValue / (pow(updateDelay, 2))) * balanceFactor;
 
-    int sexIdx = userInformation.isMale ? 0 : 1;
-    return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.userWeight) + (sexCalorieConstants[sexIdx][2] * userInformation.userHeight) - (sexCalorieConstants[sexIdx][3] * userInformation.userAge)) * moveFactor;
+    int sexIdx = userInformation.getIsMale() ? 0 : 1;
+    return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.getUserWeight()) + (sexCalorieConstants[sexIdx][2] * userInformation.getUserHeight()) - (sexCalorieConstants[sexIdx][3] * userInformation.getUserAge())) * moveFactor;
   }
 
   float convertMilliToSeconds(float milli) {
