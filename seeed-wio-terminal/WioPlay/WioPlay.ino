@@ -50,7 +50,6 @@ void loop() {
     motionDetection.recordPreviousAcceleration();  // Read previous user-position
     bool isPlayingSong = player.isPlayingSong();
 
-
     if (player.song.size() > 0 && !player.hasRequested) {
       if (player.getPosition() >= player.song.size()) {
         Serial.println(player.getPosition());
@@ -60,13 +59,12 @@ void loop() {
         player.playChunk();
       }
     } else {
-      delay(100);
+      delay(burndownChart.getUpdateValue());
     }
 
-    float updateDelay = 100;
-
-    burndownChart.updateTimeElapsed(updateDelay);
-
+    //float updateDelay = 100;
+    // burndownChart.updateTimeElapsed(updateDelay);
+    burndownChart.updateTimeElapsed(burndownChart.getUpdateValue());
 
     // TEMPORARY - Note: Commit 'future updates' statistics
     // Serial.println("***********************");
@@ -77,7 +75,8 @@ void loop() {
 
     movementValue = motionDetection.detectMotion();  // Read current user-position
 
-    burndownChart.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
+    // burndownChart.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
+    burndownChart.sufficientMovementInquiry(userInformation, movementValue, burndownChart.getUpdateValue());
 
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
