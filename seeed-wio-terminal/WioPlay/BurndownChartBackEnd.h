@@ -21,13 +21,6 @@ public:
     return actual + "  " + expected;
   }
 
-  /*
-  // Note: We used this previously when our only intention was to make it work without MQTT connection
-  bool isExercising() {
-    return convertMilliToSeconds(timeElapsed) < exerciseDuration;
-  }
-  */
-
   // Check if the user is exercising with a variable associated with MQTT
   bool isExercising() {
     return isWorkingOut;
@@ -81,6 +74,7 @@ public:
     chosenActivityIdx = newChosenActivityIdx;
     timeElapsed = 0;
     caloriesBurnt = 0;
+    isWorkingOut = true;
   }
 
   bool checkIfUserAccomplishedGoal() {
