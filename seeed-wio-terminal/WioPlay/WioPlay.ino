@@ -3,11 +3,11 @@
 #include <ArduinoJson.h>  // json library
 #include "Seeed_FS.h"     // SD card library
 #include "UserInformation.h"
+
 UserInformation userInformation(67, 175, 23, 0);  // (userWeight, userHeight, userAge, isMale)
 
 #include "MotionDetection.h"
 #include "MusicPlayer.h"
-
 
 MusicPlayer player(2);
 
@@ -21,7 +21,6 @@ float movementValue;
 
 MotionDetection motionDetection;
 BurndownChart burndownChart;
-
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
@@ -59,24 +58,12 @@ void loop() {
         player.playChunk();
       }
     } else {
-      delay(burndownChart.getUpdateValue());
+      delay(burndownChart.getUpdateDelay());
     }
 
-    //float updateDelay = 100;
-    // burndownChart.updateTimeElapsed(updateDelay);
-    burndownChart.updateTimeElapsed(burndownChart.getUpdateValue());
-
-    // TEMPORARY - Note: Commit 'future updates' statistics
-    // Serial.println("***********************");
-    // Serial.println(burndownChart.getTimeElapsed());
-    // Serial.println(burndownChart.getActualCaloriesPerSecond());
-    // Serial.println(burndownChart.getExpectedCaloriesPerSecond());
-    // Serial.println("***********************");
-
+    burndownChart.updateTimeElapsed();
     movementValue = motionDetection.detectMotion();  // Read current user-position
-
-    // burndownChart.sufficientMovementInquiry(userInformation, movementValue, updateDelay);
-    burndownChart.sufficientMovementInquiry(userInformation, movementValue, burndownChart.getUpdateValue());
+    burndownChart.sufficientMovementInquiry(userInformation, movementValue);
 
     client.publish(calorie_pub, String(burndownChartBackEnd.getCaloriesBurnt()).c_str());
   }
@@ -86,7 +73,6 @@ void loop() {
     burndownChart.displayExerciseResults();
     delay(200); // to make the scene flicker less
   }
-  
 }
 
 void showBurndownChartScene() {
