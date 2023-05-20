@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 
 //This class manages the workout. Updates the target goal, the calories they burn and keeps track of the time
