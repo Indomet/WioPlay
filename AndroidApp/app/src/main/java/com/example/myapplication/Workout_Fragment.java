@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -235,6 +234,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
             //refresh the fragment such that the views get updated
             workoutManager.setCurrentCalorie(0);
+            BrokerConnection.getInstance().getMqttClient().publish("stop/workout", "stop", BrokerConnection.QOS, null);
+
             Util.changeFragment(this, getActivity());
 
         }
