@@ -101,11 +101,18 @@ public class SongList {
     private ArrayList<String> getAllUnlockedSongTitles()
     {
         ArrayList<String> titles = new ArrayList<>();
+        //If unlockedSongList was somehow overridden as null from the beginning, re-instantiate it and prevent crash
+        try{
+            for (Song currentSong : unlockedSongList)
+                titles.add(currentSong.getTitle());
 
-        for (Song currentSong : unlockedSongList)
-            titles.add(currentSong.getTitle());
-
+        }catch (NullPointerException e){
+            setUnlockedSongList(new ArrayList<>());
+            getUnlockedSongList();
+        }
         return titles;
+
+
     }
 
     private void addUnlockedSong(Song newSong)
