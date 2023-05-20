@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,18 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 
 public class MusicFragment extends Fragment implements BrokerConnection.MessageListener{
@@ -124,31 +120,6 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         });
         return list;
     }
-
-
-    public  int findBestMatchIndex(List<Song> sortedList, String targetString) {
-        int low = 0;
-        int high = sortedList.size() - 1;
-
-
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            int comparison = sortedList.get(mid).getTitle().compareTo(targetString);
-
-
-
-            if (comparison == 0) {
-                return mid; // Found an exact match
-            } else if (comparison < 0) {
-                low = mid + 1;
-            } else {
-                high = mid - 1;
-            }
-        }
-
-        return high; // No exact match found, return the index for the best match
-    }
-
 
     public void orderTheListOfSongs(){
 
