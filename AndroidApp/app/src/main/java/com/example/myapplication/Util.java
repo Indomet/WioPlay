@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 
+import android.graphics.Bitmap;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -12,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class Util {
             String name = field.getName();
             field.setAccessible(true);
             JsonNode jsonValue = node.get(name);
-            if (jsonValue != null) {
+            if (jsonValue != null && field.getType() != Bitmap.class) {
                 //set the value of the field to be the json saved value
                 Object value = mapper.convertValue(jsonValue, field.getType());
                 field.set(object, value);
