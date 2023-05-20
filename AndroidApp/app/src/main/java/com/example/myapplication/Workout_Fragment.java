@@ -234,6 +234,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             workoutsCount.setText(Integer.toString(workoutManager.getTotalWorkoutsCount()));
             //refresh the fragment such that the views get updated
             workoutManager.setCurrentCalorie(0);
+            BrokerConnection.getInstance().getMqttClient().publish("stop/workout", "stop", BrokerConnection.QOS, null);
+
             Util.changeFragment(this, getActivity());
 
         }
