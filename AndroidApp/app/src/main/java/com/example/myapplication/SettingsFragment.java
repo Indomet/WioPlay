@@ -30,12 +30,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -276,7 +274,7 @@ public class SettingsFragment extends Fragment {
     }
 
 
-    // result of the request is recieved here
+    // result of the request is received here
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -286,7 +284,7 @@ public class SettingsFragment extends Fragment {
             profilePicture.setImageURI(imageUri);// adding the image from gallery to the imageview
             user.setImageUri(imageUri);
             user.setBitmap(null);
-            dialog.dismiss();// close the dialod
+            dialog.dismiss();// close the dialog
 
 
         } else if (requestCode == TAKE_PICTURE_REQUEST && resultCode == RESULT_OK) {
@@ -297,7 +295,7 @@ public class SettingsFragment extends Fragment {
             user.setBitmap(imageBitmap);
             saveimageTofiles(imageBitmap);
             user.setImageUri(null);
-            dialog.dismiss();// close the dialod
+            dialog.dismiss();// close the dialog
         }
     }
 
@@ -320,7 +318,7 @@ public class SettingsFragment extends Fragment {
                     if (file.isDirectory()) {
                         // Recursively traverse subdirectory
                         checkToseeIfPictureIsthere(file,filePath,bitmap);
-                        Log.d("Allmost there", "one step remaining");
+                        Log.d("Almost there", "one step remaining");
 
                     } else {
                         String compare1 = directory.getAbsolutePath() + "/myImage.jpg";
@@ -368,7 +366,7 @@ public class SettingsFragment extends Fragment {
                 }
 
                 Bitmap bitmap1= BitmapFactory.decodeStream(inputStream);
-                Log.d("It is being reached", "it is being reachesd");
+                Log.d("It is being reached", "it is being reached");
                 profilePicture.setImageBitmap(bitmap1);
                 User.getInstance().setBitmap(bitmap1);
 
@@ -404,14 +402,6 @@ public class SettingsFragment extends Fragment {
         }
         return false;
     }
-
-
-
-
-
-
-
-
 
 
 }
