@@ -72,9 +72,10 @@ public:
 
   void displayExerciseResults(BurndownChartBackEnd burndownChartBackEnd) {
     tft.setTextSize(2);
-
+    
     // User completed goal
     if (burndownChartBackEnd.checkIfUserAccomplishedGoal()) {
+      tft.fillScreen(TFT_GREEN);
       goal = "Accomplished goal!";
     }
 
