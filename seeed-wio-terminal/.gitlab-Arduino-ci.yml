@@ -8,23 +8,40 @@ build-sketch:
   stage: build
   image: ubuntu:20.04
   script:
-    - apt-get update && apt-get install -y python3 python3-pip
-    - pip3 install pyserial
-    - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
-    - arduino-cli config init --additional-urls "${ARDUINO_CORE_URL}"
-    - arduino-cli core update-index
-    - arduino-cli core install Seeeduino:samd
-    - arduino-cli lib install "ArduinoJson"
-    - arduino-cli lib install "Seeed_Arduino_LIS3DHTR"
-    - arduino-cli lib install "PubSubClient"
-    - arduino-cli lib install "Seeed_Arduino_FS"
-    - arduino-cli lib install "Seeed_Arduino_LineChart"
-    - arduino-cli lib install "Seeed_Arduino_mbedtls"
-    - arduino-cli lib install "Seeed_Arduino_rpcUnified"
-    - arduino-cli lib install "Seeed_Arduino_rpcWiFi"
-    - arduino-cli lib install "Seeed_Arduino_SFUD"
-    - git clone https://github.com/0015/TP_Arduino_DigitalRain_Anim.git libraries/Digital_Rain_Animation
-    - git clone https://github.com/mikeputnam/Arduino_Pitches.git libraries/pitches
-    - wget -O libraries/RawImage.h "https://files.seeedstudio.com/wiki/Wio-Terminal/res/RawImage.h"
-    - git clone https://github.com/Bodmer/TFT_eSPI.git libraries/TFT_eSPI
-    - arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino
+  - apt-get update && apt-get install -y python3 python3-pip
+  - pip3 install pyserial
+  - apt-get install -y git
+  - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
+  - arduino-cli config init --additional-urls "${ARDUINO_CORE_URL}"
+  - arduino-cli core update-index
+  - arduino-cli core install Seeeduino:samd
+  #- mkdir libraries
+  - mkdir libraries
+  - cd libraries
+  - git clone https://github.com/0015/TP_Arduino_DigitalRain_Anim.git 
+  - git clone https://github.com/Indomet/RawImage 
+  - git clone https://github.com/Bodmer/TFT_eSPI.git 
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_LIS3DHTR.git 
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_LineChart
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_mbedtls
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_SFUD
+  - git clone https://github.com/knolleary/pubsubclient
+  - cd ../
+  #- arduino-cli lib install "TP_Arduino_DigitalRain_Anim"
+  #- arduino-cli lib install "RawImage"
+  #- arduino-cli lib install "TFT_eSPI"
+  #- arduino-cli lib install "Seeed_Arduino_LIS3DHTR"
+  - arduino-cli lib install "ArduinoJson"
+  #- arduino-cli lib search "ArduinoJson"
+  #- arduino-cli lib list
+  #- arduino-cli lib install "Seeed_Arduino_LIS3DHTR"
+  #- arduino-cli lib install "PubSubClient"
+  #- arduino-cli lib install "Seeed_Arduino_FS"
+  #- arduino-cli lib install "Seeed_Arduino_LineChart"
+  #- arduino-cli lib install "Seeed_Arduino_mbedtls"
+  #- arduino-cli lib install "Seeed_Arduino_rpcUnified"
+  #- arduino-cli lib install "Seeed_Arduino_rpcWiFi"
+  #- arduino-cli lib install "Seeed_Arduino_SFUD"
+  - arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino --library /libraries/TP_Arduino_DigitalRain_Anim --library /libraries/RawImage --library /libraries/Seeed_Arduino_LIS3DHTR --library /libraries/Seeed_Arduino_LineChart --library /libraries/Seeed_Arduino_mbedtls --library /libraries/Seeed_Arduino_rpcUnified --library /libraries/Seeed_Arduino_rpcUnified --library /libraries/Seeed_Arduino_rpcWiFi --library /libraries/Seeed_Arduino_SFUD --library /libraries/pubsubclient
