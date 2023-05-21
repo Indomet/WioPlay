@@ -52,13 +52,13 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         TextView userBalance = rootView.findViewById(R.id.user_balance);
         searchSongs= rootView.findViewById(R.id.searchSongs);
         searchSongs.setOnClickListener(v -> orderTheListOfSongs());
-        checkForProfilePicture();
+        //checkForProfilePicture();
 
 
 
         userBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
         //The adapter that handles the recycler view functionalities
-        adapter = new SongLibraryAdapter(recyclerView.getContext());
+        adapter =  SongLibraryAdapter.getInstance(recyclerView.getContext());
 
         adapter.setSongsList(SongList.getInstance().getSongList());
         recyclerView.setAdapter(adapter);
@@ -143,8 +143,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     // Since this is the fragment that is shown when the app is opened, It would make sance
     // to check if The profile picture is saved in the phone.
     public void checkForProfilePicture(){
-        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "myImage.jpg";
+        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + File.separator + "myImage.jpg";
         if(pictureExist(file1)){
             try {
                 InputStream inputStream = null;
@@ -189,12 +189,5 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         }
         return false;
     }
-
-
-
-
-
-
-
 
 }

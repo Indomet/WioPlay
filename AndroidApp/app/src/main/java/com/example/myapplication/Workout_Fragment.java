@@ -119,14 +119,9 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_workout, container, false);
-
-        BrokerConnection broker = BrokerConnection.getInstance();
-
         user = User.getInstance();
         workoutManager = WorkoutManager.getInstance();
-
         widgetInit();
-
         return rootView;
     }
 
@@ -159,7 +154,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         int cals = workoutManager.getCaloriesBurnt();
         caloriesBurnt.setText(Integer.toString(cals));
         caloriesProgressbar.setProgress(cals,true);
-        addProfile();
+        //addProfile();
 
 
 
@@ -223,7 +218,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
             String calculatedTimeLeft = workoutManager.calculateTimeLeft();
-            if(integerPayload>1){
+            if(integerPayload>=1){
             timeLeft.setText(calculatedTimeLeft);
             }
 
@@ -264,7 +259,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         //this makes sure that the progress bar is set to 0. The lib is very buggy so sometimes it updates others it doesnt
         caloriesProgressbar.setMax(100);
         caloriesProgressbar.setProgress(0,true);
-
+        caloriesProgressbar= rootView.findViewById(R.id.calories_burnt_progressbar);
         caloriesBurnt.setText("0");
 
         workoutManager.stopWorkout();
@@ -409,7 +404,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             removebackGroud();
            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
             profilepicture.setImageBitmap(user.getBitmap());
-        } else if(user.getImageUri()!=null){
+        }
+        if(user.getImageUri()!=null){
             removebackGroud();
             profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
             profilepicture.setImageURI(user.getImageUri());
