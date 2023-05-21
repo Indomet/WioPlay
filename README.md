@@ -24,7 +24,7 @@ The purpose of Wio Play is motivating people to lose calories by effectively uti
 
   - **50+** **songs** currently available
 
-- Maintainbility 🔄
+- Maintainability 🔄
 
   - Songs are automatically **maintained on the server**
 
@@ -33,7 +33,7 @@ The purpose of Wio Play is motivating people to lose calories by effectively uti
   - Downloaded songs are **cached on the app**
 
 - Motion Detection 👟
-  - Utilizes the **small form factor** of the wio terminal
+  - Utilizes the **small form factor** of the WIO terminal
 
 <!-- [**Wiki**](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/home) -->
 
@@ -47,7 +47,7 @@ The full process of streaming a track on our service can be broken down into 3 k
 
 1. Pinging Terminal
 
-   - Happens once when the user requests to play a specific song, this will put the terminal in `Note Requesting` state
+   - Happens once when the user requests to play a specific song, this will put the terminal in the `Note Requesting` state
 
 2. Requesting Notes
 
@@ -73,7 +73,7 @@ For more detailed diagrams about the system please refer to the following wiki p
 
 ## Setup
 
-The system cosists of 3 main components, the **Android application**, the **wio terminal**, and the **Note-Parser** server that is responsible for providing and parsing the song library. All three components must be set up correctly in order for the system to function properly.
+The system consists of 3 main components, the **Android application**, the **WIO terminal**, and the **Note-Parser** server that is responsible for providing and parsing the song library. All three components must be set up correctly for the system to function properly.
 
 In order to get all the project files, you must clone the project repo:
 
@@ -92,7 +92,7 @@ Assuming you already have a device or emulator attached, you can build the appli
 To install the Android app on your personal device, please make sure to have [_Android Studio Flamingo or newer_](https://developer.android.com/studio) installed on your machine.
 
 - Navigate to the File menu, then open the project from the AndroidApp folder.
-- Connect your device to the computer, alternatively you can install an emulator with the help of the android studio device manager.
+- Connect your device to the computer, alternatively you can install an emulator with the help of the Android Studio device manager.
 - At the top of the screen, make sure to select your device
 - Click the run icon, while making sure the phone is open. A popup should appear asking for permission to install the app, press yes. Now the phone can be unplugged from the computer and the app will function as a normal Android application.
 
@@ -109,13 +109,13 @@ Assuming you have maven installed and present in your path
 
 ### Wio Terminal
 
-Compiling and uploading the arduino code to your Wio Terminal.
+Compiling and uploading the Arduino code to your Wio Terminal.
 #### - Using Arduino-CLI ![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white)
 
 1. `arduino-cli compile -b <fqbn> WioPlay/` to compile the workspace
 2. `arduino-cli upload -p <port> -b <fqbn> WioPlay/` to upload the compiled workspace onto the device
 
-*Note: **&lt;fqbn&gt;** and **&lt;port&gt;** correspond to the device fqbn number and usb connection port respectively*
+*Note: **&lt;fqbn&gt;** and **&lt;port&gt;** correspond to the device fqbn number and USB connection port respectively*
 
 #### - Using IDE
 - In the Arduino IDE, navigate to: **group-10-dit113-v23-mini-project-systems-development/seeed-wio-terminal/WioPlay** and open the folder.
@@ -137,7 +137,7 @@ Compiling and uploading the arduino code to your Wio Terminal.
 
 ### Using the system
 
-After completing the installation process, you can start using the system by first launching the note parser and the android app. The app should automatically send a message to the server and receive all the available songs, as well as storing them to the phone's storage at /Documents. the three files created should be songList.json, user.json, and workoutManager.json.
+After completing the installation process, you can start using the system by first launching the note parser and the Android app. The app should automatically send a message to the server and receive all the available songs, as well as storing them to the phone's storage at /Documents. the three files created should be songList.json, user.json, and workoutManager.json.
 
 After that, turn on the Wio terminal, if you are a first time user, you must navigate to the settings page in the app and enter your information, which is used to provide you with your personal workout data. Then navigate to the workout page and pick a workout you would like to do, choose the calorie goal and duration, and press start.
 
@@ -159,12 +159,12 @@ The Wio Play is currently receiving contributions from the following members
 
 | Member  |                                                                                                                                                                                                                               Contributions                                                                                                                                                                                                                               |                    Profile                     |
 | :-----: | :-- | :--------------------------------------------: |
-|   Ali   |Establsihed MQTT conncetion for andorid phone<br>Created modern UI for settings and workout tab<br>Helped setup CI for the android phone<br>Created the JSON MQTT message sending format<br>Created fucntioanlity behind the workouttab and the updating of user information tab<br>Created many diagrams in the wiki<br>Contributed to requirement tracing and writing<br>Wrote workout backend logic tests  <br> Created observer pattern <br> create reusable util methods | [Click Here](https://git.chalmers.se/almuslim) |
-|  Asim   |Set up Arduino CLI.<br>Implemented detection of movement in all three axes on the wio terminal.<br>Implemented data receiving/sending functionality via MQTT on WIO terminal<br>Fixed the bug that was causing the app to crash on Android devices with API 31 or higher.<br>Implemented the display of current song title on the WIO terminal.<br>Added button clicking functionalities such as switch scene, play, resume, next, and previous button.<br>Added music UI with visualisation of buttons and image.<br>Fixed the bug where the burndown chart displays a flat line after a certain amount of time.<br>Fixed the bug causing the music to slow down during the transition to the burndown chart scene.<br>Implemented the display of an image from the SD card when playing a song.<br>Implemented automatic image update when a new song is played.<br>Refactored menu panel with 2 cases (accomplish/fail goal) to make it look prettier on the WIO terminal<br>Created component diagram in the wiki.<br>Divided the received topic values from json and passed them to the relevant function for calculating burnt calories.                                                                                                                                                                                                                                                                                                                                                                                                                      | [Click Here](https://git.chalmers.se/mehmetas) |
-| Jackson |     Helped refactor broker connection class to be singleton <br> Added popup to edit the username and save it  <br> Added viewing the username in fragments<br> Added functionality to restrict to a specific range while user saves required personal information <br>Added search bar and underlaying functionality to quickly access desired song.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |  [Click Here](https://git.chalmers.se/jacniy)  |
+|   Ali   |Establsihed MQTT connection for Android phone<br>Created modern UI for settings and workout tab<br>Helped setup CI for the Android phone<br>Created the JSON MQTT message sending format<br>Created functionality behind the workout tab and the updating of user information tab<br>Created many diagrams in the wiki<br>Contributed to requirement tracing and writing<br>Wrote workout backend logic tests  <br> Created observer pattern <br> create reusable util methods | [Click Here](https://git.chalmers.se/almuslim) |
+|  Asim   |Set up Arduino CLI.<br>Implemented detection of movement in all three axes on the WIO terminal.<br>Implemented data receiving/sending functionality via MQTT on WIO terminal<br>Fixed the bug that was causing the app to crash on Android devices with API 31 or higher.<br>Implemented the display of current song title on the WIO terminal.<br>Added button clicking functionalities such as switch scene, play, resume, next, and previous button.<br>Added music UI with visualisation of buttons and image.<br>Fixed the bug where the burndown chart displays a flat line after a certain amount of time.<br>Fixed the bug causing the music to slow down during the transition to the burndown chart scene.<br>Implemented the display of an image from the SD card when playing a song.<br>Implemented automatic image update when a new song is played.<br>Refactored menu panel with 2 cases (accomplish/fail goal) to make it look prettier on the WIO terminal<br>Created component diagram in the wiki.<br>Divided the received topic values from json and passed them to the relevant function for calculating burnt calories.                                                                                                                                                                                                                                                                                                                                                                                                                      | [Click Here](https://git.chalmers.se/mehmetas) |
+| Jackson |     Helped refactor broker connection class to be singleton <br> Added popup to edit the username and save it  <br> Added viewing the username in fragments<br> Added functionality to restrict to a specific range while user saves required personal information <br>Added search bar and underlying functionality to quickly access desired song.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |  [Click Here](https://git.chalmers.se/jacniy)  |
 |  Joel   | Created the composite BurndownChart.h and its components BurndownChartBackEnd.h and BurndownChartFrontEnd.h.<br> Created the logic behind the burndown chart (the X-axis or time elapsed, the Y-axis or current calories burnt and the blue line's slope that ends in the coordinates (exerciseDuration, calorieGoal) are subscribed to the values sent from the application) <br> Created UserInformation.h whose single responsibility is to store the physical attributes having an impact on the burnt calories <br> Created the menu panel with 2 cases (accomplish/fail goal) with that displays a comparison between the actual- vs expected calories burnt per second throughout the workout <br> Created the unlocked songs list that uses binary search insertion by comparing the title of the song to be inserted (the unlocked songs are alphabetically sorted) <br> Created the feature of switching between unlocked songs by clicking on two blue terminal buttons (previous, next)                                                                                                                                                                                                                                                                                                                                                                                                                                                             | [Click Here](https://git.chalmers.se/joelmat)  |
-| Mohamad | Create the algorithm for the music parser<br/>Create the MQTT connection between parser and android app<br/>Get a list of 50+ songs to parse<br/>Get metadata for each song (tempo, album art, etc…)<br/>Write tests for the music parser<br/>Add CI for the note-parser building + testing<br/>Contributed to the android CI<br/>Add music-player class to the arduino<br/>Come up with the request/receive architecture for streaming music<br/>Add sequence diagram for the architecture<br/>Format and add content to the README<br/>Contribute to bug fixes and refactors | [Click Here](https://git.chalmers.se/mohamadk) |
-|  Zepei  |  Implemented backend for music library tab<br>Implemented UI for music library tab<br>Created User, Song, and songlist logic<br>Implemented reading and writing of User data<br>Implemented reading and writing of Song list<br>Reworked bottom navigation and music library UI<br>Implemented calorie credits earning and spending logic<br>Implemented unlocking songs<br>Worked on refactoring the code of the whole Android app<br>Refactored classes into singleton pattern<br>Implemented receiving and loading of song data through MQTT<br>Worked on requirements traceability<br>Worked on cycling through unlocked song list with left and right buttons on the terminal<br>Fixed many bugs<br>Added android instrumented tests <br>Helped with setting up CI.|[Click Here](https://git.chalmers.se/zepei)   |
+| Mohamad | Create the algorithm for the music parser<br/>Create the MQTT connection between parser and Android app<br/>Get a list of 50+ songs to parse<br/>Get metadata for each song (tempo, album art, etc…)<br/>Write tests for the music parser<br/>Add CI for the note-parser building + testing<br/>Contributed to the Android CI<br/>Add music-player class to the Arduino<br/>Come up with the request/receive architecture for streaming music<br/>Add sequence diagram for the architecture<br/>Format and add content to the README<br/>Contribute to bug fixes and refactors | [Click Here](https://git.chalmers.se/mohamadk) |
+|  Zepei  |  Implemented backend for music library tab<br>Implemented UI for music library tab<br>Created User, Song, and songlist logic<br>Implemented reading and writing of User data<br>Implemented reading and writing of Song list<br>Reworked bottom navigation and music library UI<br>Implemented calorie credits earning and spending logic<br>Implemented unlocking songs<br>Worked on refactoring the code of the whole Android app<br>Refactored classes into singleton pattern<br>Implemented receiving and loading of song data through MQTT<br>Worked on requirements traceability<br>Worked on cycling through unlocked song list with left and right buttons on the terminal<br>Fixed many bugs<br>Added Android instrumented tests <br>Helped with setting up CI.|[Click Here](https://git.chalmers.se/zepei)   |
  
 
  ## Demo Video link
