@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -25,6 +28,11 @@ import android.widget.Toast;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import nl.dionsegijn.konfetti.core.PartyFactory;
@@ -141,6 +149,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         addWalkingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addHikingWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
         addRunningWorkout.setOnClickListener(view -> changeToNewWorkoutFragment(view));
+        //checkForProfilePicture();
 
         calendarView.setOnDateChangedListener((widget, date, selected) -> onDateSelected(date));
         targetWorkoutsThisMonth.setText(Integer.toString(user.getMonthlyWorkouts()));
@@ -393,13 +402,13 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
 
     }
+    @SuppressLint("UseCompatLoadingForDrawables")
     public void addProfile(){
         if(user.getBitmap()!=null){
             removebackGroud();
-            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
+           profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
             profilepicture.setImageBitmap(user.getBitmap());
-        }
-        if(user.getImageUri()!=null){
+        } else if(user.getImageUri()!=null){
             removebackGroud();
             profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
             profilepicture.setImageURI(user.getImageUri());
@@ -409,6 +418,8 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
     public void removebackGroud(){
         profilepicture.setBackground(null);
     }
+
+
 
 
 }
