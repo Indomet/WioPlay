@@ -119,10 +119,21 @@ Compiling and uploading the arduino code to your Wio Terminal.
 
 #### - Using IDE
 - In the Arduino IDE, navigate to: **group-10-dit113-v23-mini-project-systems-development/seeed-wio-terminal/WioPlay** and open the folder.
-- Connected the Wio Seeed Terminal to your computer.
+- Connect the Wio Seeed Terminal to your computer.
+- Plug in the grove speaker to **port 1** on the Wio Seeed Terminal.
+- Create a header file named "**WifiInformation.h**", copy paste and fill in each field in the following format:
+
+`#define SSID "Wifi-name-here"`
+
+`#define PASSWORD "Password-here"`
+
+`#define my_IPv4 "Broker-adress-here"`
+
+
+- Go to line 9 in MqttConnection.h and uncomment `"#include "WifiInformation.h"`
 - Compile and upload the sketch to the Wio Seeed Terminal.
 - If you have the battery pack attached, now it is safe to unplug, otherwise please attach the battery pack.
-- plug in the grove speaker to one of the 4 pin ports on the Wio Seeed Terminal.
+
 
 //Insert images
 
@@ -154,7 +165,7 @@ The Wio Play is currently receiving contributions from the following members
 |  Asim   |Set up Arduino CLI.<br>Implemented detection of movement in all three axes on the wio terminal.<br>Implemented data receiving/sending functionality via MQTT on WIO terminal<br>Fixed the bug that was causing the app to crash on Android devices with API 31 or higher.<br>Implemented the display of current song titlecon the WIO terminal.<br>Added basic playback controls such as play, resume, skip, and previous button clicking functionality and visualisation to the UI.<br>Fixed the bug where the Wio Terminal displays a flat line after a certain amount of time on the burndown chart scene.<br>Fixed the bug causing the music to slow down during the transition to the burndown chart scene.<br>Implemented the feature to display an image from the SD card when playing a song and ensured that the image is automatically updated when a new song is played.<br>Created diagrams in the wiki                                                                                                                                                                                                                                                                                                                                                                                                                        | [Click Here](https://git.chalmers.se/mehmetas) |
 | Jackson |                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |  [Click Here](https://git.chalmers.se/jacniy)  |
 |  Joel   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | [Click Here](https://git.chalmers.se/joelmat)  |
-| Mohamad | Create the algorithm for the music parser<br />Create the MQTT connection between parser and android app<br />Get a list of 50+ songs to parse<br />Get metadata for each song (tempo, album art, etc…)<br />Write tests for the music parser<br />Add CI for the note-parser building + testing<br />Contributed to the android CI<br />Add music-player class to the arduino<br />Come up with the request/receive architecture for streaming music<br />Add sequence diagram for the architecture<br />Format and add content to the README <br/>Contribute to bug fixes and refactors | [Click Here](https://git.chalmers.se/mohamadk) |
+| Mohamad |                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | [Click Here](https://git.chalmers.se/mohamadk) |
 |  Zepei  |  Implemented backend for music library tab<br>Implemented UI for music library tab<br>Created User, Song, and songlist logic<br>Implemented reading and writing of User data<br>Implemented reading and writing of Song list<br>Reworked bottom navigation and music library UI<br>Implemented calorie credits earning and spending logic<br>Implemented unlocking songs<br>Worked on refactoring the code of the whole Android app<br>Refactored classes into singleton pattern<br>Implemented receiving and loading of song data through MQTT<br>Worked on requirements traceability<br>Worked on cycling through unlocked song list with left and right buttons on the terminal<br>Fixed many bugs<br>Added android instrumented tests <br>Helped with setting up CI.|[Click Here](https://git.chalmers.se/zepei)   |
  
 
