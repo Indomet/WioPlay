@@ -214,7 +214,9 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
             caloriesProgressbar.setProgress(workoutManager.getCaloriesBurnt(), true);
             caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
             String calculatedTimeLeft = workoutManager.calculateTimeLeft();
+            if(integerPayload>1){
             timeLeft.setText(calculatedTimeLeft);
+            }
 
             int diff = workoutManager.calculateCalDiff(integerPayload);
             workoutManager.setCurrentCalorie(integerPayload);
