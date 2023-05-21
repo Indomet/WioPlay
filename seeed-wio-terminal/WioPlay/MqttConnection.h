@@ -6,7 +6,7 @@
 #define my_IPv4 "Broker-adress-here"
 // #include "WifiInformation.h" Alternatively, you can consolidate all the Wi-Fi information into a 
 //header file and include it.
-  
+// #include "WifiInformation.h"
 
 // Update these with values suitable for your network.
 const char *ssid = SSID;          // WiFi Name
