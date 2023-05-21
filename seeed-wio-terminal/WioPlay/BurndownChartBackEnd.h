@@ -51,7 +51,7 @@ public:
 
   // Conform calories burned velocity in accordance to realistic boundaries
   double constrainCaloriesBurntVelocity(float balanceFactor, float updateValue) {
-    float controlVariable = (balanceFactor * 100) / updateValue;
+    float controlVariable = (balanceFactor * 1000) / updateValue;
 
     double minValue = min(controlVariable, realisticCaloriesBurntVelocity[0]);
     double maxValue = max(controlVariable, realisticCaloriesBurntVelocity[1]);
@@ -121,7 +121,7 @@ public:
   }
 
 private:
-  const float realisticCaloriesBurntVelocity[2]{ 0.004, 0.007 };
+  const float realisticCaloriesBurntVelocity[2]{ 0.005, 0.01 };
 
   const float sexCalorieConstants[2][4]{
     { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
