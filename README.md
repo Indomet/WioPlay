@@ -103,13 +103,13 @@ Assuming you have maven installed and present in your path
 ### Wio terminal
 
 Compiling and uploading the arduino code to your Wio Terminal.
-### Using Arduino-CLI
+#### Using Arduino-CLI
 1. `arduino-cli compile -b <fqbn> WioPlay/` to compile the workspace
 2. `arduino-cli upload -p <port> -b <fqbn> WioPlay/` to upload the compiled workspace onto the device
 
 *Note: **&lt;fqbn&gt;** and **&lt;port&gt;** correspond to the device fqbn number and usb connection port respectively*
 
-### Using IDE
+#### Using IDE
 - In the Arduino IDE, navigate to: **group-10-dit113-v23-mini-project-systems-development/seeed-wio-terminal/WioPlay** and open the folder.
 - Connected the Wio Seeed Terminal to your computer.
 - Compile and upload the sketch to the Wio Seeed Terminal.
