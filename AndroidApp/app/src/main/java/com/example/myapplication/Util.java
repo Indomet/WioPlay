@@ -1,6 +1,14 @@
 package com.example.myapplication;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -9,8 +17,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -153,5 +165,62 @@ public class Util {
         }
 
         return (int)Math.ceil(((left + right) /(double)2));
+    }
+    public static Bitmap addTheProfileFromExistingPhotoInPhone(){
+        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "myImage.jpg";
+        if(pictureExist(file1)){
+            try {
+                InputStream inputStream = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    inputStream = Files.newInputStream(Paths.get(filePath));
+                }
+
+                Bitmap bitmap1= BitmapFactory.decodeStream(inputStream);
+                Log.d("It is being reached", "it is being reachesd");
+                //profilePicture.setImageBitmap(bitmap1);
+                //LayoutInflater inflater = LayoutInflater.from(this);
+                //View rootView = inflater.inflate(R.layout.fragment_settings ,null);
+                //ImageView imageView = rootView.findViewById(R.id.user_profile_pic_settings);
+                // imageView.setImageBitmap(bitmap1);
+
+                //LayoutInflater inflater1 = LayoutInflater.from(getContext());
+                //View rootView1 = inflater1.inflate(R.layout.fragment_workout ,null);
+                //ImageView imageView1 = rootView1.findViewById(R.id.user_picture);
+                //imageView1.setImageBitmap(bitmap1);
+                return bitmap1;
+
+            }catch (Exception e){
+                e.getMessage();
+            }
+
+
+        }
+        return null;
+
+    }
+    public static boolean pictureExist(File file){
+
+        if(file.isDirectory()){
+            File[] files = file.listFiles();
+            if(files!=null){
+                for (File myfile:files) {
+                    if(myfile.isDirectory()){
+                        pictureExist(myfile);
+                    } else {
+                        String compare1=myfile.getAbsolutePath();
+                        String compare2=file.getAbsolutePath()+"/myImage.jpg";
+                        Log.d("compare2",compare2);
+                        Log.d("compare1",compare1);
+                        if(compare2.equals(compare1)) {
+                            return true;
+                        }
+                    }
+                }
+
+            }
+
+        }
+        return false;
     }
 }

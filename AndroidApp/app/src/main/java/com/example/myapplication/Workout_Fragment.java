@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -26,6 +28,11 @@ import android.widget.Toast;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import nl.dionsegijn.konfetti.core.PartyFactory;
@@ -151,7 +158,9 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         int cals = workoutManager.getCaloriesBurnt();
         caloriesBurnt.setText(Integer.toString(cals));
         caloriesProgressbar.setProgress(cals,true);
-        addProfile();
+
+        addProfile(Util.addTheProfileFromExistingPhotoInPhone());
+        //addTheProfileFromExistingPhotoInPhone();
 
 
 
@@ -392,21 +401,11 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         caloriesBurnt.setText(Integer.toString(workoutManager.getCaloriesBurnt()));
 
     }
-    public void addProfile(){
-        if(user.getBitmap()!=null){
-            removebackGroud();
-            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
-            profilepicture.setImageBitmap(user.getBitmap());
-        }
-        if(user.getImageUri()!=null){
-            removebackGroud();
-            profilepicture.setBackground(getResources().getDrawable(R.drawable.bentconnersforworkout));
-            profilepicture.setImageURI(user.getImageUri());
-        }
 
-    }
-    public void removebackGroud(){
-        profilepicture.setBackground(null);
+    public void addProfile(Bitmap bitmap) {
+        if(bitmap!=null){
+            profilepicture.setImageBitmap(bitmap);
+        }
     }
 
 

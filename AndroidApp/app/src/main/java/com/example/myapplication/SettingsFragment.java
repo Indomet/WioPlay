@@ -70,7 +70,6 @@ public class SettingsFragment extends Fragment {
         widgetInit();
 
 
-
         return rootView;
     }
 
@@ -92,9 +91,7 @@ public class SettingsFragment extends Fragment {
         ImageButton sexInfoButton = rootView.findViewById(R.id.sex_info_btn);
         sexInfoButton.setOnClickListener(view -> showSexInfoPopup());
         changeProfile.setOnClickListener(v -> addPictureToTheBackground());
-
-        checkUserprofile();
-        checkForProfilePicture();
+        addProfile(Util.addTheProfileFromExistingPhotoInPhone());
 
 
         spinnerInit();
@@ -135,14 +132,12 @@ public class SettingsFragment extends Fragment {
         dialog.show();
     }
 
-    public void checkUserprofile() {
-        if (user.getBitmap() != null) {
-            profilePicture.setImageBitmap(user.getBitmap());
-        }
-        if (user.getImageUri() != null) {
-            profilePicture.setImageURI(user.getImageUri());
+    public void addProfile(Bitmap bitmap) {
+        if (bitmap != null) {
+            profilePicture.setImageBitmap(bitmap);
         }
     }
+
 
     private void updateUsername(String name, Dialog dialog) {
 
@@ -172,11 +167,11 @@ public class SettingsFragment extends Fragment {
         }
 
         try {
-        BrokerConnection.getInstance().getMqttClient().publish(BrokerConnection.getInstance().SETTINGS_CHANGE_TOPIC
-         ,Util.objectToJSON(user)
-         ,BrokerConnection.getInstance().QOS, null);
-         } catch (IllegalAccessException e) {
-         e.printStackTrace();
+            BrokerConnection.getInstance().getMqttClient().publish(BrokerConnection.getInstance().SETTINGS_CHANGE_TOPIC
+                    , Util.objectToJSON(user)
+                    , BrokerConnection.getInstance().QOS, null);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
@@ -284,8 +279,6 @@ public class SettingsFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             profilePicture.setImageURI(imageUri);// adding the image from gallery to the imageview
-            user.setImageUri(imageUri);
-            user.setBitmap(null);
             dialog.dismiss();// close the dialod
 
 
@@ -294,9 +287,7 @@ public class SettingsFragment extends Fragment {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");// creating a bitmap from the image from camera
             profilePicture.setImageBitmap(imageBitmap); //adding the camera from gallery to the imageview
-            user.setBitmap(imageBitmap);
             saveimageTofiles(imageBitmap);
-            user.setImageUri(null);
             dialog.dismiss();// close the dialod
         }
     }
@@ -306,20 +297,20 @@ public class SettingsFragment extends Fragment {
 
         File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        if (!checkToseeIfPictureIsthere(file1,filePath,bitmap)) {
-            saveThePicture(filePath,bitmap);
+        if (!checkToseeIfPictureIsthere(file1, filePath, bitmap)) {
+            saveThePicture(filePath, bitmap);
         }
 
     }
 
-    public boolean checkToseeIfPictureIsthere(File directory,String filePath, Bitmap bitmap) {
+    public boolean checkToseeIfPictureIsthere(File directory, String filePath, Bitmap bitmap) {
         if (directory.isDirectory()) {
             File[] files = directory.listFiles();
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory()) {
                         // Recursively traverse subdirectory
-                        checkToseeIfPictureIsthere(file,filePath,bitmap);
+                        checkToseeIfPictureIsthere(file, filePath, bitmap);
                         Log.d("Allmost there", "one step remaining");
 
                     } else {
@@ -329,8 +320,8 @@ public class SettingsFragment extends Fragment {
                         Log.d("compare1", compare1);
                         if (compare2.equals(compare1)) {
                             Log.d("The picture is found", "the picture is found");
-                            boolean deleted=file.delete();
-                            saveThePicture(filePath,bitmap);
+                            boolean deleted = file.delete();
+                            saveThePicture(filePath, bitmap);
                             return deleted;
                         }
                     }
@@ -339,7 +330,8 @@ public class SettingsFragment extends Fragment {
         }
         return false;
     }
-    public void saveThePicture(String filePath, Bitmap bitmap){
+
+    public void saveThePicture(String filePath, Bitmap bitmap) {
         File file = new File(filePath);
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
@@ -357,64 +349,20 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    public void checkForProfilePicture(){
-        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "myImage.jpg";
-        if(pictureExist(file1)){
-            try {
-                InputStream inputStream = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    inputStream = Files.newInputStream(Paths.get(filePath));
-                }
-
-                Bitmap bitmap1= BitmapFactory.decodeStream(inputStream);
-                Log.d("It is being reached", "it is being reachesd");
-                profilePicture.setImageBitmap(bitmap1);
-                User.getInstance().setBitmap(bitmap1);
-
-            }catch (Exception e){
-                e.getMessage();
-            }
-
-
-        }
-
-    }
-    public boolean pictureExist(File file){
-
-        if(file.isDirectory()){
-            File[] files = file.listFiles();
-            if(files!=null){
-                for (File myfile:files) {
-                      if(myfile.isDirectory()){
-                      pictureExist(myfile);
-                    } else {
-                        String compare1=myfile.getAbsolutePath();
-                        String compare2=file.getAbsolutePath()+"/myImage.jpg";
-                        Log.d("compare2",compare2);
-                          Log.d("compare1",compare1);
-                        if(compare2.equals(compare1)) {
-                            return true;
-                        }
-                    }
-                }
-
-            }
-
-        }
-        return false;
-    }
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

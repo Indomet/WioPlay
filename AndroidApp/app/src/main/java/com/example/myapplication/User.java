@@ -57,8 +57,7 @@ public class User {
         this.username = "username";
         this.calorieCredit = 500; //A new user starts with 500 CalorieCurrency
         this.monthlyWorkouts=30; //30 is the default number, so a workout per day per month
-        bitmap=null;
-        imageUri=null;
+
     }
 
     public void setUsername(String username) {
@@ -85,20 +84,7 @@ public class User {
         this.weight = weight;
         saveUserData();
     }
-    public void setBitmap(Bitmap bitmap){
-        this.bitmap=bitmap;
-        imageUri=null;
-    }
-    public Bitmap getBitmap(){
-        return this.bitmap;
-    }
-    public void setImageUri (Uri imageUri){
-        this.imageUri=imageUri;
-        bitmap=null;
-    }
-    public Uri getImageUri(){
-        return this.imageUri;
-    }
+
 
 
 

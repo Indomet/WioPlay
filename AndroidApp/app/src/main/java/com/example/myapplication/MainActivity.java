@@ -4,12 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private BottomNavigationView bottomNavigation;
@@ -36,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         //replaces the frame layout with the fragment when app is opened not sure if needed tbh
         changeFragment(musicFragment);
         bottomNavigation.setOnItemSelectedListener(this);
+
+       // addTheProfileFromExistingPhotoInPhone();
 
 
         String downloadsDir = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOCUMENTS;
@@ -84,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .commit();
         return true;
     }
+
 
 
 }
