@@ -121,7 +121,7 @@ public:
   }
 
 private:
-  const float realisticCaloriesBurntVelocity[2]{ 0.0025, 0.0065 };
+  const float realisticCaloriesBurntVelocity[2]{ 0.004, 0.007 };
 
   const float sexCalorieConstants[2][4]{
     { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
