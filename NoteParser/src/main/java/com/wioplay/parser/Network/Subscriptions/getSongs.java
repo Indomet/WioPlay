@@ -24,7 +24,7 @@ public class getSongs extends AbstractSubscription {
         try {
 
             String jsonString = mapper.writeValueAsString(songs);
-            this.getClient().publish("songs", jsonString);
+            this.getClient().publish("Send/SongList", jsonString);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
