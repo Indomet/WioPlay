@@ -95,10 +95,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         @Override
         public String getSubbedTopic() {
-            final String SONG_TOPIC = "Send/SongList";
-            return SONG_TOPIC;
-
-    }
+            return "Send/SongList";
+        }
 
     private Song parseSong(JsonNode node, ObjectMapper mapper){
         String title = node.get("title").asText();
