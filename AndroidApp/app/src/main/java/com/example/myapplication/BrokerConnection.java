@@ -85,7 +85,6 @@ public class BrokerConnection extends AppCompatActivity {
                     for(MessageListener listener : observers){
                         String topic = listener.getSubbedTopic();
                         mqttClient.subscribe(topic,0, null);
-                        mqttClient.subscribe(SONG_BUTTON_TOPIC, 0, null);
                     }
 
                 }
@@ -127,11 +126,6 @@ public class BrokerConnection extends AppCompatActivity {
                             for(MessageListener listener : observers) {
                                 if (topic.equals(listener.getSubbedTopic())) {
                                     listener.onMessageArrived(messageMQTT);
-                                }
-
-                                if (topic.equals(SONG_BUTTON_TOPIC)) {
-                                    listener.onMessageArrived(messageMQTT);
-                                    Log.d(messageMQTT, messageMQTT);
                                 }
                             }
                         }
