@@ -143,8 +143,8 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     // Since this is the fragment that is shown when the app is opened, It would make sance
     // to check if The profile picture is saved in the phone.
     public void checkForProfilePicture(){
-        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "myImage.jpg";
+        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + File.separator + "myImage.jpg";
         if(pictureExist(file1)){
             try {
                 InputStream inputStream = null;
