@@ -280,35 +280,34 @@ public class SettingsFragment extends Fragment {
 
 
     // result of the request is received here
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-            profilePicture.setImageURI(imageUri);// adding the image from gallery to the imageview
-            user.setImageUri(imageUri);
-            makeBitmapFromUri(requireContext(),imageUri);
-            dialog.dismiss();// close the dialod
-
-
-        } else if (requestCode == TAKE_PICTURE_REQUEST && resultCode == RESULT_OK) {
-            assert data != null;
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");// creating a bitmap from the image from camera
-            profilePicture.setImageBitmap(imageBitmap); //adding the camera from gallery to the imageview
-            user.setBitmap(imageBitmap);
-            saveimageTofiles(imageBitmap);
-            dialog.dismiss();// close the dialod
-            user.setImageUri(null);
-            dialog.dismiss();// close the dialog
-        }
-    }
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//
+//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//            Uri imageUri = data.getData();
+//            profilePicture.setImageURI(imageUri);// adding the image from gallery to the imageview
+//            user.setImageUri(imageUri);
+//            //makeBitmapFromUri(requireContext(),imageUri);
+//            dialog.dismiss();// close the dialod
+//
+//
+//        } else if (requestCode == TAKE_PICTURE_REQUEST && resultCode == RESULT_OK) {
+//            assert data != null;
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");// creating a bitmap from the image from camera
+//            profilePicture.setImageBitmap(imageBitmap); //adding the camera from gallery to the imageview
+//            user.setBitmap(imageBitmap);
+//            saveimageTofiles(imageBitmap);
+//            dialog.dismiss();// close the dialod
+//            user.setImageUri(null);
+//        }
+//    }
 
     public void saveimageTofiles(Bitmap bitmap) {
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "myImage.jpg";
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + File.separator + "myImage.jpg";
 
-        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
 
         if (!checkToseeIfPictureIsthere(file1,filePath,bitmap)) {
             saveThePicture(filePath,bitmap);
