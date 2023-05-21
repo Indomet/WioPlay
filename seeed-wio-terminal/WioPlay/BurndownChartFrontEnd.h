@@ -75,7 +75,8 @@ public:
     
     // User completed goal
     if (burndownChartBackEnd.checkIfUserAccomplishedGoal()) {
-      goal = "Accomplished goal!";                                 
+      tft.fillScreen(TFT_GREEN);
+      goal = "Accomplished goal!";
     }
 
     // User didn't complete set goal
@@ -93,16 +94,12 @@ public:
     tft.drawString(caloriesPerSecondComparison, (320 - tft.textWidth(caloriesPerSecondComparison)) / 2, 100);
   }
 
-  void resetChart()
-  {
-    if (!firstWorkout)
-    {
-      for (byte i = 0; i < numberOfGraphValues; i++)
-      {
-        for (byte j = 0; j < (maxDataPoints - 1); j++)
-        {
+  void resetChart() {
+    if (!firstWorkout) {
+      for (byte i = 0; i < numberOfGraphValues; i++) {
+        for (byte j = 0; j < 29; j++) { // Note: Arduino doesn't work when you do mathematical operations with constants as a loop-boundary for some reason. That explains the magic number '29'
           removeEarliestPoint(i);
-        }        
+        }
       }
     }
 
@@ -111,10 +108,7 @@ public:
 
 private:
   const byte numberOfGraphValues = 2;
-  const byte maxDataPoints = 30;
-
-  byte caloriesPerSecondTextCoordinates[2] = { 5, 50 };
-  byte exerciseResultTextCoordinates[2] = { 15, 70 };
+  String goal;
 
   // Don't display the data-points added earliest on the graph. Delete them to sustain the memory limit
   void removeEarliestDataPoints() {
@@ -124,9 +118,9 @@ private:
     }
   }
 
-    void removeEarliestPoint(int idx) {
+  void removeEarliestPoint(int idx) {
     data[idx].pop();
-    }
+  }
 
   void vizualiseGraphValues(BurndownChartBackEnd burndownChartBackEnd) {
     data[0].push(burndownChartBackEnd.getCaloriesBurnt());

@@ -1,5 +1,4 @@
-class BurndownChartBackEnd
-{
+class BurndownChartBackEnd {
 public:
   BurndownChartBackEnd(float exerciseDuration, float caloriesGoal, byte chosenActivityIdx) {
     this->exerciseDuration = exerciseDuration;
@@ -19,19 +18,11 @@ public:
     std::string actual = std::to_string(getActualCaloriesPerSecond());
     std::string expected = std::to_string(getGeneralExpectedCaloriesPerSecond());
 
-    return  actual + "  " + expected;
+    return actual + "  " + expected;
   }
-
-  /*
-  // Note: We used this previously when our only intention was to make it work without MQTT connection
-  bool isExercising() {
-    return convertMilliToSeconds(timeElapsed) < exerciseDuration;
-  }
-  */
 
   // Check if the user is exercising with a variable associated with MQTT
-  bool isExercising()
-  {
+  bool isExercising() {
     return isWorkingOut;
   }
 
@@ -50,8 +41,8 @@ public:
     movementValue = getMETValue(movementValue);
     float moveFactor = (movementValue / (pow(updateDelay, 2))) * balanceFactor;
 
-    int sexIdx = userInformation.isMale ? 0 : 1;
-    return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.userWeight) + (sexCalorieConstants[sexIdx][2] * userInformation.userHeight) - (sexCalorieConstants[sexIdx][3] * userInformation.userAge)) * moveFactor;
+    int sexIdx = userInformation.getIsMale() ? 0 : 1;
+    return (sexCalorieConstants[sexIdx][0] + (sexCalorieConstants[sexIdx][1] * userInformation.getUserWeight()) + (sexCalorieConstants[sexIdx][2] * userInformation.getUserHeight()) - (sexCalorieConstants[sexIdx][3] * userInformation.getUserAge())) * moveFactor;
   }
 
   float convertMilliToSeconds(float milli) {
@@ -72,8 +63,7 @@ public:
   void sufficientMovementInquiry(UserInformation userInformation, float movementValue) {
     if (userIsMovingFastEnough(movementValue)) {
       caloriesBurnt += burnCalories(userInformation, movementValue);
-    }
-    else {
+    } else {
       Serial.println("You are not exercising hard enough for the selected exercise!");
     }
   }
@@ -84,14 +74,7 @@ public:
     chosenActivityIdx = newChosenActivityIdx;
     timeElapsed = 0;
     caloriesBurnt = 0;
-
-    Serial.println("******************mrjex blet******************");
-    Serial.println(timeElapsed);
-    Serial.println(caloriesGoal);
-    Serial.println(chosenActivityIdx);
-    Serial.println(exerciseDuration);
-    Serial.println(caloriesBurnt);
-    Serial.println("******************mrjex blet******************");
+    isWorkingOut = true;
   }
 
   bool checkIfUserAccomplishedGoal() {
@@ -140,16 +123,17 @@ public:
 private:
   const float realisticCaloriesBurntVelocity[2]{ 0.0025, 0.0065 };
 
-  const float sexCalorieConstants[2][4] {
-   { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
-   { 655.1, 4.35, 4.7, 4.65 }  // Female: {startConstant, weightConstant, heightConstant, ageConstant}
+  const float sexCalorieConstants[2][4]{
+    { 66, 6.2, 12.7, 6.76 },    // Male:   {startConstant, weightConstant, heightConstant, ageConstant}
+    { 655.1, 4.35, 4.7, 4.65 }  // Female: {startConstant, weightConstant, heightConstant, ageConstant}
   };
 
   // Notes:
   // * Row[i] is equivalent to the (i)th activity
   // * Retrieve standard-value by getting the average of min and max value
   // The minimal and maximal met-values for each physical activity
-  const byte metRanges[3][2] = { // Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
+  const byte metRanges[3][2] = {
+    // Calorie reference: "List Of METs Of The Most Popular Exercises", https://betterme.world/articles/calories-burned-calculator/
     { 3, 6 },   // Walking
     { 9, 23 },  // Running
     { 5, 8 }    // Hiking
@@ -166,8 +150,8 @@ private:
   const float updateDelay = 100;
 
   float standard;
-  float minMovement;    // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
-  float maxMovement;    // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
+  float minMovement;  // Minimal movement required for specific exercise (Deals with cases where user isn't moving enough in accordance with selected exercise)
+  float maxMovement;  // Maximal movement required for specific exercise (Handles the case where user selected 'Walking' but is running in reality)
   float proportionalConstant;
 
   byte chosenActivityIdx;
