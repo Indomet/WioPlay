@@ -1,0 +1,30 @@
+before_script:
+  - apt-get update && apt-get install -y curl
+
+variables:
+  ARDUINO_CORE_URL: "https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json"
+
+build-sketch:
+  stage: build
+  image: ubuntu:20.04
+  script:
+  - apt-get update && apt-get install -y python3 python3-pip
+  - pip3 install pyserial
+  - apt-get install -y git
+  - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
+  - arduino-cli config init --additional-urls "${ARDUINO_CORE_URL}"
+  - arduino-cli core update-index
+  - arduino-cli core install Seeeduino:samd
+  - git clone https://github.com/0015/TP_Arduino_DigitalRain_Anim.git 
+  - git clone https://github.com/Indomet/RawImage 
+  - git clone https://github.com/Bodmer/TFT_eSPI.git 
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_LIS3DHTR.git 
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_LineChart
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_mbedtls
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_SFUD
+  - git clone https://github.com/knolleary/pubsubclient
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_FS 
+  - arduino-cli lib install "ArduinoJson"
+  - arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino --library TP_Arduino_DigitalRain_Anim --library RawImage/RawImage --library Seeed_Arduino_LIS3DHTR --library Seeed_Arduino_LineChart --library Seeed_Arduino_mbedtls --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcWiFi --library Seeed_Arduino_SFUD --library pubsubclient --library Seeed_Arduino_FS

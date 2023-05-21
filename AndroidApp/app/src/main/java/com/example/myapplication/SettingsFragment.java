@@ -1,7 +1,10 @@
 package com.example.myapplication;
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,7 +38,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class SettingsFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -92,7 +97,7 @@ public class SettingsFragment extends Fragment {
         changeProfile.setOnClickListener(v -> addPictureToTheBackground());
 
         checkUserprofile();
-        checkForProfilePicture();
+
 
 
         spinnerInit();
@@ -283,8 +288,8 @@ public class SettingsFragment extends Fragment {
             Uri imageUri = data.getData();
             profilePicture.setImageURI(imageUri);// adding the image from gallery to the imageview
             user.setImageUri(imageUri);
-            user.setBitmap(null);
-            dialog.dismiss();// close the dialog
+            makeBitmapFromUri(requireContext(),imageUri);
+            dialog.dismiss();// close the dialod
 
 
         } else if (requestCode == TAKE_PICTURE_REQUEST && resultCode == RESULT_OK) {
@@ -294,6 +299,7 @@ public class SettingsFragment extends Fragment {
             profilePicture.setImageBitmap(imageBitmap); //adding the camera from gallery to the imageview
             user.setBitmap(imageBitmap);
             saveimageTofiles(imageBitmap);
+            dialog.dismiss();// close the dialod
             user.setImageUri(null);
             dialog.dismiss();// close the dialog
         }
@@ -355,52 +361,21 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    public void checkForProfilePicture(){
-        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "myImage.jpg";
-        if(pictureExist(file1)){
-            try {
-                InputStream inputStream = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    inputStream = Files.newInputStream(Paths.get(filePath));
-                }
+    public void makeBitmapFromUri(Context context, Uri imageUri){
+        ContentResolver contentResolver= context.getContentResolver();
+        try {
+            InputStream inputStream=contentResolver.openInputStream(imageUri);
+            Bitmap bitmap=BitmapFactory.decodeStream(inputStream);
+            saveimageTofiles(bitmap);
 
                 Bitmap bitmap1= BitmapFactory.decodeStream(inputStream);
                 Log.d("It is being reached", "it is being reached");
                 profilePicture.setImageBitmap(bitmap1);
                 User.getInstance().setBitmap(bitmap1);
 
-            }catch (Exception e){
-                e.getMessage();
-            }
-
-
+        }catch (Exception e){
+            e.getMessage();
         }
-
-    }
-    public boolean pictureExist(File file){
-
-        if(file.isDirectory()){
-            File[] files = file.listFiles();
-            if(files!=null){
-                for (File myfile:files) {
-                      if(myfile.isDirectory()){
-                      pictureExist(myfile);
-                    } else {
-                        String compare1=myfile.getAbsolutePath();
-                        String compare2=file.getAbsolutePath()+"/myImage.jpg";
-                        Log.d("compare2",compare2);
-                          Log.d("compare1",compare1);
-                        if(compare2.equals(compare1)) {
-                            return true;
-                        }
-                    }
-                }
-
-            }
-
-        }
-        return false;
     }
 
 
