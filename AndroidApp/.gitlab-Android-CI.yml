@@ -24,7 +24,8 @@ variables:
   ANDROID_SDK_TOOLS: "6514223"
 
 # Packages installation before running script
-before_script:
+
+.prepare_step: &prepare_step
   - apt-get --quiet update --yes
   - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
 
@@ -65,6 +66,8 @@ androidBuild:
   image: gradle:8
   interruptible: true
   stage: build
+  before_script:
+    - *prepare_step
   script:
     - ./gradlew assembleDebug
 
@@ -73,6 +76,8 @@ androidTest:
   image: gradle:8
   interruptible: true
   stage: test
+  before_script:
+    - *prepare_step
   script:
     - ./gradlew -Pci --console=plain :app:testDebug
 
