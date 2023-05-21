@@ -306,9 +306,9 @@ public class SettingsFragment extends Fragment {
     }
 
     public void saveimageTofiles(Bitmap bitmap) {
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "myImage.jpg";
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + File.separator + "myImage.jpg";
 
-        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
 
         if (!checkToseeIfPictureIsthere(file1,filePath,bitmap)) {
             saveThePicture(filePath,bitmap);
