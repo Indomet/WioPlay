@@ -57,13 +57,19 @@ The steps described above can be seen in the sequence diagram below:
 <img src="https://lh3.googleusercontent.com/drive-viewer/AFGJ81p9zU6DBnY59_8D82sz5SMo3yR0VnWb_HecgOrcSK-aTqkYeohW5WBslyrLSCfYT-ftaoWi8t12STy1MtWIQBnjGfiJeg=s2560" />
 </div>
 
+For more detailed diagrams about the system please refer to the following wiki pages
+
+* [Software Architecture](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/Software-Architecture)
+* [Diagrams](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/Requirements/Diagrams)
+
+
 ## Contributions
 
 The Wio Play is currently receiving contributions from the following members
 
 |   Member        | Contributions                |                       Profile                       |
 | :-------------: | :--------------------------: | :-------------------------------------------------: |
-|     Ali         |                              |      [Click Here](https://git.chalmers.se/almuslim) |
+|     Ali      |<ul><li>Establsihed MQTT conncetion for andorid phone</li><li>Created modern UI for settings and workout tab</li><li>Helped setup CI for the android phone</li></ul><ul><li>Created the JSON MQTT message sending format</li><li>Created fucntioanlity behind the workouttab and the updating of user information tab</li><li>Created many diagrams in the wiki</li></ul><ul><li>Contributed to requirement tracing and writing</li><li>Wrote workout backend logic tests         |      [Click Here](https://git.chalmers.se/almuslim) |
 |     Asim        |                              | [Click Here](https://git.chalmers.se/mehmetas)      |
 |     Jackson     |                              |     [Click Here](https://git.chalmers.se/jacniy)    |
 |     Joel        |                              |     [Click Here](https://git.chalmers.se/joelmat)   |
