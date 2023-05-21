@@ -259,7 +259,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
         //this makes sure that the progress bar is set to 0. The lib is very buggy so sometimes it updates others it doesnt
         caloriesProgressbar.setMax(100);
         caloriesProgressbar.setProgress(0,true);
-
+        caloriesProgressbar= rootView.findViewById(R.id.calories_burnt_progressbar);
         caloriesBurnt.setText("0");
 
         workoutManager.stopWorkout();
