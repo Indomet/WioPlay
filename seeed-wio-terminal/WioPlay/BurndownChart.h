@@ -1,8 +1,8 @@
 #include "BurndownChartBackEnd.h"
 #include "BurndownChartFrontEnd.h"
 
-BurndownChartBackEnd burndownChartBackEnd(300, 30, 0);   // (exerciseDuration, caloriesGoal, chosenActivityIdx)
-BurndownChartFrontEnd burndownChartFrontEnd(20);         // (float graphUIXStartValue)
+BurndownChartBackEnd burndownChartBackEnd(300, 30, 0);  // (exerciseDuration, caloriesGoal, chosenActivityIdx)
+BurndownChartFrontEnd burndownChartFrontEnd(20);        // (float graphUIXStartValue)
 
 class BurndownChart {
 
@@ -30,13 +30,6 @@ public:
   float getExpectedCaloriesPerSecond() {
     return burndownChartBackEnd.getExpectedCaloriesPerSecond();
   }
-
-  /*
-  // Note: Previous implementation that works as intended without MQTT
-  bool isExercising() {
-    return burndownChartBackEnd.isExercising();
-  }
-  */
 
   bool isExercising() {
     return burndownChartBackEnd.isExercising();

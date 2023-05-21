@@ -1,12 +1,12 @@
 #include <rpcWiFi.h>
 #include <PubSubClient.h>
 // This should be created by the user to enter wifi name password and the broker for mqtt
-/*
-  #define SSID "Wifi-name-here"
-  #define PASSWORD "Password-here"
-  #define my_IPv4 "Broker-adress-here"
-  */
-#include "WifiInformation.h"
+#define SSID "Wifi-name-here"
+#define PASSWORD "Password-here"
+#define my_IPv4 "Broker-adress-here"
+// #include "WifiInformation.h" Alternatively, you can consolidate all the Wi-Fi information into a 
+//header file and include it.
+  
 
 // Update these with values suitable for your network.
 const char *ssid = SSID;          // WiFi Name
@@ -139,8 +139,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
     startStreaming();
   } else if (strcmp(Music_notes_sub, topic) == 0) {
     updateSong(charBuf);
-  }
-  else if (strcmp(WorkoutStop_sub, topic) == 0) {
+  } else if (strcmp(WorkoutStop_sub, topic) == 0) {
     stopWorkout(charBuf);
   }
 }

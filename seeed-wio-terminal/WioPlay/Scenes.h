@@ -51,7 +51,7 @@ public:
     this->songName = newSongName;
 
     index++;
-    index = index % (sizeof(imageList) / sizeof(int)); 
+    index = index % (sizeof(imageList) / sizeof(int));
 
     messageReceived = true;
   }
