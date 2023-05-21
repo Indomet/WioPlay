@@ -35,7 +35,9 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
     private final Context context;
     private boolean confirm;
 
-    public SongLibraryAdapter(Context context) {
+    private static SongLibraryAdapter instance;
+
+    private SongLibraryAdapter(Context context) {
         this.context = context;
     }
 
@@ -184,6 +186,8 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
                 updateNoteChunk();
                 Toast.makeText(context, "Next song is  " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
                 Log.d("Request", "Next song is  " + currentSong.getTitle() + " index is " + SongList.getInstance().getCurrentSongIdx());
+                BrokerConnection.getInstance().getMqttClient().publish("Music/Data/Change", currentSong.getTitle(), BrokerConnection.QOS, null);
+
             }
             if (payload.equals(PREVIOUS_SONG_MESSAGE)){
                 SongList.getInstance().decreaseSongIdx();
@@ -191,7 +195,7 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
                 updateNoteChunk();
                 Toast.makeText(context, "Previous song is " + currentSong.getTitle(), Toast.LENGTH_SHORT).show();
                 Log.d("Request", "Previous song is " + currentSong.getTitle() + "index is " + SongList.getInstance().getCurrentSongIdx() );
-
+                BrokerConnection.getInstance().getMqttClient().publish("Music/Data/Change", currentSong.getTitle(), BrokerConnection.QOS, null);
             }
         }
 
@@ -224,8 +228,14 @@ public class SongLibraryAdapter extends RecyclerView.Adapter<SongLibraryAdapter.
             userBalance = itemView.findViewById(R.id.user_balance);
             songImage = itemView.findViewById(R.id.image);
             artistName = itemView.findViewById(R.id.artist_name);
-
-
         }
     }
+
+    public static SongLibraryAdapter getInstance(Context context) {
+        if(SongLibraryAdapter.instance == null) {
+            SongLibraryAdapter.instance = new SongLibraryAdapter(context);
+        }
+        return SongLibraryAdapter.instance;
+    }
+
 }
