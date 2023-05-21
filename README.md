@@ -169,3 +169,6 @@ The Wio Play is currently receiving contributions from the following members
  ## Demo Video link
 [Group 10 WioPlay Demo](https://youtu.be/E4AoKy7i2mA)
 
+## Support
+[User manual](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/User-Manual)
+
