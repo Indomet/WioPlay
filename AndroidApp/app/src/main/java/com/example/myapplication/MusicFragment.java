@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.util.Log;
 
 import android.view.LayoutInflater;
@@ -18,7 +21,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,7 +35,6 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
 
     private View rootView;
-    private SongList songList;
     private SongLibraryAdapter adapter;
     private EditText searchSongs;
 
@@ -46,6 +52,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         TextView userBalance = rootView.findViewById(R.id.user_balance);
         searchSongs= rootView.findViewById(R.id.searchSongs);
         searchSongs.setOnClickListener(v -> orderTheListOfSongs());
+        checkForProfilePicture();
 
 
 
@@ -61,10 +68,6 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
                     false));
         //Linearly displays a single line of items vertically
         BrokerConnection.getInstance().addMessageListener(adapter);
-
-        songList=SongList.getInstance();
-
-
         return rootView;
     }
 
@@ -139,6 +142,58 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
 
         } else searchSongs.setText("");
     }
+    // Since this is the fragment that is shown when the app is opened, It would make sance
+    // to check if The profile picture is saved in the phone.
+    public void checkForProfilePicture(){
+        File file1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "myImage.jpg";
+        if(pictureExist(file1)){
+            try {
+                InputStream inputStream = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    inputStream = Files.newInputStream(Paths.get(filePath));
+                }
+
+                Bitmap bitmap1= BitmapFactory.decodeStream(inputStream);
+                Log.d("It is being reached", "it is being reachesd");
+
+                User.getInstance().setBitmap(bitmap1);
+
+            }catch (Exception e){
+                e.getMessage();
+            }
+
+
+        }
+
+    }
+    public boolean pictureExist(File file){
+
+        if(file.isDirectory()){
+            File[] files = file.listFiles();
+            if(files!=null){
+                for (File myfile:files) {
+                    if(myfile.isDirectory()){
+                        pictureExist(myfile);
+                    } else {
+                        String compare1=myfile.getAbsolutePath();
+                        String compare2=file.getAbsolutePath()+"/myImage.jpg";
+                        Log.d("compare2",compare2);
+                        Log.d("compare1",compare1);
+                        if(compare2.equals(compare1)) {
+                            return true;
+                        }
+                    }
+                }
+
+            }
+
+        }
+        return false;
+    }
+
+
+
 
 
 
