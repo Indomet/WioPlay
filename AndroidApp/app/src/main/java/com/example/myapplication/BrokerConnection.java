@@ -21,8 +21,6 @@ public class BrokerConnection extends AppCompatActivity {
     public static final String SETTINGS_CHANGE_TOPIC = "User/Data/Change";
     public static final String WORKOUT_STARTED_TOPIC = "User/Workout/Start";
 
-    public static final String SONG_BUTTON_TOPIC = "Music/Song/Buttons";
-    public static final String SONG_NOTES_TOPIC = "Music/Song/Notes";
     public static final String LOCALHOST = "broker.hivemq.com" ; // Ip address of the local host
     private static final String MQTT_SERVER = "tcp://" + LOCALHOST + ":1883";   // the server uses tcp protocol on the local host ip and listens to the port 1883
     public static final String CLIENT_ID = "a1w2exr@$23xjdq%w1jex";   // the app client ID name
@@ -39,8 +37,8 @@ public class BrokerConnection extends AppCompatActivity {
     private List<MessageListener> observers;
     //This interface is a contract between this class to notify other classes that implement it that a message has arrived
     public interface MessageListener{
-        public void onMessageArrived(String payload);
-        public String getSubbedTopic();
+        void onMessageArrived(String payload);
+        String getSubbedTopic();
     }
 
     //attach a class to listen to incoming messages with this setter
@@ -122,13 +120,11 @@ public class BrokerConnection extends AppCompatActivity {
                         Log.i(CLIENT_ID, "Message" + messageMQTT);  // prints in the console
                         //this will execute the method in all classes that implement this interface and thereby forward the message to allow
                         //communicate between fragements and the broker
-                        if(!observers.isEmpty()){
                             for(MessageListener listener : observers) {
                                 if (topic.equals(listener.getSubbedTopic())) {
                                     listener.onMessageArrived(messageMQTT);
                                 }
                             }
-                        }
 
                     }else {
                         // prints in the console

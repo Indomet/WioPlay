@@ -277,8 +277,7 @@ public class Workout_Fragment extends Fragment implements BrokerConnection.Messa
 
     @Override
     public String getSubbedTopic() {
-        final String WORKOUT_TOPIC = "Send/Calorie/Burn/Data";
-        return WORKOUT_TOPIC;
+        return "Send/Calorie/Burn/Data";
     }
 
 
