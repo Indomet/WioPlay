@@ -15,9 +15,6 @@ build-sketch:
   - arduino-cli config init --additional-urls "${ARDUINO_CORE_URL}"
   - arduino-cli core update-index
   - arduino-cli core install Seeeduino:samd
-  #- mkdir libraries
-  - mkdir libraries
-  - cd libraries
   - git clone https://github.com/0015/TP_Arduino_DigitalRain_Anim.git 
   - git clone https://github.com/Indomet/RawImage 
   - git clone https://github.com/Bodmer/TFT_eSPI.git 
@@ -28,20 +25,6 @@ build-sketch:
   - git clone https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi
   - git clone https://github.com/Seeed-Studio/Seeed_Arduino_SFUD
   - git clone https://github.com/knolleary/pubsubclient
-  - cd ../
-  #- arduino-cli lib install "TP_Arduino_DigitalRain_Anim"
-  #- arduino-cli lib install "RawImage"
-  #- arduino-cli lib install "TFT_eSPI"
-  #- arduino-cli lib install "Seeed_Arduino_LIS3DHTR"
+  - git clone https://github.com/Seeed-Studio/Seeed_Arduino_FS 
   - arduino-cli lib install "ArduinoJson"
-  #- arduino-cli lib search "ArduinoJson"
-  #- arduino-cli lib list
-  #- arduino-cli lib install "Seeed_Arduino_LIS3DHTR"
-  #- arduino-cli lib install "PubSubClient"
-  #- arduino-cli lib install "Seeed_Arduino_FS"
-  #- arduino-cli lib install "Seeed_Arduino_LineChart"
-  #- arduino-cli lib install "Seeed_Arduino_mbedtls"
-  #- arduino-cli lib install "Seeed_Arduino_rpcUnified"
-  #- arduino-cli lib install "Seeed_Arduino_rpcWiFi"
-  #- arduino-cli lib install "Seeed_Arduino_SFUD"
-  - arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino --library /libraries/TP_Arduino_DigitalRain_Anim --library /libraries/RawImage --library /libraries/Seeed_Arduino_LIS3DHTR --library /libraries/Seeed_Arduino_LineChart --library /libraries/Seeed_Arduino_mbedtls --library /libraries/Seeed_Arduino_rpcUnified --library /libraries/Seeed_Arduino_rpcUnified --library /libraries/Seeed_Arduino_rpcWiFi --library /libraries/Seeed_Arduino_SFUD --library /libraries/pubsubclient
+  - arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino --library TP_Arduino_DigitalRain_Anim --library RawImage/RawImage --library Seeed_Arduino_LIS3DHTR --library Seeed_Arduino_LineChart --library Seeed_Arduino_mbedtls --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcWiFi --library Seeed_Arduino_SFUD --library pubsubclient --library Seeed_Arduino_FS

@@ -12,8 +12,9 @@
 # * Caches downloaded dependencies and plugins between invocation.
 # * Verify but don't deploy merge requests.
 # * Deploy built artifacts from master branch only.
-include: '/AndroidApp/.gitlab-Android-CI.yml'
-include: '/seeed-wio-terminal/.gitlab-Arduino-ci.yml'
+include: 
+  - '/AndroidApp/.gitlab-Android-CI.yml'
+  - '/seeed-wio-terminal/.gitlab-Arduino-ci.yml'
 
 default:
   tags:
