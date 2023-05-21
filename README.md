@@ -33,11 +33,11 @@ The purpose of Wio Play is motivating people to lose calories by effectively uti
 
 <!-- [**Wiki**](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/home) -->
 
-## Streaming Music
+## How It Works
 
 The idea is to have a compact device that can stream music from a source, or load it from its existing memory, that combined with a capable player and a motion detection mechanism make the **Wio Play** a handy piece of technology.
 
-### Proccess
+### Steps
 
 The full process of streaming a track on our service can be broken down into 3 key steps interconnected together using MQTT, the full process eventually concludes when the chosen song has been played fully on the terminal
 
@@ -67,7 +67,7 @@ For more detailed diagrams about the system please refer to the following wiki p
 - [Diagrams](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/-/wikis/Requirements/Diagrams)
 
 
-## Build And Execute
+## Setup
 
 The system cosists of 3 main components, the **Android application**, the **wio terminal**, and the **Note-Parser** server that is responsible for providing and parsing the song library. All three components must be set up correctly in order for the system to function properly.
 
