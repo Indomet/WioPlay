@@ -46,6 +46,7 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        BrokerConnection.getInstance().getMqttClient().publish("songs/all", "app is requesting for songs", BrokerConnection.QOS, null);
         rootView = inflater.inflate(R.layout.fragment_music, container, false);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.songLibraryView);
