@@ -52,13 +52,13 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         TextView userBalance = rootView.findViewById(R.id.user_balance);
         searchSongs= rootView.findViewById(R.id.searchSongs);
         searchSongs.setOnClickListener(v -> orderTheListOfSongs());
-        checkForProfilePicture();
+        //checkForProfilePicture();
 
 
 
         userBalance.setText(Integer.toString(User.getInstance().getCalorieCredit()));
         //The adapter that handles the recycler view functionalities
-        adapter = new SongLibraryAdapter(recyclerView.getContext());
+        adapter =  SongLibraryAdapter.getInstance(recyclerView.getContext());
 
         adapter.setSongsList(SongList.getInstance().getSongList());
         recyclerView.setAdapter(adapter);
@@ -189,12 +189,5 @@ public class MusicFragment extends Fragment implements BrokerConnection.MessageL
         }
         return false;
     }
-
-
-
-
-
-
-
 
 }
