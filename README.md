@@ -10,10 +10,6 @@
 
 </div>
 
-**Table of Contents:**
-
-[[_TOC_]]
-
 ## Purpose
 
 The purpose of Wio Play is motivating people to lose calories by effectively utilising the terminal's components and the user experience of the android app
