@@ -3,10 +3,10 @@ name: Android CI
 on:
   push:
     branches:
-      - main
+      - gitlabCI-to-githubCI
   pull_request:
     branches:
-      - main
+      - gitlabCI-to-githubCI
 
 jobs:
   build:

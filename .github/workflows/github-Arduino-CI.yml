@@ -3,10 +3,10 @@ name: Arduino CI Workflow
 on:
   push:
     branches:
-      - main
+      - gitlabCI-to-githubCI
   pull_request:
     branches:
-      - main
+      - gitlabCI-to-githubCI
 
 jobs:
   build:
