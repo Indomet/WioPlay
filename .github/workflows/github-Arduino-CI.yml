@@ -35,17 +35,16 @@ jobs:
         run: |
           git clone https://github.com/0015/TP_Arduino_DigitalRain_Anim.git
           git clone https://github.com/Indomet/RawImage
-          git clone https://github.com/Bodmer/TFT_eSPI.git
           git clone https://github.com/Seeed-Studio/Seeed_Arduino_LIS3DHTR.git
           git clone https://github.com/Seeed-Studio/Seeed_Arduino_LineChart
           git clone https://github.com/Seeed-Studio/Seeed_Arduino_mbedtls
           git clone https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified
           git clone https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi
           git clone https://github.com/Seeed-Studio/Seeed_Arduino_SFUD
-          git clone https://github.com/knolleary/pubsubclient
           git clone https://github.com/Seeed-Studio/Seeed_Arduino_FS
 
       - name: Build sketch
         run: |
           arduino-cli lib install "ArduinoJson"
-          arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino --library TP_Arduino_DigitalRain_Anim --library RawImage/RawImage --library Seeed_Arduino_LIS3DHTR --library Seeed_Arduino_LineChart --library Seeed_Arduino_mbedtls --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcWiFi --library Seeed_Arduino_SFUD --library pubsubclient --library Seeed_Arduino_FS
+          arduino-cli lib install "pubsubclient"
+          arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino --library TP_Arduino_DigitalRain_Anim --library RawImage/RawImage --library Seeed_Arduino_LIS3DHTR --library Seeed_Arduino_LineChart --library Seeed_Arduino_mbedtls --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcWiFi --library Seeed_Arduino_SFUD --library Seeed_Arduino_FS
