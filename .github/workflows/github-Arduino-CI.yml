@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up environment
         run: |
           sudo apt-get update && sudo apt-get install -y curl
@@ -45,4 +48,4 @@ jobs:
       - name: Build sketch
         run: |
           arduino-cli lib install "ArduinoJson"
-          arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal WioPlay.ino --library TP_Arduino_DigitalRain_Anim --library RawImage/RawImage --library Seeed_Arduino_LIS3DHTR --library Seeed_Arduino_LineChart --library Seeed_Arduino_mbedtls --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcWiFi --library Seeed_Arduino_SFUD --library pubsubclient --library Seeed_Arduino_FS
+          arduino-cli compile -b Seeeduino:samd:seeed_wio_terminal seeed-wio-terminal/WioPlay/WioPlay.ino --library TP_Arduino_DigitalRain_Anim --library RawImage/RawImage --library Seeed_Arduino_LIS3DHTR --library Seeed_Arduino_LineChart --library Seeed_Arduino_mbedtls --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcUnified --library Seeed_Arduino_rpcWiFi --library Seeed_Arduino_SFUD --library pubsubclient --library Seeed_Arduino_FS
