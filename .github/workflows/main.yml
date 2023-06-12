@@ -22,6 +22,9 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
 
+      - name: Change to NoteParser directory
+        run: cd NoteParser
+
       - name: Build with Maven
         run: mvn --batch-mode --show-version --errors --no-transfer-progress install
 
@@ -37,6 +40,9 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+
+      - name: Change to NoteParser directory
+        run: cd NoteParser
 
       - name: Test with Maven
         run: mvn --batch-mode --show-version --errors --no-transfer-progress test
