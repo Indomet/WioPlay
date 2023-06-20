@@ -1,0 +1,40 @@
+name: Java CI with Maven
+
+on:
+  push: {}
+  pull_request: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '19'
+          distribution: 'adopt'
+
+      - name: Build with Maven
+        working-directory: NoteParser
+        run: mvn --batch-mode --show-version --errors --no-transfer-progress install
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '19'
+          distribution: 'adopt'
+
+      - name: Test with Maven
+        working-directory: NoteParser
+        run: mvn --batch-mode --show-version --errors --no-transfer-progress test
