@@ -19,11 +19,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '19'
           distribution: 'adopt'
-
-      - name: Change to NoteParser directory
-        run: cd NoteParser
 
       - name: Build with Maven
         working-directory: NoteParser
@@ -39,11 +36,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '19'
           distribution: 'adopt'
-
-      - name: Change to NoteParser directory
-        run: cd NoteParser
 
       - name: Test with Maven
         working-directory: NoteParser
