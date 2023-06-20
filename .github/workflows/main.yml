@@ -26,7 +26,8 @@ jobs:
         run: cd NoteParser
 
       - name: Build with Maven
-        run: mvn --batch-mode --show-version --errors --no-transfer-progress install
+        run: mvn --batch-mode --show-version --errors --no-transfer-progress install -X
+      
 
   test:
     runs-on: ubuntu-latest
