@@ -29,6 +29,7 @@ jobs:
           build-tools: '29.0.3'
 
       - name: Build with Gradle
+        working-directory: AndroidApp
         run: ./gradlew assembleDebug
 
   test:
@@ -43,7 +44,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-          
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
         with:
@@ -51,4 +52,5 @@ jobs:
           build-tools: '29.0.3'
 
       - name: Run Android tests
+        working-directory: AndroidApp
         run: ./gradlew -Pci --console=plain :app:testDebug
