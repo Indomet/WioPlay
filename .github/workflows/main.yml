@@ -1,12 +1,8 @@
 name: Java CI with Maven
 
 on:
-  push:
-    branches:
-      - gitlabCI-to-githubCI
-  pull_request:
-    branches:
-      - gitlabCI-to-githubCI
+  push: {}
+  pull_request: {}
 
 jobs:
   build:
