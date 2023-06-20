@@ -21,17 +21,12 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
-      
-      - name: Print current directory
-        run: pwd
-                 
+
       - name: Change to NoteParser directory
         run: cd NoteParser
 
-      - name: Print current directory 2
-        run: pwd
-                 
       - name: Build with Maven
+        working-directory: NoteParser
         run: mvn --batch-mode --show-version --errors --no-transfer-progress install
 
   test:
@@ -46,14 +41,10 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
-      - name: Print current directory 3
-        run: pwd
-                 
+
       - name: Change to NoteParser directory
         run: cd NoteParser
 
-      - name: Print current directory 4
-        run: pwd
-                 
       - name: Test with Maven
+        working-directory: NoteParser
         run: mvn --batch-mode --show-version --errors --no-transfer-progress test
