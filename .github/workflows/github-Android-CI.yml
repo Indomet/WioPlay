@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
+          distribution: 'adopt'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
@@ -41,7 +42,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
-
+          distribution: 'adopt'
+          
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
         with:
