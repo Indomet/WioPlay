@@ -1,4 +1,4 @@
-name: Arduino CI Workflow
+name: Arduino CI
 
 on:
   push: {}

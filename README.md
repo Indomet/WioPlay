@@ -1,6 +1,6 @@
-![Android CI](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/badges/main/pipeline.svg?job=androidBuild&key_text=Android+CI&key_width=80)
-![Arduino CI](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/badges/main/pipeline.svg?job=build-sketch&key_text=Arduino+CI&key_width=80)
-![NoteParser CI](https://git.chalmers.se/courses/dit113/2023/group-10/group-10-dit113-v23-mini-project-systems-development/badges/main/pipeline.svg?job=parserBuild&key_text=NoteParser+CI&key_width=100)
+[![Arduino CI](https://github.com/Indomet/WioPlay/actions/workflows/github-Arduino-CI.yml/badge.svg)](https://github.com/Indomet/WioPlay/actions/workflows/github-Arduino-CI.yml)
+[![Android CI](https://github.com/Indomet/WioPlay/actions/workflows/github-Android-CI.yml/badge.svg)](https://github.com/Indomet/WioPlay/actions/workflows/github-Android-CI.yml)
+[![NoteParser CI](https://github.com/Indomet/WioPlay/actions/workflows/main.yml/badge.svg)](https://github.com/Indomet/WioPlay/actions/workflows/main.yml)
 
 <div align="center">
 
