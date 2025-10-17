@@ -29,6 +29,7 @@ The purpose of Wio Play is motivating people to lose calories by effectively uti
   - Downloaded songs are **cached on the app**
 
 - Motion Detection 👟
+  
   - Utilizes the **small form factor** of the WIO terminal
 
 <!-- [**Wiki**](https://github.com/Indomet/WioPlay/wiki) -->
